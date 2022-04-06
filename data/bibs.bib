@@ -1,0 +1,425 @@
+﻿
+ @article{Ballé_Minnen_Singh_Hwang_Johnston_2018,
+  title        = {Variational image compression with a scale hyperprior},
+  url          = {http://arxiv.org/abs/1802.01436},
+  abstractnote = {We describe an end-to-end trainable model for image compression based on variational autoencoders. The model incorporates a hyperprior to effectively capture spatial dependencies in the latent representation. This hyperprior relates to side information, a concept universal to virtually all modern image codecs, but largely unexplored in image compression using artificial neural networks (ANNs). Unlike existing autoencoder compression methods, our model trains a complex prior jointly with the underlying autoencoder. We demonstrate that this model leads to state-of-the-art image compression when measuring visual quality using the popular MS-SSIM index, and yields rate-distortion performance surpassing published ANN-based methods when evaluated using a more traditional metric based on squared error (PSNR). Furthermore, we provide a qualitative comparison of models trained for different distortion metrics.},
+  note         = {arXiv: 1802.01436},
+  journal      = {arXiv:1802.01436 [cs, eess, math]},
+  author       = {Ballé, Johannes and Minnen, David and Singh, Saurabh and Hwang, Sung Jin and Johnston, Nick},
+  year         = {2018},
+  month        = {May}
+}
+
+ @article{Zhao_Meng_Yin_Sigal_2019,
+  title        = {Image Generation from Layout},
+  url          = {http://arxiv.org/abs/1811.11389},
+  abstractnote = {Despite significant recent progress on generative models, controlled generation of images depicting multiple and complex object layouts is still a difficult problem. Among the core challenges are the diversity of appearance a given object may possess and, as a result, exponential set of images consistent with a specified layout. To address these challenges, we propose a novel approach for layout-based image generation; we call it Layout2Im. Given the coarse spatial layout (bounding boxes + object categories), our model can generate a set of realistic images which have the correct objects in the desired locations. The representation of each object is disentangled into a specified/certain part (category) and an unspecified/uncertain part (appearance). The category is encoded using a word embedding and the appearance is distilled into a low-dimensional vector sampled from a normal distribution. Individual object representations are composed together using convolutional LSTM, to obtain an encoding of the complete layout, and then decoded to an image. Several loss terms are introduced to encourage accurate and diverse generation. The proposed Layout2Im model significantly outperforms the previous state of the art, boosting the best reported inception score by 24.66% and 28.57% on the very challenging COCO-Stuff and Visual Genome datasets, respectively. Extensive experiments also demonstrate our method’s ability to generate complex and diverse images with multiple objects.},
+  note         = {arXiv: 1811.11389},
+  journal      = {arXiv:1811.11389 [cs, eess]},
+  author       = {Zhao, Bo and Meng, Lili and Yin, Weidong and Sigal, Leonid},
+  year         = {2019},
+  month        = {Oct}
+}
+
+ @article{Balle_Laparra_Simoncelli_2017,
+  title        = {End-to-end Optimized Image Compression},
+  url          = {http://arxiv.org/abs/1611.01704},
+  abstractnote = {We describe an image compression method, consisting of a nonlinear analysis transformation, a uniform quantizer, and a nonlinear synthesis transformation. The transforms are constructed in three successive stages of convolutional linear filters and nonlinear activation functions. Unlike most convolutional neural networks, the joint nonlinearity is chosen to implement a form of local gain control, inspired by those used to model biological neurons. Using a variant of stochastic gradient descent, we jointly optimize the entire model for rate-distortion performance over a database of training images, introducing a continuous proxy for the discontinuous loss function arising from the quantizer. Under certain conditions, the relaxed loss function may be interpreted as the log likelihood of a generative model, as implemented by a variational autoencoder. Unlike these models, however, the compression model must operate at any given point along the rate-distortion curve, as specified by a trade-off parameter. Across an independent set of test images, we find that the optimized method generally exhibits better rate-distortion performance than the standard JPEG and JPEG 2000 compression methods. More importantly, we observe a dramatic improvement in visual quality for all images at all bit rates, which is supported by objective quality estimates using MS-SSIM.},
+  note         = {arXiv: 1611.01704},
+  journal      = {arXiv:1611.01704 [cs, math]},
+  author       = {Ballé, Johannes and Laparra, Valero and Simoncelli, Eero P.},
+  year         = {2017},
+  month        = {Mar}
+}
+ @article{Theis_Shi_Cunningham_Huszar_2017,
+  title        = {Lossy Image Compression with Compressive Autoencoders},
+  url          = {http://arxiv.org/abs/1703.00395},
+  abstractnote = {We propose a new approach to the problem of optimizing autoencoders for lossy image compression. New media formats, changing hardware technology, as well as diverse requirements and content types create a need for compression algorithms which are more flexible than existing codecs. Autoencoders have the potential to address this need, but are difficult to optimize directly due to the inherent non-differentiabilty of the compression loss. We here show that minimal changes to the loss are sufficient to train deep autoencoders competitive with JPEG 2000 and outperforming recently proposed approaches based on RNNs. Our network is furthermore computationally efficient thanks to a sub-pixel architecture, which makes it suitable for high-resolution images. This is in contrast to previous work on autoencoders for compression using coarser approximations, shallower architectures, computationally expensive methods, or focusing on small images.},
+  note         = {arXiv: 1703.00395},
+  journal      = {arXiv:1703.00395 [cs, stat]},
+  author       = {Theis, Lucas and Shi, Wenzhe and Cunningham, Andrew and Huszár, Ferenc},
+  year         = {2017},
+  month        = {Mar}
+}
+ @article{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017,
+  title        = {Full Resolution Image Compression with Recurrent Neural Networks},
+  url          = {http://arxiv.org/abs/1608.05148},
+  abstractnote = {This paper presents a set of full-resolution lossy image compression methods based on neural networks. Each of the architectures we describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. All of our architectures consist of a recurrent neural network (RNN)-based encoder and decoder, a binarizer, and a neural network for entropy coding. We compare RNN types (LSTM, associative LSTM) and introduce a new hybrid of GRU and ResNet. We also study “one-shot” versus additive reconstruction architectures and introduce a new scaled-additive framework. We compare to previous work, showing improvements of 4.3%-8.8% AUC (area under the rate-distortion curve), depending on the perceptual metric used. As far as we know, this is the first neural network architecture that is able to outperform JPEG at image compression across most bitrates on the rate-distortion curve on the Kodak dataset images, with and without the aid of entropy coding.},
+  note         = {arXiv: 1608.05148},
+  journal      = {arXiv:1608.05148 [cs]},
+  author       = {Toderici, George and Vincent, Damien and Johnston, Nick and Hwang, Sung Jin and Minnen, David and Shor, Joel and Covell, Michele},
+  year         = {2017},
+  month        = {Jul}
+}
+ @book{Battaglia_Hamrick_Bapst_Sanchez-Gonzalez_Zambaldi_Malinowski_Tacchetti_Raposo_Santoro_Faulkner_etal_2018,
+  title        = {Relational inductive biases, deep learning, and graph networks},
+  abstractnote = {Artificial intelligence (AI) has undergone a renaissance recently, making major progress in key domains such as vision, language, control, and decision-making. This has been due, in part, to cheap data and cheap compute resources, which have fit the natural strengths of deep learning. However, many defining characteristics of human intelligence, which developed under much different pressures, remain out of reach for current approaches. In particular, generalizing beyond one’s experiences—a hallmark of human intelligence from infancy—remains a formidable challenge for modern AI. The following is part position paper, part review, and part unification. We argue that combinatorial generalization must be a top priority for AI to achieve human-like abilities, and that structured representations and computations are key to realizing this objective. Just as biology uses nature and nurture cooperatively, we reject the false choice between “hand-engineering” and “end-to-end” learning, and instead advocate for an approach which benefits from their complementary strengths. We explore how using relational inductive biases within deep learning architectures can facilitate learning about entities, relations, and rules for composing them. We present a new building block for the AI toolkit with a strong relational inductive bias—the graph network—which generalizes and extends various approaches for neural networks that operate on graphs, and provides a straightforward interface for manipulating structured knowledge and producing structured behaviors. We discuss how graph networks can support relational reasoning and combinatorial generalization, laying the foundation for more sophisticated, interpretable, and flexible patterns of reasoning. As a companion to this paper, we have also released an open-source software library for building graph networks, with demonstrations of how to use them in practice.},
+  journal      = {arXiv},
+  author       = {Battaglia, Peter W. and Hamrick, Jessica B. and Bapst, Victor and Sanchez-Gonzalez, Alvaro and Zambaldi, Vinicius and Malinowski, Mateusz and Tacchetti, Andrea and Raposo, David and Santoro, Adam and Faulkner, Ryan and et al.},
+  year         = {2018}
+}
+ @article{Defferrard_Bresson_Vandergheynst_2017,
+  title        = {Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering},
+  url          = {http://arxiv.org/abs/1606.09375},
+  abstractnote = {In this work, we are interested in generalizing convolutional neural networks (CNNs) from low-dimensional regular grids, where image, video and speech are represented, to high-dimensional irregular domains, such as social networks, brain connectomes or words’ embedding, represented by graphs. We present a formulation of CNNs in the context of spectral graph theory, which provides the necessary mathematical background and efficient numerical schemes to design fast localized convolutional filters on graphs. Importantly, the proposed technique offers the same linear computational complexity and constant learning complexity as classical CNNs, while being universal to any graph structure. Experiments on MNIST and 20NEWS demonstrate the ability of this novel deep learning system to learn local, stationary, and compositional features on graphs.},
+  note         = {arXiv: 1606.09375},
+  journal      = {arXiv:1606.09375 [cs, stat]},
+  author       = {Defferrard, Michaël and Bresson, Xavier and Vandergheynst, Pierre},
+  year         = {2017},
+  month        = {Feb}
+}
+ @inproceedings{Fey_Lenssen_Weichert_Muller_2018,
+  title        = {SplineCNN: Fast Geometric Deep Learning with Continuous B-Spline Kernels},
+  issn         = {10636919},
+  doi          = {10.1109/CVPR.2018.00097},
+  abstractnote = {We present Spline-based Convolutional Neural Networks (SplineCNNs), a variant of deep neural networks for irregular structured and geometric input, e.g., graphs or meshes. Our main contribution is a novel convolution operator based on B-splines, that makes the computation time independent from the kernel size due to the local support property of the B-spline basis functions. As a result, we obtain a generalization of the traditional CNN convolution operator by using continuous kernel functions parametrized by a fixed number of trainable weights. In contrast to related approaches that filter in the spectral domain, the proposed method aggregates features purely in the spatial domain. In addition, SplineCNN allows entire end-to-end training of deep architectures, using only the geometric structure as input, instead of handcrafted feature descriptors. For validation, we apply our method on tasks from the fields of image graph classification, shape correspondence and graph node classification, and show that it outperforms or pars state-of-the-art approaches while being significantly faster and having favorable properties like domain-independence. Our source code is available on GitHub1.},
+  booktitle    = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+  author       = {Fey, Matthias and Lenssen, Jan Eric and Weichert, Frank and Muller, Heinrich},
+  year         = {2018}
+}
+ @inproceedings{Hamilton_Ying_Leskovec_2017,
+  title        = {Inductive representation learning on large graphs},
+  issn         = {10495258},
+  abstractnote = {Low-dimensional embeddings of nodes in large graphs have proved extremely useful in a variety of prediction tasks, from content recommendation to identifying protein functions. However, most existing approaches require that all nodes in the graph are present during training of the embeddings; these previous approaches are inherently transductive and do not naturally generalize to unseen nodes. Here we present GraphSAGE, a general inductive framework that leverages node feature information (e.g., text attributes) to efficiently generate node embeddings for previously unseen data. Instead of training individual embeddings for each node, we learn a function that generates embeddings by sampling and aggregating features from a node’s local neighborhood. Our algorithm outperforms strong baselines on three inductive node-classification benchmarks: we classify the category of unseen nodes in evolving information graphs based on citation and Reddit post data, and we show that our algorithm generalizes to completely unseen graphs using a multi-graph dataset of protein-protein interactions.},
+  booktitle    = {Advances in Neural Information Processing Systems},
+  author       = {Hamilton, William L. and Ying, Rex and Leskovec, Jure},
+  year         = {2017}
+}
+ @article{Hamilton_Ying_Leskovec_2018,
+  title        = {Inductive Representation Learning on Large Graphs},
+  url          = {http://arxiv.org/abs/1706.02216},
+  abstractnote = {Low-dimensional embeddings of nodes in large graphs have proved extremely useful in a variety of prediction tasks, from content recommendation to identifying protein functions. However, most existing approaches require that all nodes in the graph are present during training of the embeddings; these previous approaches are inherently transductive and do not naturally generalize to unseen nodes. Here we present GraphSAGE, a general, inductive framework that leverages node feature information (e.g., text attributes) to efficiently generate node embeddings for previously unseen data. Instead of training individual embeddings for each node, we learn a function that generates embeddings by sampling and aggregating features from a node’s local neighborhood. Our algorithm outperforms strong baselines on three inductive node-classification benchmarks: we classify the category of unseen nodes in evolving information graphs based on citation and Reddit post data, and we show that our algorithm generalizes to completely unseen graphs using a multi-graph dataset of protein-protein interactions.},
+  note         = {arXiv: 1706.02216},
+  journal      = {arXiv:1706.02216 [cs, stat]},
+  author       = {Hamilton, William L. and Ying, Rex and Leskovec, Jure},
+  year         = {2018},
+  month        = {Sep}
+}
+ @article{Kipf_Welling_2017,
+  title        = {Semi-Supervised Classification with Graph Convolutional Networks},
+  url          = {http://arxiv.org/abs/1609.02907},
+  abstractnote = {We present a scalable approach for semi-supervised learning on graph-structured data that is based on an efficient variant of convolutional neural networks which operate directly on graphs. We motivate the choice of our convolutional architecture via a localized first-order approximation of spectral graph convolutions. Our model scales linearly in the number of graph edges and learns hidden layer representations that encode both local graph structure and features of nodes. In a number of experiments on citation networks and on a knowledge graph dataset we demonstrate that our approach outperforms related methods by a significant margin.},
+  note         = {arXiv: 1609.02907},
+  journal      = {arXiv:1609.02907 [cs, stat]},
+  author       = {Kipf, Thomas N. and Welling, Max},
+  year         = {2017},
+  month        = {Feb}
+}
+ @inproceedings{Monti_Boscaini_Masci_Rodolà_Svoboda_Bronstein_2017,
+  title        = {Geometric deep learning on graphs and manifolds using mixture model CNNs},
+  isbn         = {978-1-5386-0457-1},
+  doi          = {10.1109/CVPR.2017.576},
+  abstractnote = {Deep learning has achieved a remarkable performance breakthrough in several fields, most notably in speech recognition, natural language processing, and computer vision. In particular, convolutional neural network (CNN) architectures currently produce state-of-the-art performance on a variety of image analysis tasks such as object detection and recognition. Most of deep learning research has so far focused on dealing with 1D, 2D, or 3D Euclidean-structured data such as acoustic signals, images, or videos. Recently, there has been an increasing interest in geometric deep learning, attempting to generalize deep learning methods to non-Euclidean structured data such as graphs and manifolds, with a variety of applications from the domains of network analysis, computational social science, or computer graphics. In this paper, we propose a unified framework allowing to generalize CNN architectures to non-Euclidean domains (graphs and manifolds) and learn local, stationary, and compositional task-specific features. We show that various non-Euclidean CNN methods previously proposed in the literature can be considered as particular instances of our framework. We test the proposed method on standard tasks from the realms of image-, graph-and 3D shape analysis and show that it consistently outperforms previous approaches.},
+  booktitle    = {Proceedings - 30th IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2017},
+  author       = {Monti, Federico and Boscaini, Davide and Masci, Jonathan and Rodolà, Emanuele and Svoboda, Jan and Bronstein, Michael M.},
+  year         = {2017}
+}
+ @inproceedings{Monti_Otness_Bronstein_2018,
+  title        = {MOTIFNET: A MOTIF-BASED GRAPH CONVOLUTIONAL NETWORK for DIRECTED GRAPHS},
+  isbn         = {978-1-5386-4410-2},
+  doi          = {10.1109/DSW.2018.8439897},
+  abstractnote = {Deep learning on graphs and in particular, graph convolutional neural networks, have recently attracted significant attention in the machine learning community. Many of such techniques explore the analogy between the graph Laplacian eigenvectors and the classical Fourier basis, allowing to formulate the convolution as a multiplication in the spectral domain. One of the key drawback of spectral CNNs is their explicit assumption of an undirected graph, leading to a symmetric Laplacian matrix with orthogonal eigendecomposition. In this work we propose MotifNet, a graph CNN capable of dealing with directed graphs by exploiting local graph motifs. We present experimental evidence showing the advantage of our approach on real data.},
+  booktitle    = {2018 IEEE Data Science Workshop, DSW 2018 - Proceedings},
+  author       = {Monti, Federico and Otness, Karl and Bronstein, Michael M.},
+  year         = {2018}
+}
+ @book{Velicković_Cucurull_Casanova_Romero_Liò_Bengio_2017,
+  title        = {Graph attention networks},
+  abstractnote = {We present graph attention networks (GATs), novel neural network architectures that operate on graph-structured data, leveraging masked self-attentional layers to address the shortcomings of prior methods based on graph convolutions or their approximations. By stacking layers in which nodes are able to attend over their neighborhoods’ features, we enable (implicitly) specifying different weights to different nodes in a neighborhood, without requiring any kind of costly matrix operation (such as inversion) or depending on knowing the graph structure upfront. In this way, we address several key challenges of spectral-based graph neural networks simultaneously, and make our model readily applicable to inductive as well as transductive problems. Our GAT models have achieved or matched state-of-the-art results across four established transductive and inductive graph benchmarks: the Cora, Citeseer and Pubmed citation network datasets, as well as a proteinprotein interaction dataset (wherein test graphs remain unseen during training).},
+  journal      = {arXiv},
+  author       = {Velicković, Petar and Cucurull, Guillem and Casanova, Arantxa and Romero, Adriana and Liò, Pietro and Bengio, Yoshua},
+  year         = {2017}
+}
+
+ @article{Stańczyk_Mehrkanoon_2021,
+  title        = {Deep Graph Convolutional Networks for Wind Speed Prediction},
+  url          = {http://arxiv.org/abs/2101.10041},
+  abstractnote = {Wind speed prediction and forecasting is important for various business and management sectors. In this paper, we introduce new models for wind speed prediction based on graph convolutional networks (GCNs). Given hourly data of several weather variables acquired from multiple weather stations, wind speed values are predicted for multiple time steps ahead. In particular, the weather stations are treated as nodes of a graph whose associated adjacency matrix is learnable. In this way, the network learns the graph spatial structure and determines the strength of relations between the weather stations based on the historical weather data. We add a self-loop connection to the learnt adjacency matrix and normalize the adjacency matrix. We examine two scenarios with the self-loop connection setting (two separate models). In the first scenario, the self-loop connection is imposed as a constant additive. In the second scenario a learnable parameter is included to enable the network to decide about the self-loop connection strength. Furthermore, we incorporate data from multiple time steps with temporal convolution, which together with spatial graph convolution constitutes spatio-temporal graph convolution. We perform experiments on real datasets collected from weather stations located in cities in Denmark and the Netherlands. The numerical experiments show that our proposed models outperform previously developed baseline models on the referenced datasets. We provide additional insights by visualizing learnt adjacency matrices from each layer of our models.},
+  note         = {arXiv: 2101.10041},
+  journal      = {arXiv:2101.10041 [cs]},
+  author       = {Stańczyk, Tomasz and Mehrkanoon, Siamak},
+  year         = {2021},
+  month        = {Jan}
+}
+ @article{Cui_Henrickson_Ke_Wang_2020,
+  title        = {Traffic Graph Convolutional Recurrent Neural Network: A Deep Learning Framework for Network-Scale Traffic Learning and Forecasting},
+  volume       = {21},
+  issn         = {1524-9050, 1558-0016},
+  doi          = {10.1109/TITS.2019.2950416},
+  abstractnote = {Trafﬁc forecasting is a particularly challenging application of spatiotemporal forecasting, due to the time-varying trafﬁc patterns and the complicated spatial dependencies on road networks. To address this challenge, we learn the trafﬁc network as a graph and propose a novel deep learning framework, Trafﬁc Graph Convolutional Long Short-Term Memory Neural Network (TGC-LSTM), to learn the interactions between roadways in the trafﬁc network and forecast the network-wide trafﬁc state. We deﬁne the trafﬁc graph convolution based on the physical network topology. The relationship between the proposed trafﬁc graph convolution and the spectral graph convolution is also discussed. An L1-norm on graph convolution weights and an L2-norm on graph convolution features are added to the model’s loss function to enhance the interpretability of the proposed model. Experimental results show that the proposed model outperforms baseline methods on two real-world trafﬁc state datasets. The visualization of the graph convolution weights indicates that the proposed framework can recognize the most inﬂuential road segments in real-world trafﬁc networks.},
+  number       = {11},
+  journal      = {IEEE Transactions on Intelligent Transportation Systems},
+  author       = {Cui, Zhiyong and Henrickson, Kristian and Ke, Ruimin and Wang, Yinhai},
+  year         = {2020},
+  month        = {Nov},
+  pages        = {4883–4894}
+}
+ @article{Krizhevsky_Sutskever_Hinton_2017,
+  title        = {ImageNet classification with deep convolutional neural networks},
+  volume       = {60},
+  issn         = {0001-0782, 1557-7317},
+  doi          = {10.1145/3065386},
+  abstractnote = {We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 different classes. On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0% which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, consists of ﬁve convolutional layers, some of which are followed by max-pooling layers, and three fully-connected layers with a ﬁnal 1000-way softmax. To make training faster, we used non-saturating neurons and a very efﬁcient GPU implementation of the convolution operation. To reduce overﬁtting in the fully-connected layers we employed a recently-developed regularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the second-best entry.},
+  number       = {6},
+  journal      = {Communications of the ACM},
+  author       = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E.},
+  year         = {2017},
+  month        = {May},
+  pages        = {84–90}
+}
+ @article{Krishna_Zhu_Groth_Johnson_Hata_Kravitz_Chen_Kalantidis_Li_Shamma_etal_2016,
+  title        = {Visual Genome: Connecting Language and Vision Using Crowdsourced Dense Image Annotations},
+  url          = {http://arxiv.org/abs/1602.07332},
+  abstractnote = {Despite progress in perceptual tasks such as image classification, computers still perform poorly on cognitive tasks such as image description and question answering. Cognition is core to tasks that involve not just recognizing, but reasoning about our visual world. However, models used to tackle the rich content in images for cognitive tasks are still being trained using the same datasets designed for perceptual tasks. To achieve success at cognitive tasks, models need to understand the interactions and relationships between objects in an image. When asked “What vehicle is the person riding?”, computers will need to identify the objects in an image as well as the relationships riding(man, carriage) and pulling(horse, carriage) in order to answer correctly that “the person is riding a horse-drawn carriage”. In this paper, we present the Visual Genome dataset to enable the modeling of such relationships. We collect dense annotations of objects, attributes, and relationships within each image to learn these models. Specifically, our dataset contains over 100K images where each image has an average of 21 objects, 18 attributes, and 18 pairwise relationships between objects. We canonicalize the objects, attributes, relationships, and noun phrases in region descriptions and questions answer pairs to WordNet synsets. Together, these annotations represent the densest and largest dataset of image descriptions, objects, attributes, relationships, and question answers.},
+  note         = {arXiv: 1602.07332},
+  journal      = {arXiv:1602.07332 [cs]},
+  author       = {Krishna, Ranjay and Zhu, Yuke and Groth, Oliver and Johnson, Justin and Hata, Kenji and Kravitz, Joshua and Chen, Stephanie and Kalantidis, Yannis and Li, Li-Jia and Shamma, David A. and et al.},
+  year         = {2016},
+  month        = {Feb}
+}
+ @article{Simonyan_Zisserman_2015,
+  title        = {Very Deep Convolutional Networks for Large-Scale Image Recognition},
+  url          = {http://arxiv.org/abs/1409.1556},
+  abstractnote = {In this work we investigate the effect of the convolutional network depth on its accuracy in the large-scale image recognition setting. Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3x3) convolution filters, which shows that a significant improvement on the prior-art configurations can be achieved by pushing the depth to 16-19 weight layers. These findings were the basis of our ImageNet Challenge 2014 submission, where our team secured the first and the second places in the localisation and classification tracks respectively. We also show that our representations generalise well to other datasets, where they achieve state-of-the-art results. We have made our two best-performing ConvNet models publicly available to facilitate further research on the use of deep visual representations in computer vision.},
+  note         = {arXiv: 1409.1556},
+  journal      = {arXiv:1409.1556 [cs]},
+  author       = {Simonyan, Karen and Zisserman, Andrew},
+  year         = {2015},
+  month        = {Apr}
+}
+ @article{He_Zhang_Ren_Sun_2015,
+  title        = {Deep Residual Learning for Image Recognition},
+  url          = {http://arxiv.org/abs/1512.03385},
+  abstractnote = {Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8x deeper than VGG nets but still having lower complexity. An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers. The depth of representations is of central importance for many visual recognition tasks. Solely due to our extremely deep representations, we obtain a 28% relative improvement on the COCO object detection dataset. Deep residual nets are foundations of our submissions to ILSVRC and COCO 2015 competitions, where we also won the 1st places on the tasks of ImageNet detection, ImageNet localization, COCO detection, and COCO segmentation.},
+  note         = {arXiv: 1512.03385},
+  journal      = {arXiv:1512.03385 [cs]},
+  author       = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  year         = {2015},
+  month        = {Dec}
+}
+ @article{Wu_Zhang_Souza_Jr_Fifty_Yu_Weinberger_2019,
+  title        = {Simplifying Graph Convolutional Networks},
+  url          = {http://arxiv.org/abs/1902.07153},
+  abstractnote = {Graph Convolutional Networks (GCNs) and their variants have experienced significant attention and have become the de facto methods for learning graph representations. GCNs derive inspiration primarily from recent deep learning approaches, and as a result, may inherit unnecessary complexity and redundant computation. In this paper, we reduce this excess complexity through successively removing nonlinearities and collapsing weight matrices between consecutive layers. We theoretically analyze the resulting linear model and show that it corresponds to a fixed low-pass filter followed by a linear classifier. Notably, our experimental evaluation demonstrates that these simplifications do not negatively impact accuracy in many downstream applications. Moreover, the resulting model scales to larger datasets, is naturally interpretable, and yields up to two orders of magnitude speedup over FastGCN.},
+  note         = {arXiv: 1902.07153},
+  journal      = {arXiv:1902.07153 [cs, stat]},
+  author       = {Wu, Felix and Zhang, Tianyi and Souza Jr., Amauri Holanda de and Fifty, Christopher and Yu, Tao and Weinberger, Kilian Q.},
+  year         = {2019},
+  month        = {Jun}
+}
+ @article{Gu_Tresp_2020,
+  title        = {Interpretable Graph Capsule Networks for Object Recognition},
+  url          = {http://arxiv.org/abs/2012.01674},
+  abstractnote = {Capsule Networks, as alternatives to Convolutional Neural Networks, have been proposed to recognize objects from images. The current literature demonstrates many advantages of CapsNets over CNNs. However, how to create explanations for individual classifications of CapsNets has not been well explored. The widely used saliency methods are mainly proposed for explaining CNN-based classifications; they create saliency map explanations by combining activation values and the corresponding gradients, e.g., Grad-CAM. These saliency methods require a specific architecture of the underlying classifiers and cannot be trivially applied to CapsNets due to the iterative routing mechanism therein. To overcome the lack of interpretability, we can either propose new post-hoc interpretation methods for CapsNets or modifying the model to have build-in explanations. In this work, we explore the latter. Specifically, we propose interpretable Graph Capsule Networks (GraCapsNets), where we replace the routing part with a multi-head attention-based Graph Pooling approach. In the proposed model, individual classification explanations can be created effectively and efficiently. Our model also demonstrates some unexpected benefits, even though it replaces the fundamental part of CapsNets. Our GraCapsNets achieve better classification performance with fewer parameters and better adversarial robustness, when compared to CapsNets. Besides, GraCapsNets also keep other advantages of CapsNets, namely, disentangled representations and affine transformation robustness.},
+  author       = {Gu, Jindong and Tresp, Volker},
+  year         = {2020}
+}
+ @inproceedings{Vaswani_Shazeer_Parmar_Uszkoreit_Jones_Gomez_Kaiser_Polosukhin_2017,
+  title        = {Attention is all you need},
+  issn         = {10495258},
+  abstractnote = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.0 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature.},
+  booktitle    = {Advances in Neural Information Processing Systems},
+  author       = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, \Lukasz and Polosukhin, Illia},
+  year         = {2017}
+}
+ @article{Levie_Monti_Bresson_Bronstein_2019,
+  title        = {CayleyNets: Graph Convolutional Neural Networks with Complex Rational Spectral Filters},
+  volume       = {67},
+  issn         = {1053587X},
+  doi          = {10.1109/TSP.2018.2879624},
+  abstractnote = {The rise of graph-structured data such as social networks, regulatory networks, citation graphs, and functional brain networks, in combination with resounding success of deep learning in various applications, has brought the interest in generalizing deep learning models to non-Euclidean domains. In this paper, we introduce a new spectral domain convolutional architecture for deep learning on graphs. The core ingredient of our model is a new class of parametric rational complex functions (Cayley polynomials) allowing to efficiently compute spectral filters on graphs that specialize on frequency bands of interest. Our model generates rich spectral filters that are localized in space, scales linearly with the size of the input data for sparsely connected graphs, and can handle different constructions of Laplacian operators. Extensive experimental results show the superior performance of our approach, in comparison to other spectral domain convolutional architectures, on spectral image classification, community detection, vertex classification, and matrix completion tasks.},
+  number       = {1},
+  journal      = {IEEE Transactions on Signal Processing},
+  author       = {Levie, Ron and Monti, Federico and Bresson, Xavier and Bronstein, Michael M.},
+  year         = {2019},
+  pages        = {97–109}
+}
+ @article{Bai_Cui_Jiao_Rossi_Hancock_2019,
+  title        = {Learning backtrackless aligned-spatial graph convolutional networks for graph classification},
+  issn         = {23318422},
+  doi          = {10.1109/tpami.2020.3011866},
+  abstractnote = {In this paper, we develop a novel Backtrackless Aligned-Spatial Graph Convolutional Network (BASGCN) model to learn effective features for graph classification. Our idea is to transform arbitrary-sized graphs into fixed-sized backtrackless aligned grid structures and define a new spatial graph convolution operation associated with the grid structures. We show that the proposed BASGCN model not only reduces the problems of information loss and imprecise information representation arising in existing spatially-based Graph Convolutional Network (GCN) models, but also bridges the theoretical gap between traditional Convolutional Neural Network (CNN) models and spatially-based GCN models. Furthermore, the proposed BASGCN model can both adaptively discriminate the importance between specified vertices during the convolution process and reduce the notorious tottering problem of existing spatially-based GCNs related to the Weisfeiler-Lehman algorithm, explaining the effectiveness of the proposed model. Experiments on standard graph datasets demonstrate the effectiveness of the proposed model.},
+  journal      = {arXiv},
+  author       = {Bai, Lu and Cui, Lixin and Jiao, Yuhang and Rossi, Luca and Hancock, Edwin R.},
+  year         = {2019},
+  pages        = {1–16}
+}
+ @book{Chen_Wei_Huang_Ding_Li_2020,
+  title        = {Simple and Deep Graph Convolutional Networks},
+  abstractnote = {Graph convolutional networks (GCNs) are a powerful deep learning approach for graph-structured data. Recently, GCNs and subsequent variants have shown superior performance in various application areas on real-world datasets. Despite their success, most of the current GCN models are shallow, due to the over-smoothing problem. In this paper, we study the problem of designing and analyzing deep graph convolutional networks. We propose the GCNII, an extension of the vanilla GCN model with two simple yet effective techniques: Initial residual and Identity mapping. We provide theoretical and empirical evidence that the two techniques effectively relieves the problem of over-smoothing. Our experiments show that the deep GCNII model outperforms the state-of-the-art methods on various semi- and full-supervised tasks. Code is available at https://github.com/chennnM/GCNII.},
+  journal      = {arXiv},
+  author       = {Chen, Ming and Wei, Zhewei and Huang, Zengfeng and Ding, Bolin and Li, Yaliang},
+  year         = {2020}
+}
+ @article{Wang_Qian_Zeng_Chen_Liu_Zheng_Zhou_Wu_2021,
+  title        = {ATPGNN: Reconstruction of Neighborhood in Graph Neural Networks With Attention-Based Topological Patterns},
+  volume       = {9},
+  issn         = {2169-3536},
+  doi          = {10.1109/ACCESS.2021.3050541},
+  abstractnote = {Graph Neural Networks (GNNs) have been applied in many ﬁelds of semi-supervised node classiﬁcation for non-Euclidean data. However, some GNNs cannot make good use of positive information brought by nodes which are far away from each central node for aggregation operations. These remote nodes with positive information can enhance the representation of the central node. Some GNNs also ignore rich structure information around each central node’s surroundings or entire network. Besides, most of GNNs have a ﬁxed architecture and cannot change their components to adapt to different tasks. In this paper, we propose a semi-supervised learning platform ATPGNN with three variable components to overcome the above shortcomings. This novel model can fully adapt to different tasks by changing its components and support inductive learning. The key idea is that we ﬁrst create a high-order topology graph, which is from similarity of node structure information. Speciﬁcally, we reconstruct the relationships between nodes in a potential space obtained by network embedding in graph. Second, we introduce graph representation learning methods to extract representation information of remote nodes on the high-order topology graph. Third, we use some network embedding methods to get graph structure information of each node. Finally, we combine the representation information of remote nodes, graph structure information and feature for each node by attention mechanism, and apply them to learning node representation in graph. Extensive experiments on real attributed networks demonstrate the superiority of the proposed model against traditional GNNs.},
+  journal      = {IEEE Access},
+  author       = {Wang, Kehao and Qian, Hantao and Zeng, Xuming and Chen, Mozi and Liu, Kezhong and Zheng, Kai and Zhou, Pan and Wu, Dapeng},
+  year         = {2021},
+  pages        = {9218–9234}
+}
+ @article{Herrera_Proselkov_Perez-Hernandez_Parlikad_2021,
+  title        = {Mining Graph-Fourier Transform Time Series for Anomaly Detection of Internet Traffic at Core and Metro Networks},
+  volume       = {9},
+  issn         = {2169-3536},
+  doi          = {10.1109/ACCESS.2021.3050014},
+  abstractnote = {This paper proposes a framework to analyse trafﬁc-data processes on a long-haul backbone infrastructure network providing internet services at a national level. This type of network requires low latency and fast speed, which means there is a large demand for research focusing on near real-time decision-making and resilience assessment. To this aim, this paper proposes two innovative, complementary procedures: a multi-view approach for the topology analysis of a backbone network at a static level and a time-series mining approach of the graph signal for modelling the trafﬁc dynamics. The combined framework provides a deeper understanding of a backbone network than classical models, allowing for backbone network optimisation operations and management at near real-time. This methodology was applied to the backbone infrastructure of a major UK internet service provider. Doing so increased accuracy and computational efﬁciency for detecting where and when anomalies and pattern irregularities occur in the network signal.},
+  journal      = {IEEE Access},
+  author       = {Herrera, Manuel and Proselkov, Yaniv and Perez-Hernandez, Marco and Parlikad, Ajith Kumar},
+  year         = {2021},
+  pages        = {8997–9011}
+}
+ @article{Jin_Xia_Liu_Murata_Kim_2021,
+  title        = {Predicting Emergency Medical Service Demand with Bipartite Graph Convolutional Networks},
+  issn         = {2169-3536},
+  doi          = {10.1109/ACCESS.2021.3050607},
+  abstractnote = {Emergency medical service (EMS) plays an essential role in increasing survival rates as it provides ﬁrst aid to victims of life-threatening emergencies. However, unbalanced EMS supply-demand distribution in the metropolis may cause a shortage of accessible EMS resources and delay the ﬁrst aid treatment. There is an urgent need to discover the hidden EMS supply-demand relation, predict the incoming EMS demand, and take precautions against unexpected emergencies. This study assumes that EMS demand correlates with population demographic data, regional socioeconomic factors, and hospital conditions. To model these correlated factors, we represent Tokyo’s ambulance record data as a hospital-region bipartite graph and propose a bipartite graph convolutional neural network model to predict the EMS demand between hospital-region pairs. Our approach achieves 77.3% − 87.7% accuracy in binary demand label prediction task. It signiﬁcantly outperforms traditional machine learning algorithms, statistical models, and the latest graph-based methods. Finally, we use a case study to show the signiﬁcance ofEMS demand forecasting, proving that our approach can contribute to public health emergency management by making EMS predictions.},
+  journal      = {IEEE Access},
+  author       = {Jin, Ruidong and Xia, Tianqi and Liu, Xin and Murata, Tsuyoshi and Kim, Kyoung-Sook},
+  year         = {2021},
+  pages        = {1–1}
+}
+ @inproceedings{Cheng_Zhang_He_Chen_Cheng_Lu_2020,
+  place        = {Seattle, WA, USA},
+  title        = {Skeleton-Based Action Recognition With Shift Graph Convolutional Network},
+  isbn         = {978-1-72817-168-5},
+  url          = {https://ieeexplore.ieee.org/document/9157077/},
+  doi          = {10.1109/CVPR42600.2020.00026},
+  abstractnote = {Action recognition with skeleton data is attracting more attention in computer vision. Recently, graph convolutional networks (GCNs), which model the human body skeletons as spatiotemporal graphs, have obtained remarkable performance. However, the computational complexity of GCNbased methods are pretty heavy, typically over 15 GFLOPs for one action sample. Recent works even reach ∼100 GFLOPs. Another shortcoming is that the receptive ﬁelds of both spatial graph and temporal graph are inﬂexible. Although some works enhance the expressiveness of spatial graph by introducing incremental adaptive modules, their performance is still limited by regular GCN structures. In this paper, we propose a novel shift graph convolutional network (Shift-GCN) to overcome both shortcomings. Instead of using heavy regular graph convolutions, our Shift-GCN is composed of novel shift graph operations and lightweight point-wise convolutions, where the shift graph operations provide ﬂexible receptive ﬁelds for both spatial graph and temporal graph. On three datasets for skeleton-based action recognition, the proposed Shift-GCN notably exceeds the state-of-the-art methods with more than 10× less computational complexity.},
+  booktitle    = {2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  publisher    = {IEEE},
+  author       = {Cheng, Ke and Zhang, Yifan and He, Xiangyu and Chen, Weihan and Cheng, Jian and Lu, Hanqing},
+  year         = {2020},
+  month        = {Jun},
+  pages        = {180–189}
+}
+ @article{Wu_Wan_Yue_Jin_Zhao_Golmant_Gholaminejad_Gonzalez_Keutzer_2017,
+  title        = {Shift: A Zero FLOP, Zero Parameter Alternative to Spatial Convolutions},
+  url          = {http://arxiv.org/abs/1711.08141},
+  abstractnote = {Neural networks rely on convolutions to aggregate spatial information. However, spatial convolutions are expensive in terms of model size and computation, both of which grow quadratically with respect to kernel size. In this paper, we present a parameter-free, FLOP-free “shift” operation as an alternative to spatial convolutions. We fuse shifts and point-wise convolutions to construct end-to-end trainable shift-based modules, with a hyperparameter characterizing the tradeoff between accuracy and efficiency. To demonstrate the operation’s efficacy, we replace ResNet’s 3x3 convolutions with shift-based modules for improved CIFAR10 and CIFAR100 accuracy using 60% fewer parameters; we additionally demonstrate the operation’s resilience to parameter reduction on ImageNet, outperforming ResNet family members. We finally show the shift operation’s applicability across domains, achieving strong performance with fewer parameters on classification, face verification and style transfer.},
+  note         = {arXiv: 1711.08141},
+  journal      = {arXiv:1711.08141 [cs]},
+  author       = {Wu, Bichen and Wan, Alvin and Yue, Xiangyu and Jin, Peter and Zhao, Sicheng and Golmant, Noah and Gholaminejad, Amir and Gonzalez, Joseph and Keutzer, Kurt},
+  year         = {2017},
+  month        = {Dec}
+}
+ @article{Lin_Gan_Han_2019,
+  title        = {TSM: Temporal Shift Module for Efficient Video Understanding},
+  url          = {http://arxiv.org/abs/1811.08383},
+  abstractnote = {The explosive growth in video streaming gives rise to challenges on performing video understanding at high accuracy and low computation cost. Conventional 2D CNNs are computationally cheap but cannot capture temporal relationships; 3D CNN based methods can achieve good performance but are computationally intensive, making it expensive to deploy. In this paper, we propose a generic and effective Temporal Shift Module (TSM) that enjoys both high efficiency and high performance. Specifically, it can achieve the performance of 3D CNN but maintain 2D CNN’s complexity. TSM shifts part of the channels along the temporal dimension; thus facilitate information exchanged among neighboring frames. It can be inserted into 2D CNNs to achieve temporal modeling at zero computation and zero parameters. We also extended TSM to online setting, which enables real-time low-latency online video recognition and video object detection. TSM is accurate and efficient: it ranks the first place on the Something-Something leaderboard upon publication; on Jetson Nano and Galaxy Note8, it achieves a low latency of 13ms and 35ms for online video recognition. The code is available at: https://github.com/mit-han-lab/temporal-shift-module.},
+  note         = {arXiv: 1811.08383},
+  journal      = {arXiv:1811.08383 [cs]},
+  author       = {Lin, Ji and Gan, Chuang and Han, Song},
+  year         = {2019},
+  month        = {Aug}
+}
+ @article{Yang_Zou_2020,
+  title        = {A Graph-based Interactive Reasoning for Human-Object Interaction Detection},
+  url          = {http://arxiv.org/abs/2007.06925},
+  abstractnote = {Human-Object Interaction (HOI) detection devotes to learn how humans interact with surrounding objects via inferring triplets of < human, verb, object >. However, recent HOI detection methods mostly rely on additional annotations (e.g., human pose) and neglect powerful interactive reasoning beyond convolutions. In this paper, we present a novel graph-based interactive reasoning model called Interactive Graph (abbr. in-Graph) to infer HOIs, in which interactive semantics implied among visual targets are efficiently exploited. The proposed model consists of a project function that maps related targets from convolution space to a graph-based semantic space, a message passing process propagating semantics among all nodes and an update function transforming the reasoned nodes back to convolution space. Furthermore, we construct a new framework to assemble in-Graph models for detecting HOIs, namely in-GraphNet. Beyond inferring HOIs using instance features respectively, the framework dynamically parses pairwise interactive semantics among visual targets by integrating two-level in-Graphs, i.e., scene-wide and instance-wide in-Graphs. Our framework is end-to-end trainable and free from costly annotations like human pose. Extensive experiments show that our proposed framework outperforms existing HOI detection methods on both V-COCO and HICO-DET benchmarks and improves the baseline about 9.4% and 15% relatively, validating its efficacy in detecting HOIs.},
+  note         = {arXiv: 2007.06925},
+  journal      = {arXiv:2007.06925 [cs]},
+  author       = {Yang, Dongming and Zou, Yuexian},
+  year         = {2020},
+  month        = {Jul}
+}
+ @article{Yang_Wang_Song_Yuan_Tao_2021,
+  title        = {SPAGAN: Shortest Path Graph Attention Network},
+  url          = {http://arxiv.org/abs/2101.03464},
+  abstractnote = {Graph convolutional networks (GCN) have recently demonstrated their potential in analyzing non-grid structure data that can be represented as graphs. The core idea is to encode the local topology of a graph, via convolutions, into the feature of a center node. In this paper, we propose a novel GCN model, which we term as Shortest Path Graph Attention Network (SPAGAN). Unlike conventional GCN models that carry out node-based attentions within each layer, the proposed SPAGAN conducts path-based attention that explicitly accounts for the influence of a sequence of nodes yielding the minimum cost, or shortest path, between the center node and its higher-order neighbors. SPAGAN therefore allows for a more informative and intact exploration of the graph structure and further {a} more effective aggregation of information from distant neighbors into the center node, as compared to node-based GCN methods. We test SPAGAN on the downstream classification task on several standard datasets, and achieve performances superior to the state of the art. Code is publicly available at https://github.com/ihollywhy/SPAGAN.},
+  note         = {arXiv: 2101.03464},
+  journal      = {arXiv:2101.03464 [cs]},
+  author       = {Yang, Yiding and Wang, Xinchao and Song, Mingli and Yuan, Junsong and Tao, Dacheng},
+  year         = {2021},
+  month        = {Jan}
+}
+ @article{Dwivedi_Bresson_2020,
+  title        = {A Generalization of Transformer Networks to Graphs},
+  url          = {http://arxiv.org/abs/2012.09699},
+  abstractnote = {We propose a generalization of transformer neural network architecture for arbitrary graphs. The original transformer was designed for Natural Language Processing (NLP), which operates on fully connected graphs representing all connections between the words in a sequence. Such architecture does not leverage the graph connectivity inductive bias, and can perform poorly when the graph topology is important and has not been encoded into the node features. We introduce a graph transformer with four new properties compared to the standard model. First, the attention mechanism is a function of the neighborhood connectivity for each node in the graph. Second, the positional encoding is represented by the Laplacian eigenvectors, which naturally generalize the sinusoidal positional encodings often used in NLP. Third, the layer normalization is replaced by a batch normalization layer, which provides faster training and better generalization performance. Finally, the architecture is extended to edge feature representation, which can be critical to tasks s.a. chemistry (bond type) or link prediction (entity relationship in knowledge graphs). Numerical experiments on a graph benchmark demonstrate the performance of the proposed graph transformer architecture. This work closes the gap between the original transformer, which was designed for the limited case of line graphs, and graph neural networks, that can work with arbitrary graphs. As our architecture is simple and generic, we believe it can be used as a black box for future applications that wish to consider transformer and graphs.},
+  author       = {Dwivedi, Vijay Prakash and Bresson, Xavier},
+  year         = {2020}
+}
+ @article{Gao_Wang_Ji_2018,
+  title        = {Large-Scale Learnable Graph Convolutional Networks},
+  doi          = {10.1145/3219819.3219947},
+  abstractnote = {Convolutional neural networks (CNNs) have achieved great success on grid-like data such as images, but face tremendous challenges in learning from more generic data such as graphs. In CNNs, the trainable local filters enable the automatic extraction of high-level features. The computation with filters requires a fixed number of ordered units in the receptive fields. However, the number of neighboring units is neither fixed nor are they ordered in generic graphs, thereby hindering the applications of convolutional operations. Here, we address these challenges by proposing the learnable graph convolutional layer (LGCL). LGCL automatically selects a fixed number of neighboring nodes for each feature based on value ranking in order to transform graph data into grid-like structures in 1-D format, thereby enabling the use of regular convolutional operations on generic graphs. To enable model training on large-scale graphs, we propose a sub-graph training method to reduce the excessive memory and computational resource requirements suffered by prior methods on graph convolutions. Our experimental results on node classification tasks in both transductive and inductive learning settings demonstrate that our methods can achieve consistently better performance on the Cora, Citeseer, Pubmed citation network, and protein-protein interaction network datasets. Our results also indicate that the proposed methods using sub-graph training strategy are more efficient as compared to prior approaches.},
+  note         = {arXiv: 1808.03965},
+  journal      = {Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  author       = {Gao, Hongyang and Wang, Zhengyang and Ji, Shuiwang},
+  year         = {2018},
+  month        = {Jul},
+  pages        = {1416–1424}
+}
+ @article{Bai_Meng_Rui_Wang_2021,
+  title        = {Rumour Detection based on Graph Convolutional Neural Net},
+  issn         = {2169-3536},
+  doi          = {10.1109/ACCESS.2021.3050563},
+  abstractnote = {Rumor detection is an important research topic in social networks, and lots of rumor detection models are proposed in recent years. For the rumor detection task, structural information in a conversation can be used to extract effective features. However, many existing rumor detection models focus on local structural features while the global structural features between the source tweet and its replies are not effectively used. To make full use of global structural features and content information, we propose SourceReplies relation Graph (SR-graph) for each conversation, in which every node denotes a tweet, its node feature is weighted word vectors, and edges denote the interaction between tweets. Based on SR-graphs, we propose an Ensemble Graph Convolutional Neural Net with a Nodes Proportion Allocation Mechanism (EGCN) for the rumor detection task. In experiments, we ﬁrst verify that the extracted structural features are effective, and then we show the effects of different word-embedding dimensions on multiple test indices. Moreover, we show that our proposed EGCN model is comparable or even better than the current state-of-art machine learning models.},
+  journal      = {IEEE Access},
+  author       = {Bai, Na and Meng, Fanrong and Rui, Xiaobin and Wang, Zhixiao},
+  year         = {2021},
+  pages        = {1–1}
+}
+ @article{Yang_2018_Graph,
+  title     = {Graph r-cnn for scene graph generation},
+  author    = {Yang, Jianwei and Lu, Jiasen and Lee, Stefan and Batra, Dhruv and Parikh, Devi},
+  year      = {2018}
+}
+ @article{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014,
+  title        = {Generative Adversarial Networks},
+  url          = {http://arxiv.org/abs/1406.2661},
+  abstractnote = {We propose a new framework for estimating generative models via an adversarial process, in which we simultaneously train two models: a generative model G that captures the data distribution, and a discriminative model D that estimates the probability that a sample came from the training data rather than G. The training procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D, a unique solution exists, with G recovering the training data distribution and D equal to 1/2 everywhere. In the case where G and D are defined by multilayer perceptrons, the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference networks during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples.},
+  note         = {arXiv: 1406.2661},
+  journal      = {arXiv:1406.2661 [cs, stat]},
+  author       = {Goodfellow, Ian J. and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+  year         = {2014},
+  month        = {Jun}
+}
+@article{OpenImages2,
+  title   = {OpenImages: A public dataset for large-scale multi-label and multi-class image classification.},
+  author  = {Krasin, Ivan and Duerig, Tom and Alldrin, Neil and Ferrari, Vittorio and Abu-El-Haija, Sami and Kuznetsova, Alina and Rom, Hassan and Uijlings, Jasper and Popov, Stefan and Kamali, Shahab and Malloci, Matteo and Pont-Tuset, Jordi and Veit, Andreas and Belongie, Serge and Gomes, Victor and Gupta, Abhinav and Sun, Chen and Chechik, Gal and Cai, David and Feng, Zheyun and Narayanan, Dhyanesh and Murphy, Kevin},
+  journal = {Dataset available from https://storage.googleapis.com/openimages/web/index.html},
+  year    = {2017}
+}
+ @inbook{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019,
+  place        = {Cham},
+  series       = {Lecture Notes in Computer Science},
+  title        = {ESRGAN: Enhanced Super-Resolution Generative Adversarial Networks},
+  volume       = {11133},
+  isbn         = {978-3-030-11020-8},
+  url          = {http://link.springer.com/10.1007/978-3-030-11021-5_5},
+  doi          = {10.1007/978-3-030-11021-5_5},
+  abstractnote = {The Super-Resolution Generative Adversarial Network (SRGAN) is a seminal work that is capable of generating realistic textures during single image super-resolution. However, the hallucinated details are often accompanied with unpleasant artifacts. To further enhance the visual quality, we thoroughly study three key components of SRGAN – network architecture, adversarial loss and perceptual loss, and improve each of them to derive an Enhanced SRGAN (ESRGAN). In particular, we introduce the Residual-in-Residual Dense Block (RRDB) without batch normalization as the basic network building unit. Moreover, we borrow the idea from relativistic GAN to let the discriminator predict relative realness instead of the absolute value. Finally, we improve the perceptual loss by using the features before activation, which could provide stronger supervision for brightness consistency and texture recovery. Beneﬁting from these improvements, the proposed ESRGAN achieves consistently better visual quality with more realistic and natural textures than SRGAN and won the ﬁrst place in the PIRM2018-SR Challenge (region 3) with the best perceptual index. The code is available at https://github.com/xinntao/ESRGAN.},
+  booktitle    = {Computer Vision – ECCV 2018 Workshops},
+  publisher    = {Springer International Publishing},
+  author       = {Wang, Xintao and Yu, Ke and Wu, Shixiang and Gu, Jinjin and Liu, Yihao and Dong, Chao and Qiao, Yu and Loy, Chen Change},
+  editor       = {Leal-Taixé, Laura and Roth, Stefan},
+  year         = {2019},
+  pages        = {63–79},
+  collection   = {Lecture Notes in Computer Science}
+}
+ @article{Wang_Xie_Dong_Shan_2021,
+  title        = {Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data},
+  url          = {http://arxiv.org/abs/2107.10833},
+  abstractnote = {Though many attempts have been made in blind super-resolution to restore low-resolution images with unknown and complex degradations, they are still far from addressing general real-world degraded images. In this work, we extend the powerful ESRGAN to a practical restoration application (namely, Real-ESRGAN), which is trained with pure synthetic data. Specifically, a high-order degradation modeling process is introduced to better simulate complex real-world degradations. We also consider the common ringing and overshoot artifacts in the synthesis process. In addition, we employ a U-Net discriminator with spectral normalization to increase discriminator capability and stabilize the training dynamics. Extensive comparisons have shown its superior visual performance than prior works on various real datasets. We also provide efficient implementations to synthesize training pairs on the fly.},
+  note         = {arXiv: 2107.10833},
+  journal      = {arXiv:2107.10833 [cs, eess]},
+  author       = {Wang, Xintao and Xie, Liangbin and Dong, Chao and Shan, Ying},
+  year         = {2021},
+  month        = {Aug}
+}
+ @article{Ledig_Theis_Huszar_Caballero_Cunningham_Acosta_Aitken_Tejani_Totz_Wang_et_al_2017,
+  title        = {Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network},
+  url          = {http://arxiv.org/abs/1609.04802},
+  abstractnote = {Despite the breakthroughs in accuracy and speed of single image super-resolution using faster and deeper convolutional neural networks, one central problem remains largely unsolved: how do we recover the finer texture details when we super-resolve at large upscaling factors? The behavior of optimization-based super-resolution methods is principally driven by the choice of the objective function. Recent work has largely focused on minimizing the mean squared reconstruction error. The resulting estimates have high peak signal-to-noise ratios, but they are often lacking high-frequency details and are perceptually unsatisfying in the sense that they fail to match the fidelity expected at the higher resolution. In this paper, we present SRGAN, a generative adversarial network (GAN) for image super-resolution (SR). To our knowledge, it is the first framework capable of inferring photo-realistic natural images for 4x upscaling factors. To achieve this, we propose a perceptual loss function which consists of an adversarial loss and a content loss. The adversarial loss pushes our solution to the natural image manifold using a discriminator network that is trained to differentiate between the super-resolved images and original photo-realistic images. In addition, we use a content loss motivated by perceptual similarity instead of similarity in pixel space. Our deep residual network is able to recover photo-realistic textures from heavily downsampled images on public benchmarks. An extensive mean-opinion-score (MOS) test shows hugely significant gains in perceptual quality using SRGAN. The MOS scores obtained with SRGAN are closer to those of the original high-resolution images than to those obtained with any state-of-the-art method.},
+  note         = {arXiv: 1609.04802},
+  journal      = {arXiv:1609.04802 [cs, stat]},
+  author       = {Ledig, Christian and Theis, Lucas and Huszar, Ferenc and Caballero, Jose and Cunningham, Andrew and Acosta, Alejandro and Aitken, Andrew and Tejani, Alykhan and Totz, Johannes and Wang, Zehan and Shi, Wenzhe},
+  year         = {2017},
+  month        = {May}
+}

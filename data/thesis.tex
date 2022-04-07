@@ -1,7 +1,17 @@
 % !Mode:: "TeX:UTF-8"
 \chapter{Introduction}
 
-Nowadays there are many existing image compression approaches. We can divide such algorithms in two groups: lossy (such as JPEG. Mainly such algorithms use Discrete Cosine Transform) and lossless (such as DEFLATE. Mainly such algorithms use similar to Huffman Encoding methods). Both has beed developed for decades already. It is important to mention that image containers (such as JPEG, PNG, GIF etc.) are using information compression algorithms \textit{only as a part} of their architecture. Usually lossy and lossless compression methods are combined to achieve higher performance.
+TODO: Introduction
+
+JPEG is widley used in image compression applications. It was introduced in 1992 \cite{wallace_jpeg_1992}. Algorithm consists of several steps. Chroma subsampling is a process of transformations from RGB format to YCbCr. YCbCr is a special format of storing image data not in Red, Green and Blue channels, but in Y, Cb and Cr channels. Y is the brightness channel of an image, Cb is the blue difference relative to the green color, Cr is the red difference relative to the green channel. After that it is already possible to reduce size by rescaling Cb and Cr channels by four. By doing so, the space is reduced by 1.5.
+
+Compression of each channel is an performed in parallel. Image is partitioned into blocks 8x8 pixels. Each block is processed independently. Block values are centered at 0, so the values are in range (-127, 127). Then Discrete Cosine Transform (DCT) is being applied.
+
+TODO: describe an algorithm of DCT.
+
+
+
+Nowadays there are many existing image compression approaches. We can divide such algorithms in two groups: lossy (such as JPEG. Mainly such algorithms use Discrete Cosine Transform) and lossless (such as DEFLATE. Mainly such algorithms use similar to Huffman Encoding methods). Both has beed developed for decades already. It is important to mention that image containers (such as JPEG, PNG, GIF etc.) use information compression algorithms \textit{only as a part} of their architecture. Usually lossy and lossless compression methods are combined to achieve higher performance.
 
 Famous JPEG format, for example, has following steps, and only last three are about compression.
 

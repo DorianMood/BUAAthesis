@@ -2,9 +2,21 @@
   "cSpell.words": [
     "canonicalized",
     "convolutional",
+    "deconvolution",
+    "downsampling",
+    "hyperlatent",
+    "hyperlatents",
+    "hyperparameters",
     "Hyperprior",
+    "LSTM",
+    "pretrain",
+    "PSNR",
     "RCNN",
     "subsampling",
-    "synset"
+    "synset",
+    "Upconvolutional",
+    "upsample",
+    "upsampling",
+    "upscaling"
   ]
 }

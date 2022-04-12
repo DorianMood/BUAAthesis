@@ -66,6 +66,8 @@ The result of Huffman coding is a Huffman tree \ref{huffman-tree}. To build this
     \label{huffman-tree}
 \end{figure}
 
+Huffman coding is performed on matrix obtained after DCT and quantization. this matrix is being reshaped to linear sequence (it is called Zig-Zag sequence, since the trajectory has a shape of zig-zag from top left corner up-down to the bottom-right corner).
+
 \subsection{Decompression}
 
 Decoding process consists of several steps, which are basically a reversed encoding steps.
@@ -77,7 +79,9 @@ Decoding process consists of several steps, which are basically a reversed encod
     \item Transformation from YCbCr to RGB.
 \end{enumerate}
 
-To restore initial image first each block is passed through arithmetic decoding algorithm. This step is lossless, so it just transforms a number with frequencies to a matrix obtained after DCT (during compression process).
+To restore initial image first each block is passed through Huffman decoding algorithm. This step is lossless, so it just transforms a number with frequencies to a matrix obtained after DCT (during compression process).
+
+
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
 

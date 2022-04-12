@@ -11,9 +11,10 @@ JPEG is widely used in image compression applications. It was introduced in 1992
     \item Transformation from RGB to YCbCr (Chroma subsampling).
     \item Discrete Cosine Transform. Lossless.
     \item Quantization. Lossy.
-    \item Run-length encoding. Lossless.
-    \item Huffman encoding. Lossless.
+    \item Coding. Lossless.
 \end{enumerate}
+
+\subsection{Compression algorithm}
 
 Chroma subsampling is a process of transformations from RGB format to YCbCr. YCbCr is a special format of storing image data not in Red, Green and Blue channels, but in Y, Cb and Cr channels. Y is the brightness channel of an image, Cb is the blue difference relative to the green color, Cr is the red difference relative to the green channel. After that it is already possible to reduce size by rescaling Cb and Cr channels by four. By doing so, the space is reduced by 1.5.
 
@@ -43,18 +44,40 @@ where:
     \end{split}
 \end{equation}
 
-The last step of compression is coding. Coding is lossless, and basically it is an independent algorithm. Usually arithmetic coding is used.
+Huffman coding is a type of entropy coding algorithms. This algorithm performs coding based on frequencies of each symbol in sequence. The goal is to encode most frequent symbols using less bits of information, since they appear in sequence more. Less frequent symbols are encoded using more bits of information since they appear in sequence less.
 
-Arithmetic coding is a form of entropy coding \ref{arithmetic_coding}. It is lossless, which means that after compression and decompression no information is lost. It is used to compress numeric sequencies, which makes it perfect for the task of image compression since after quantization process we have exactly what is required - a list of integers. According to Shannon's source coding theorem an optimal representation converges to $log_2P$ bits per symbol for a symbol with frequency $P$.
+The result of Huffman coding is a Huffman tree \ref{huffman-tree}. To build this tree we need to follow the steps:
 
-The first step of arithmetic coding is building of probability information from source sequence. After knowing all the probabilities we need to place them according to their probabilities. Then the range of the first symbol is set to be a next range. Then the process is repeated $N$ times, where $N$ is a length of sequence. By the end of this process we have a single segment in the global range (on the \ref{arithmetic_coding} it is the range from $0.534$ to $0.54$). Then we just pick a number from this range. This number is a compressed sequence.
+\begin{enumerate}
+    \item Calculate frequencies of each symbol in sequence.
+    \item Sort symbols in increasing order of frequencies.
+    \item Make each unique symbol a leaf node (in other words, independent tree).
+    \item Create an empty node and attach two leafs with smallest frequencies to this node as a children.
+    \item Set value of this new node as a sum of it's children frequencies.
+    \item Repeat steps 4-5 until thee is built.
+    \item Each left edge must be labeled as $0$, each right edge must be labeled as $1$.
+    \item Each symbol can be encoded using a path from the root node of a tree to this symbol.
+\end{enumerate}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\textwidth]{figure/Arithmetic_encoding.svg.png}
-    \caption{Arithmetic coding for a sequence with length 3. Each horizontal segment represents a position in sequence, and parts of these segments correspond to probabilities or frequencies of the symbols they are related to.}
-    \label{arithmetic_coding}
+    \includegraphics[width=\textwidth]{figure/Huffman_tree_2.svg.png}
+    \caption{Huffman tree is a special type of binary tree. Each node of this tree can be described as a path from the root. This path consists of choices: left or right, which are encoded using ${0, 1}$}
+    \label{huffman-tree}
 \end{figure}
+
+\subsection{Decompression}
+
+Decoding process consists of several steps, which are basically a reversed encoding steps.
+
+\begin{enumerate}
+    \item Decoding. Lossless.
+    \item Dequantization. Lossy.
+    \item Inverse Discrete Cosine Transform. Lossless.
+    \item Transformation from YCbCr to RGB.
+\end{enumerate}
+
+To restore initial image first each block is passed through arithmetic decoding algorithm. This step is lossless, so it just transforms a number with frequencies to a matrix obtained after DCT (during compression process).
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
 
@@ -62,7 +85,7 @@ All these steps are reversible, which makes this algorithm stable and convenient
 
 There is a certain trend to apply a power of neural networks in compression domain, extending a group of lossy algorithms. First approaches were \cite{Balle_Laparra_Simoncelli_2017}, \cite{Theis_Shi_Cunningham_Huszar_2017}, \cite{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017}, where authors proved that it is possible to use one neural network to generate a compressed representation of an image and another neural network to restore initial image from its representation generated by first network. Now such networks are also being used to solve an image and video upscale tasks.
 
-Recent progress in neural image compression has shown a great progress: 
+Recent progress in neural image compression has shown a great progress:
 
 \begin{enumerate}
     \item Now image neural image compression outperform traditional compression algorithms such as JPEG and JPEG2000.
@@ -180,6 +203,21 @@ It is possible to use another autoencoder to encode latents obtained from the en
     \caption{Compression general pipeline. Encoder is used to obtain latents, then another encoder is used to obtain hyperlatents. Yellow block is quantization and arithmetic coding block. Then hyperlatents are decoded to latents and the last step is to pass it though Decoder to obtain reconstructed image.}
     \label{whole-system-geneal-pipeline}
 \end{figure}
+
+The last step of compression is coding. Coding is lossless, and basically it is an independent algorithm. Usually arithmetic coding is used.
+
+Arithmetic coding is a form of entropy coding \ref{arithmetic_coding}. It is lossless, which means that after compression and decompression no information is lost. It is used to compress numeric sequencies, which makes it perfect for the task of image compression since after quantization process we have exactly what is required - a list of integers. According to Shannon's source coding theorem an optimal representation converges to $log_2P$ bits per symbol for a symbol with frequency $P$.
+
+The first step of arithmetic coding is building of probability information from source sequence. After knowing all the probabilities we need to place them according to their probabilities. Then the range of the first symbol is set to be a next range. Then the process is repeated $N$ times, where $N$ is a length of sequence. By the end of this process we have a single segment in the global range (on the \ref{arithmetic_coding} it is the range from $0.534$ to $0.54$). Then we just pick a number from this range. This number is a compressed sequence.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/Arithmetic_encoding.svg.png}
+    \caption{Arithmetic coding for a sequence with length 3. Each horizontal segment represents a position in sequence, and parts of these segments correspond to probabilities or frequencies of the symbols they are related to.}
+    \label{arithmetic_coding}
+\end{figure}
+
+Compressed sequence is stored as a single number. It's also required to remember probabilities since they are used in decompression process.
 
 Generative adversarial networks (GANs) show a great performance in training generative models. For GANs training pipeline is slightly different from traditional deep learning pipeline. In \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014} they introduced a neural network training pipeline with two networks: generator and discriminator. Generators objective is to produce a good enough synthetic data. Discriminators objective is to find out, whether given sample synthetic or real. So, trained generator network can be used then to solve a problem.
 
@@ -318,17 +356,17 @@ We refer to the schedule from thesis proposal \ref{tab:schedule}.
     \label{tab:schedule}
     \begin{tabular}{p{4cm}|p{8cm}|p{2cm}|p{2cm}}
         \hline
-        Task & Description & Deadline & Status \\
+        Task                    & Description                                                                                                                                & Deadline    & Status      \\
         \hline
-        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1 & Done \\
+        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1 & Done        \\
         \hline
-        Improve model prototype & Adjust parameters, decide on additional convolutional features size & December 1 & Done \\
+        Improve model prototype & Adjust parameters, decide on additional convolutional features size                                                                        & December 1  & Done        \\
         \hline
-        Research proposal 1 & Reduce number of layers in generator & February 1 & In progress \\
+        Research proposal 1     & Reduce number of layers in generator                                                                                                       & February 1  & In progress \\
         \hline
-        Research proposal 2 & Solve false textures issue & March 1 & In progress \\
+        Research proposal 2     & Solve false textures issue                                                                                                                 & March 1     & In progress \\
         \hline
-        Write the final thesis & Summarize research in the final thesis & May 20 & In progress \\
+        Write the final thesis  & Summarize research in the final thesis                                                                                                     & May 20      & In progress \\
         \hline
     \end{tabular}
 \end{table}

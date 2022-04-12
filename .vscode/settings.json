@@ -3,6 +3,7 @@
     "canonicalized",
     "convolutional",
     "deconvolution",
+    "Dequantization",
     "downsampling",
     "hyperlatent",
     "hyperlatents",

@@ -22,7 +22,9 @@ Compression of each channel is an performed in parallel. Image is partitioned in
 
 We can view an image as a combination of different frequencies. Pixel values can vary over given image, and we view this variation as a periodic function $f(x, y)$ where $x$ is horizontal coordinate and $y$ is a vertical one. There is a matrix of DCT coefficients, which consists of elements of different frequencies from low frequencies to high. High frequencies can be omitted to achieve better compression performance.
 
-Each element of obtained matrix is a coefficient of corresponding frequency. Basically, the meaning of an element of this matrix is how much of this frequency is in given image. Then goes quantization, this step is lossy, and on this step elements of coefficients matrix are divided by so called standard JPEG quantization table. By the end of this procedure we have a matrix with coefficients. Relatively small coefficients can be omitted to react higher compression performance, since their frequencies contribution to image are tiny.
+Mathematically, the DCT is one-to-one mapping for 64-point vectors between the image and the frequency domains. If the FDCT (Fast Discrete Cosine Transform) and IDCT could be computed with perfect accuracy and if the DCT coefficients were not quantized as in the following description, the original 64-point signal could be exactly recovered. In principle, the DCT introduces no loss to the source image samples; it merely transforms them to a domain in which they can be more efficiently encoded.
+
+Each element of obtained matrix is a coefficient of corresponding frequency. Basically, the meaning of an element of this matrix is how much of this frequency is in given image. Then goes quantization, this step is lossy, and on this step elements of coefficients matrix are divided by so called standard JPEG quantization table. By the end of this procedure we have a matrix with coefficients. Relatively small coefficients can be omitted to react higher compression performance, since their frequencies contribution to image are tiny. Quantization table is specified as an input by application or user. Each element of quantization table is a number in range $(0; 255)$ which specifies the step size of the quantizer for its' corresponding DCT coefficient.
 
 \begin{equation}
     \label{eq:00}
@@ -81,7 +83,15 @@ Decoding process consists of several steps, which are basically a reversed encod
 
 To restore initial image first each block is passed through Huffman decoding algorithm. This step is lossless, so it just transforms a number with frequencies to a matrix obtained after DCT (during compression process).
 
+For decoding Huffman codes it's required to take a code of the symbol and traverse through the Huffman tree. By the end of one traverse (in other words - reaching a leaf node), an original symbol is being obtained. So we can get a quantized coefficients matrix. To further continue decoding process dequantization is applied.
 
+Dequantization is the inverse operation of quantization. Here it means that normalization is removed by multiplying by step size, which is specified in quantization table. To remind, this table is selected as an input information for the whole compression process before compression, and this is exactly same table as the one that was used during encoding process.
+
+The next step is IDCT (Inverse Discrete Cosine Transform). IDCT takes the 64 DCT coefficients (which at that point have been quantized) and reconstructs a 64-point output image signal by summing the basis signals.
+
+The last step of decompression is transformation from YCbCr representation to RGB. Ths transformation is a simple arithmetic which we omit here.
+
+TODO : put formulas here.
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
 

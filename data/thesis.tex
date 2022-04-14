@@ -91,7 +91,13 @@ The next step is IDCT (Inverse Discrete Cosine Transform). IDCT takes the 64 DCT
 
 The last step of decompression is transformation from YCbCr representation to RGB. Ths transformation is a simple arithmetic which we omit here.
 
-TODO : put formulas here.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png}
+    \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg}
+    \caption{}
+    \label{jpeg-hific-comparision}
+\end{figure}
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
 
@@ -129,6 +135,11 @@ In this work we are going to apply fully convolutional neural network to extract
 \chapter{Objective}
 
 Our motivation is that traditional image compression methods are simple and computationally efficient. However, using more heavy neural models we can compress image much more efficient. By combining these two methods we can reach equilibrium.
+
+Nowadays existing methods have a strong compression power. Existing models significantly overcome traditional methods by many metrics. The most impressive though is a PSNR metrics, which measures an effectiveness of compression. From the figure we can see a comparison of JPEG and famous HiFiC \cite{mentzer_high_fidelity_2020}
+
+
+TODO : put pictures to compare here
 
 Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing L1 or L2 distance between given image and its reconstruction.
 

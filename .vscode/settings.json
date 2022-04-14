@@ -1,10 +1,12 @@
 {
   "cSpell.words": [
+    "autoencoders",
     "canonicalized",
     "convolutional",
     "deconvolution",
     "Dequantization",
     "downsampling",
+    "Eigen",
     "FDCT",
     "hyperlatent",
     "hyperlatents",

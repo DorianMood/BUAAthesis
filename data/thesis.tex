@@ -91,13 +91,7 @@ The next step is IDCT (Inverse Discrete Cosine Transform). IDCT takes the 64 DCT
 
 The last step of decompression is transformation from YCbCr representation to RGB. Ths transformation is a simple arithmetic which we omit here.
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png}
-    \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg}
-    \caption{}
-    \label{jpeg-hific-comparision}
-\end{figure}
+TODO: formulas here
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
 
@@ -138,8 +132,13 @@ Our motivation is that traditional image compression methods are simple and comp
 
 Nowadays existing methods have a strong compression power. Existing models significantly overcome traditional methods by many metrics. The most impressive though is a PSNR metrics, which measures an effectiveness of compression. From the figure we can see a comparison of JPEG and famous HiFiC \cite{mentzer_high_fidelity_2020}
 
-
-TODO : put pictures to compare here
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png}
+    \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg}
+    \caption{}
+    \label{jpeg-hific-comparision}
+\end{figure}
 
 Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing L1 or L2 distance between given image and its reconstruction.
 
@@ -173,7 +172,37 @@ The contribution of this work can be considered from two major perspective. The 
 
 In our work we compared several approaches to compress images. At first we tried to use a graph as a representation of an image. This approach is quite intuitive, since graph has a certain information about image structure. However, after series of experiments, we figure out that graph cannot represent image identity precisely. And most importantly, current state of the art methods are not capable of producing a good image from a scene graph, since scene graph to image architectures use scene graph to scene layout to image architecture, which makes scene graph a redundant information and only makes reconstructed images worse. We also found out that layout to image algorithms such as \cite{Zhao_Meng_Yin_Sigal_2019} use LSTM network architecture to fuse layout objects into singe representation, but LSTM is not designed to capture spatial relations and fuse objects into single one, since layout objects are unordered. In future this task can be potentially solved by using permutation invariant fusion module.
 
+\section{Autoencoder}
+
+Autoencoder is a popular architecture for neural networks. It has been first introduced in \cite{HinSal06} and proven to be a powerful tool in dimensionality reduction tasks. Basically, autoencoders were introduced to solve a particular problem of dimensionality reduction. The goal of an original autoencoder is to reduce dimensionality of input tensor. PCA (principal component analysis) is a widely used method to perform a dimensionality reduction. PCA finds the directions of greatest variance over a dataset, and then represents each point in a dataset by its coordinates along these directions. These directions are called principal components and the number of principal components is significantly less than number of components of original data point.
+
+PCA uses a statistical approach to fit data. More precise, PCA is based on Eigen-decomposition, where we find a matrix of eigenvectors and eigenvalues of the covariance matrix and take $N$ biggest eigenvalues and $N$ corresponding eigenvectors. These are called principal components.
+
+Similarly to PCA, autoencoder reduces dimensionality of an original data point, but the core principle of autoencoder is different from PCA. Instead of having a fixed algorithm to reduce dimensionality, autoencoders employs a power of neural networks. Autoencoder has two networks: encoder and decoder. Encoder is a network that embeds an original data into space with much smaller dimensions by sequentially passing original data through convolutional layers. These layers reduce dimensions of data, keeping however the most significant information. After the encoder, reduced features go through decoder, which increases dimensionality of data to its' original shape.
+
+Autoencoder is trained in supervised manner: feed data, pass it through encoder and decoder, calculate difference between original image in the output, then back propagate. After sufficient amount of iterations autoencoder finds its' local minimum. At this moment we need to stop training process, store weights and fix them.
+
+Autoencoders have many applications \ref{autoencoder-popularity-stats} in compression, denoising, debluring, upscaling etc. The conceptual idea in all these applications is that hidden representation is a compressed version of input data, then original data is restored by generator. The loss here is significant since this is actually the criteria of autoencoder performance and for different tasks the criteria is formulated differently.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/autoencoder-popularity-over-time.png}
+    \caption{Autoencoder architecture popularity over time compared to other popular neural network architectures (data from \cite[paperwithcode website]{autoencoder_papers})}
+    \label{autoencoder-popularity-dynamics}
+\end{figure}
+
+TODO: About autoencoder application and spheres of applications.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/autoencoder-popularity-stats.png}
+    \caption{Autoencoder architecture usage statistics by paper' subject (data from \cite[paperwithcode website]{autoencoder_papers})}
+    \label{autoencoder-popularity-stats}
+\end{figure}
+
 We use fully convolutional neural networks (FCN) in the encoder \ref{encoder}. FCNs are a family of convolutional neural networks which does not use pooling layers or bilinear interpolation or any other layer that can cause an information loss. Layers like pooling layer only propagate one value though itself. It causes a situation when we cannot determine or learn any information about input to this layer knowing it's output.
+
+\subsection{Encoder}
 
 Let us consider a pooling layer as an example to make our concern clear. Pooling layer takes a patch from an image (or from a feature map) and aggregates all those values into single output value. Pooling layers usually make use of aggregation functions such as \textit{max}, \textit{min}, \textit{avg} etc. Those functions are permutation invariant, which means we cannot reverse them. Even in theory it is impossible to get an inverse functions for pooling layers kernels, since pooling operation causes information loss.
 
@@ -183,6 +212,8 @@ Let us consider a pooling layer as an example to make our concern clear. Pooling
     \caption{Convolutional block of the encoder. We stack 6 such blocks to obtain encoder.}
     \label{encoder}
 \end{figure}
+
+\subsection{Decoder}
 
 After a motivation for using FCNs in our encoder, let us take a look on the decoder \ref{decoder}. And the logic here is absolutely same: To restore an image given hidden feature map we need to learn an inverse function, which can be only obtained by reverse of encoder. In practice it means that we need both encoder and decoder to be FCNs \ref{autoencoder}. It will make the entire pipeline less lossy and make an intermediate features more interpretable, since using only convolutional layers helps to achieve a certain consistency in mapping features from input of one layer to its output.
 
@@ -201,6 +232,8 @@ We are also using normalization layers in encoder and decoder to make a network 
     \caption{Simple autoencoder architecture, which is used in this work. Encoder and decoder are FCNs. Data flow is highlighted to blue. Features in the middle have more channels but less height and width than original image, and this hidden representation takes less space than initial image.}
     \label{autoencoder}
 \end{figure}
+
+\subsection{Autoencoder training}
 
 We can train this autoencoder by minimizing L1 \ref{eq:1} and L2 \ref{eq:2} distance losses. This is a general pipeline for training autoencoder for image compression. Usually other terms are added to the final loss. But even using this simple pipelines we can still reach a reasonable results \ref{autoencoder-result}.
 
@@ -229,6 +262,8 @@ It is possible to use another autoencoder to encode latents obtained from the en
     \label{whole-system-geneal-pipeline}
 \end{figure}
 
+\section{Coding}
+
 The last step of compression is coding. Coding is lossless, and basically it is an independent algorithm. Usually arithmetic coding is used.
 
 Arithmetic coding is a form of entropy coding \ref{arithmetic_coding}. It is lossless, which means that after compression and decompression no information is lost. It is used to compress numeric sequencies, which makes it perfect for the task of image compression since after quantization process we have exactly what is required - a list of integers. According to Shannon's source coding theorem an optimal representation converges to $log_2P$ bits per symbol for a symbol with frequency $P$.
@@ -244,7 +279,11 @@ The first step of arithmetic coding is building of probability information from 
 
 Compressed sequence is stored as a single number. It's also required to remember probabilities since they are used in decompression process.
 
+\section{GAN training pipeline}
+
 Generative adversarial networks (GANs) show a great performance in training generative models. For GANs training pipeline is slightly different from traditional deep learning pipeline. In \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014} they introduced a neural network training pipeline with two networks: generator and discriminator. Generators objective is to produce a good enough synthetic data. Discriminators objective is to find out, whether given sample synthetic or real. So, trained generator network can be used then to solve a problem.
+
+\section{Training}
 
 To train such a system we need two losses: discriminator loss and generator loss. Discriminator loss will penalize discriminator network for it's wrong classification results. The loss we are using in this work is non-saturating loss \ref{eq:loss-g} and \ref{eq:loss-d}, which is just a stable variation of standard GAN loss function. It maximizes the log of the discriminator probabilities.
 

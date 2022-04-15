@@ -180,6 +180,13 @@ PCA uses a statistical approach to fit data. More precise, PCA is based on Eigen
 
 Similarly to PCA, autoencoder reduces dimensionality of an original data point, but the core principle of autoencoder is different from PCA. Instead of having a fixed algorithm to reduce dimensionality, autoencoders employs a power of neural networks. Autoencoder has two networks: encoder and decoder. Encoder is a network that embeds an original data into space with much smaller dimensions by sequentially passing original data through convolutional layers. These layers reduce dimensions of data, keeping however the most significant information. After the encoder, reduced features go through decoder, which increases dimensionality of data to its' original shape.
 
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/Autoencoder_schema.png}
+    \caption{Autoencoder schema.}
+    \label{autoencoder-schema}
+\end{figure}
+
 Autoencoder is trained in supervised manner: feed data, pass it through encoder and decoder, calculate difference between original image in the output, then back propagate. After sufficient amount of iterations autoencoder finds its' local minimum. At this moment we need to stop training process, store weights and fix them.
 
 Autoencoders have many applications \ref{autoencoder-popularity-stats} in compression, denoising, debluring, upscaling etc. The conceptual idea in all these applications is that hidden representation is a compressed version of input data, then original data is restored by generator. The loss here is significant since this is actually the criteria of autoencoder performance and for different tasks the criteria is formulated differently.
@@ -187,7 +194,7 @@ Autoencoders have many applications \ref{autoencoder-popularity-stats} in compre
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{figure/autoencoder-popularity-over-time.png}
-    \caption{Autoencoder architecture popularity over time compared to other popular neural network architectures (data from \cite[paperwithcode website]{autoencoder_papers})}
+    \caption{Autoencoder architecture popularity over time compared to other popular neural network architectures (data from paperswithcode \cite{autoencoder_papers})}
     \label{autoencoder-popularity-dynamics}
 \end{figure}
 
@@ -196,7 +203,7 @@ TODO: About autoencoder application and spheres of applications.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{figure/autoencoder-popularity-stats.png}
-    \caption{Autoencoder architecture usage statistics by paper' subject (data from \cite[paperwithcode website]{autoencoder_papers})}
+    \caption{Autoencoder architecture usage statistics by paper' subject (data from paperwithcode website \cite{autoencoder_papers})}
     \label{autoencoder-popularity-stats}
 \end{figure}
 

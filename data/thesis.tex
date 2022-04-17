@@ -191,6 +191,9 @@ Autoencoder is trained in supervised manner: feed data, pass it through encoder 
 
 Autoencoders have many applications \ref{autoencoder-popularity-stats} in compression, denoising, debluring, upscaling etc. The conceptual idea in all these applications is that hidden representation is a compressed version of input data, then original data is restored by generator. The loss here is significant since this is actually the criteria of autoencoder performance and for different tasks the criteria is formulated differently.
 
+
+TODO: difference between these models
+
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{figure/autoencoder-popularity-over-time.png}
@@ -291,6 +294,37 @@ Compressed sequence is stored as a single number. It's also required to remember
 Generative adversarial networks (GANs) show a great performance in training generative models. For GANs training pipeline is slightly different from traditional deep learning pipeline. In \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014} they introduced a neural network training pipeline with two networks: generator and discriminator. Generators objective is to produce a good enough synthetic data. Discriminators objective is to find out, whether given sample synthetic or real. So, trained generator network can be used then to solve a problem.
 
 \section{Training}
+
+Training in Machine Learning is a process of adjusting model parameters based on selected criteria and according to one of selected training algorithms. Conceptually training of Machine Learning model is based on the following logic: we can input a data sample to the model, then we have an output, which we should judge by calculating a criteria. We call such a criteria loss. Loss is a function with network output as an input for this function and some number as an output. The process from input to calculating the loss is called a forward pass. We call it forward pass because the calculations, which are happening all the way from input to the output go from input layers forward to output layer (from first to last).
+
+Let us consider a single forward pass. We have an input of certain dimension $H \times W \times C$, we pass it through encoder, which is a convolutional neural network with output of another dimensions $H' \times W' \times C'$, such that $H' < H$, $W' < W$ and $C' > C$. Basically, after passing input through encoder, we get an intermediate representation with spacial dimensions($H'$ and $W'$) less than input spacial dimensions and much greater channel dimension ($C'$). Afterwards we pass these intermediate features with dimensionality $H' \times W' \times C'$ to decoder convolutional network. Usually decoder uses some kind of deconvolution operation. So, basically decoder takes an input with smaller spatial dimensionality and greater channel dimensionality ($H' \times W' \times C'$), producing an output with greater spatial dimensionality and smaller channel dimensionality ($H'' \times W'' \times C''$), such that $H'' > H'$, $W'' > W'$ and $C'' < C'$. Moreover, the decoder output dimensionality is equal to the encoder output dimensionality ($H'' = H$, $W'' = W$ and $C'' = C$).
+
+After forward pass we calculate a loss. Loss can be any function that can precisely enough calculate how good the model performs. Loss can be a linear combination of functions that measure separate objective separately. As an example we can take a just an $L1$ distance between the input $I$ and the output $\hat{I}$ of a model \ref{eq:l1}. Each loss function judges performance its own way. For example, if we compare $L1$ and $L2$ \ref{eq:2}, $L1$ can be negative and $L2$ can not. Loss functions are a big subject of researches by themselves. To define a loss means to define a criteria we'll be optimizing, trying to make it as small as it possible, so this criteria should decay with increasing performance of the output.
+
+
+
+\begin{equation}
+    \label{eq:l1}
+    L1=\sum{I-\hat{I}}
+\end{equation}
+
+After calculating a loss of the model output we need to adjust model parameters based on what loss function returns. Loss funciton returns a number which can be treated as a degree of deviation from desired $0$ loss value (or, it may be customized to be another number). Once we know how far we are from desired output we start propagating this output back from the last layer of decoder to the very first layer of the encoder. This process is called a backpropagation. Backpropagation is a way of spreading gradients back through the network, and adjusting each of network parameters based on these gradients.
+
+Backpropagation is a process of sequential gradient propagation. To propagate through a network we need to propagate gradient through each layer starting from the last one and ending through the first layer. To propagate gradient back we can use simple rules of algebra.
+
+Gradient of a scalar-valued differentiable function $\nabla f$ of several variables is the vector field (or vector-valued function) $f$ of whose value at a point $p$ is the vector whose components are the partial derivatives of $f$ at $p$. That is, for $f\colon \mathbb {R} ^{n}\to \mathbb {R}$ its gradient $\nabla f\colon \mathbb {R} ^{n}\to \mathbb {R} ^{n}$ is defined at the point $p=(x_{1},\ldots ,x_{n})$ in n-dimensional space as the vector \ref{eq:gradient}
+
+\begin{equation}
+    \label{eq:gradient}
+    \nabla f(p)={\begin{bmatrix}{\frac {\partial f}{\partial x_{1}}}(p)\\\vdots \\{\frac {\partial f}{\partial x_{n}}}(p)\end{bmatrix}}
+\end{equation}
+
+The nabla symbol $\nabla$ denotes the vector differential operator.
+
+The gradient vector can be interpreted as the "direction and rate of fastest increase". If the gradient of a function is non-zero at a point p, the direction of the gradient is the direction in which the function increases most quickly from p, and the magnitude of the gradient is the rate of increase in that direction, the greatest absolute directional derivative. Further, the gradient is the zero vector at a point if and only if it is a stationary point (where the derivative vanishes). The gradient thus plays a fundamental role in optimization theory, where it is used to maximize a function by gradient ascent.
+
+
+TODO: furmulas of backpropagation
 
 To train such a system we need two losses: discriminator loss and generator loss. Discriminator loss will penalize discriminator network for it's wrong classification results. The loss we are using in this work is non-saturating loss \ref{eq:loss-g} and \ref{eq:loss-d}, which is just a stable variation of standard GAN loss function. It maximizes the log of the discriminator probabilities.
 

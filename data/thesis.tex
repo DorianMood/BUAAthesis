@@ -309,6 +309,8 @@ After forward pass we calculate a loss. Loss can be any function that can precis
 
 After calculating a loss of the model output we need to adjust model parameters based on what loss function returns. Loss function returns a number which can be treated as a degree of deviation from desired $0$ loss value (or, it may be customized to be another number). Once we know how far we are from desired output we start propagating this output back from the last layer of decoder to the very first layer of the encoder. This process is called a backpropagation. Backpropagation is a way of spreading gradients back through the network, and adjusting each of network parameters based on these gradients.
 
+\subsection{Backpropagation}
+
 Backpropagation is a process of sequential gradient propagation. To propagate through a network we need to propagate gradient through each layer starting from the last one and ending through the first layer. To propagate gradient back we can use simple rules of algebra.
 
 Gradient of a scalar-valued differentiable function $\nabla f$ of several variables is the vector field (or vector-valued function) $f$ of whose value at a point $p$ is the vector whose components are the partial derivatives of $f$ at $p$. That is, for $f\colon \mathbb {R} ^{n}\to \mathbb {R}$ its gradient $\nabla f\colon \mathbb {R} ^{n}\to \mathbb {R} ^{n}$ is defined at the point $p=(x_{1},\ldots ,x_{n})$ in n-dimensional space as the vector \ref{eq:gradient}

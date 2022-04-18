@@ -191,13 +191,12 @@ Autoencoder is trained in supervised manner: feed data, pass it through encoder 
 
 Autoencoders have many applications \ref{autoencoder-popularity-stats} in compression, denoising, debluring, upscaling etc. The conceptual idea in all these applications is that hidden representation is a compressed version of input data, then original data is restored by generator. The loss here is significant since this is actually the criteria of autoencoder performance and for different tasks the criteria is formulated differently.
 
-
 TODO: difference between these models
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{figure/autoencoder-popularity-over-time.png}
-    \caption{Autoencoder architecture popularity over time compared to other popular neural network architectures (data from paperswithcode \cite{autoencoder_papers})}
+    \caption{Autoencoder architecture popularity over time compared to other popular neural network architectures (data from Papers With Code \cite{autoencoder_papers})}
     \label{autoencoder-popularity-dynamics}
 \end{figure}
 
@@ -206,7 +205,7 @@ TODO: About autoencoder application and spheres of applications.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{figure/autoencoder-popularity-stats.png}
-    \caption{Autoencoder architecture usage statistics by paper' subject (data from paperwithcode website \cite{autoencoder_papers})}
+    \caption{Autoencoder architecture usage statistics by paper' subject (data from Papers With Code website \cite{autoencoder_papers})}
     \label{autoencoder-popularity-stats}
 \end{figure}
 
@@ -289,7 +288,7 @@ The first step of arithmetic coding is building of probability information from 
 
 Compressed sequence is stored as a single number. It's also required to remember probabilities since they are used in decompression process.
 
-\section{GAN training pipeline}
+\section{Generative adversarial network}
 
 Generative adversarial networks (GANs) show a great performance in training generative models. For GANs training pipeline is slightly different from traditional deep learning pipeline. In \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014} they introduced a neural network training pipeline with two networks: generator and discriminator. Generators objective is to produce a good enough synthetic data. Discriminators objective is to find out, whether given sample synthetic or real. So, trained generator network can be used then to solve a problem.
 
@@ -297,18 +296,18 @@ Generative adversarial networks (GANs) show a great performance in training gene
 
 Training in Machine Learning is a process of adjusting model parameters based on selected criteria and according to one of selected training algorithms. Conceptually training of Machine Learning model is based on the following logic: we can input a data sample to the model, then we have an output, which we should judge by calculating a criteria. We call such a criteria loss. Loss is a function with network output as an input for this function and some number as an output. The process from input to calculating the loss is called a forward pass. We call it forward pass because the calculations, which are happening all the way from input to the output go from input layers forward to output layer (from first to last).
 
+\subsection{Machine learning model training}
+
 Let us consider a single forward pass. We have an input of certain dimension $H \times W \times C$, we pass it through encoder, which is a convolutional neural network with output of another dimensions $H' \times W' \times C'$, such that $H' < H$, $W' < W$ and $C' > C$. Basically, after passing input through encoder, we get an intermediate representation with spacial dimensions($H'$ and $W'$) less than input spacial dimensions and much greater channel dimension ($C'$). Afterwards we pass these intermediate features with dimensionality $H' \times W' \times C'$ to decoder convolutional network. Usually decoder uses some kind of deconvolution operation. So, basically decoder takes an input with smaller spatial dimensionality and greater channel dimensionality ($H' \times W' \times C'$), producing an output with greater spatial dimensionality and smaller channel dimensionality ($H'' \times W'' \times C''$), such that $H'' > H'$, $W'' > W'$ and $C'' < C'$. Moreover, the decoder output dimensionality is equal to the encoder output dimensionality ($H'' = H$, $W'' = W$ and $C'' = C$).
 
 After forward pass we calculate a loss. Loss can be any function that can precisely enough calculate how good the model performs. Loss can be a linear combination of functions that measure separate objective separately. As an example we can take a just an $L1$ distance between the input $I$ and the output $\hat{I}$ of a model \ref{eq:l1}. Each loss function judges performance its own way. For example, if we compare $L1$ and $L2$ \ref{eq:2}, $L1$ can be negative and $L2$ can not. Loss functions are a big subject of researches by themselves. To define a loss means to define a criteria we'll be optimizing, trying to make it as small as it possible, so this criteria should decay with increasing performance of the output.
-
-
 
 \begin{equation}
     \label{eq:l1}
     L1=\sum{I-\hat{I}}
 \end{equation}
 
-After calculating a loss of the model output we need to adjust model parameters based on what loss function returns. Loss funciton returns a number which can be treated as a degree of deviation from desired $0$ loss value (or, it may be customized to be another number). Once we know how far we are from desired output we start propagating this output back from the last layer of decoder to the very first layer of the encoder. This process is called a backpropagation. Backpropagation is a way of spreading gradients back through the network, and adjusting each of network parameters based on these gradients.
+After calculating a loss of the model output we need to adjust model parameters based on what loss function returns. Loss function returns a number which can be treated as a degree of deviation from desired $0$ loss value (or, it may be customized to be another number). Once we know how far we are from desired output we start propagating this output back from the last layer of decoder to the very first layer of the encoder. This process is called a backpropagation. Backpropagation is a way of spreading gradients back through the network, and adjusting each of network parameters based on these gradients.
 
 Backpropagation is a process of sequential gradient propagation. To propagate through a network we need to propagate gradient through each layer starting from the last one and ending through the first layer. To propagate gradient back we can use simple rules of algebra.
 
@@ -316,15 +315,155 @@ Gradient of a scalar-valued differentiable function $\nabla f$ of several variab
 
 \begin{equation}
     \label{eq:gradient}
-    \nabla f(p)={\begin{bmatrix}{\frac {\partial f}{\partial x_{1}}}(p)\\\vdots \\{\frac {\partial f}{\partial x_{n}}}(p)\end{bmatrix}}
+    \nabla f(p)=
+    \begin{bmatrix}{
+        \frac {\partial f}{\partial x_{1}}}(p) \\\vdots \\{\frac {\partial f}{\partial x_{n}}}(p)
+    \end{bmatrix}
 \end{equation}
 
-The nabla symbol $\nabla$ denotes the vector differential operator.
+Where $\nabla$ symbol denotes the vector differential operator.
 
-The gradient vector can be interpreted as the "direction and rate of fastest increase". If the gradient of a function is non-zero at a point p, the direction of the gradient is the direction in which the function increases most quickly from p, and the magnitude of the gradient is the rate of increase in that direction, the greatest absolute directional derivative. Further, the gradient is the zero vector at a point if and only if it is a stationary point (where the derivative vanishes). The gradient thus plays a fundamental role in optimization theory, where it is used to maximize a function by gradient ascent.
+The gradient vector can be interpreted as the "direction and rate of fastest increase". If the gradient of a function is non-zero at a point p, the direction of the gradient is the direction in which the function increases most quickly from p, and the magnitude of the gradient is the rate of increase in that direction, the greatest absolute directional derivative. Further, the gradient is the zero vector at a point if and only if it is a stationary point (where the derivative vanishes). The gradient thus plays a fundamental role in optimization theory, where it is used to minimize a function by gradient descent.
 
+The gradient descent method involves calculating the derivative of the loss function with respect to the weights of the network. This is normally done using backpropagation. Assuming one output neuron, the squared error function is
+
+\begin{equation}
+    \label{eq:gradient_error}
+    E=L(t,y)
+\end{equation}
+
+where
+
+$L$ is the loss for the output $y$ and target value $t$,
+$t$ is the target output for a training sample
+$y$ is the actual output of the output neuron
+For each neuron $j$, its output $o_{j}$ is defined as
+
+\begin{equation}
+    \label{eq:gradient_net_output}
+    o_{j}=\varphi ({\text{net}}_{j})=\varphi \left(\sum _{k=1}^{n}w_{kj}o_{k}\right)
+\end{equation}
+
+where the activation function $\varphi$  is non-linear and differentiable (even if the ReLU is not in one point). A historically used activation function is the logistic function:
+
+\begin{equation}
+    \label{eq:activation}
+    \varphi (z)={\frac {1}{1+e^{-z}}}
+\end{equation}
+
+which has a convenient derivative of:
+
+\begin{equation}
+    \label{eq:activation_derivative}
+    \frac {d\varphi (z)}{dz}=\varphi (z)(1-\varphi (z))
+\end{equation}
+
+The input $\text{net}_{j}$ to a neuron is the weighted sum of outputs $o_k$ of previous neurons. If the neuron is in the first layer after the input layer, the $o_k$ of the input layer are simply the inputs $x_{k}$ to the network. The number of input units to the neuron is $n$. The variable $w_{kj}$ denotes the weight between neuron $k$ of the previous layer and neuron $j$ of the current layer.
+
+\subsection{Finding the derivative of the error}
+
+Chain Rule is a calculus formula for calculating the derivatives of functions using related functions whose derivatives are known. We can use chain rule \ref{eq:chain-rule} to calculate gradients of the network.
+
+Calculating the partial derivative of the error with respect to a weight $w_{ij}$ is done using the chain rule twice:
+
+\begin{equation}
+    \label{eq:chain-1}
+    {\frac {\partial E}{\partial w_{ij}}}={\frac {\partial E}{\partial o_{j}}}{\frac {\partial o_{j}}{\partial w_{ij}}}={\frac {\partial E}{\partial o_{j}}}{\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}{\frac {\partial {\text{net}}_{j}}{\partial w_{ij}}}
+\end{equation}
+
+In the last factor of the right-hand side of the above, only one term in the sum ${\text{net}}_{j}$ depends on $w_{ij}$, so that
+
+\begin{equation}
+    \label{eq:chain-2}
+    {\frac {\partial {\text{net}}_{j}}{\partial w_{ij}}}={\frac {\partial }{\partial w_{ij}}}\left(\sum _{k=1}^{n}w_{kj}o_{k}\right)={\frac {\partial }{\partial w_{ij}}}w_{ij}o_{i}=o_{i}
+\end{equation}
+
+If the neuron is in the first layer after the input layer, $o_{i}$ is just $x_{i}$.
+
+The derivative of the output of neuron $j$ with respect to its input is simply the partial derivative of the activation function:
+
+\begin{equation}
+    \label{eq:chain-3}
+    {\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}={\frac {\partial \varphi ({\text{net}}_{j})}{\partial {\text{net}}_{j}}}
+\end{equation}
+
+which for the logistic activation function case is:
+
+\begin{equation}
+    \label{eq:chain-4}
+    {\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}={\frac {\partial }{\partial {\text{net}}_{j}}}\varphi ({\text{net}}_{j})=\varphi ({\text{net}}_{j})(1-\varphi ({\text{net}}_{j}))=o_{j}(1-o_{j})
+\end{equation}
+
+This is the reason why backpropagation requires the activation function to be differentiable. (Nevertheless, the ReLU activation function, which is non-differentiable at 0, has become quite popular, e.g. in AlexNet)
+
+The first factor is straightforward to evaluate if the neuron is in the output layer, because then $o_j = y$ and
+
+\begin{equation}
+    \label{eq:chain-5}
+    {\frac {\partial E}{\partial o_{j}}}={\frac {\partial E}{\partial y}}
+\end{equation}
+
+If half of the square error is used as loss function we can rewrite it as
+
+\begin{equation}
+    \label{eq:chain-6}
+    {\frac {\partial E}{\partial o_{j}}}={\frac {\partial E}{\partial y}}={\frac {\partial }{\partial y}}{\frac {1}{2}}(t-y)^{2}=y-t
+\end{equation}
+
+However, if $j$ is in an arbitrary inner layer of the network, finding the derivative $E$ with respect to $o_{j}$ is less obvious.
+
+Considering $E$ as a function with the inputs being all neurons $L=\{u,v,\dots ,w\}$ receiving input from neuron $j$,
+
+\begin{equation}
+    \label{eq:chain-7}
+    {\frac {\partial E(o_{j})}{\partial o_{j}}}={\frac {\partial E(\mathrm {net} _{u},{\text{net}}_{v},\dots ,\mathrm {net} _{w})}{\partial o_{j}}}
+\end{equation}
+
+and taking the total derivative with respect to $o_j$, a recursive expression for the derivative is obtained:
+
+\begin{equation}
+    \label{eq:chain-8}
+    {\frac {\partial E}{\partial o_{j}}}=\sum _{\ell \in L}\left({\frac {\partial E}{\partial {\text{net}}_{\ell }}}{\frac {\partial {\text{net}}_{\ell }}{\partial o_{j}}}\right)=\sum _{\ell \in L}\left({\frac {\partial E}{\partial o_{\ell }}}{\frac {\partial o_{\ell }}{\partial {\text{net}}_{\ell }}}{\frac {\partial {\text{net}}_{\ell }}{\partial o_{j}}}\right)=\sum _{\ell \in L}\left({\frac {\partial E}{\partial o_{\ell }}}{\frac {\partial o_{\ell }}{\partial {\text{net}}_{\ell }}}w_{j\ell }\right)
+\end{equation}
+
+Therefore, the derivative with respect to $o_j$ can be calculated if all the derivatives with respect to the outputs $o_{\ell }$ of the next layer – the ones closer to the output neuron – are known. [Note, if any of the neurons in set $L$ were not connected to neuron $j$, they would be independent of $w_{ij}$ and the corresponding partial derivative under the summation would vanish to 0.]
+
+Substituting \ref{eq:chain-2}, \ref{eq:chain-3} \ref{eq:chain-5} and \ref{eq:chain-8} in \ref{eq:chain-1} we obtain:
+
+\begin{equation}
+    \label{eq:chain-9}
+    {\frac {\partial E}{\partial w_{ij}}}={\frac {\partial E}{\partial o_{j}}}{\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}{\frac {\partial {\text{net}}_{j}}{\partial w_{ij}}}={\frac {\partial E}{\partial o_{j}}}{\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}o_{i}
+\end{equation}
+
+\begin{equation}
+    \label{eq:chain-10}
+    {\frac {\partial E}{\partial w_{ij}}}=o_{i}\delta _{j}
+\end{equation}
+
+with
+
+\begin{equation}
+    \label{eq:chain-11}
+    \delta _{j}={\frac {\partial E}{\partial o_{j}}}{\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}={\begin{cases}{\frac {\partial L(o_{j},t)}{\partial o_{j}}}{\frac {d\varphi ({\text{net}}_{j})}{d{\text{net}}_{j}}}&{\text{if }}j{\text{ is an output neuron,}}\\(\sum _{\ell \in L}w_{j\ell }\delta _{\ell }){\frac {d\varphi ({\text{net}}_{j})}{d{\text{net}}_{j}}}&{\text{if }}j{\text{ is an inner neuron.}}\end{cases}}
+\end{equation}
+
+if $\varphi$  is the logistic function, and the error is the square error:
+
+\begin{equation}
+    \label{eq:chain-12}
+    \delta _{j}={\frac {\partial E}{\partial o_{j}}}{\frac {\partial o_{j}}{\partial {\text{net}}_{j}}}={\begin{cases}(o_{j}-t_{j})o_{j}(1-o_{j})&{\text{if }}j{\text{ is an output neuron,}}\\(\sum _{\ell \in L}w_{j\ell }\delta _{\ell })o_{j}(1-o_{j})&{\text{if }}j{\text{ is an inner neuron.}}\end{cases}}
+\end{equation}
+
+To update the weight $w_{ij}$ using gradient descent, one must choose a learning rate, $\eta >0$. The change in weight needs to reflect the impact on $E$ of an increase or decrease in $w_{ij}$. If ${\frac {\partial E}{\partial w_{ij}}}>0$, an increase in $w_{ij}$ increases $E$; conversely, if ${\frac {\partial E}{\partial w_{ij}}}<0$, an increase in $w_{ij}$ decreases $E$. The new $\Delta w_{ij}$ is added to the old weight, and the product of the learning rate and the gradient, multiplied by $-1$ guarantees that $w_{ij}$ changes in a way that always decreases $E$. In other words, in the equation immediately below, $-\eta {\frac {\partial E}{\partial w_{ij}}}$ always changes $w_{ij}$ in such a way that $E$ is decreased:
+
+\begin{equation}
+    \label{eq:chain-13}
+    \Delta w_{ij}=-\eta {\frac {\partial E}{\partial w_{ij}}}=-\eta o_{i}\delta _{j}
+\end{equation}
 
 TODO: furmulas of backpropagation
+
+\subsection{Model training}
 
 To train such a system we need two losses: discriminator loss and generator loss. Discriminator loss will penalize discriminator network for it's wrong classification results. The loss we are using in this work is non-saturating loss \ref{eq:loss-g} and \ref{eq:loss-d}, which is just a stable variation of standard GAN loss function. It maximizes the log of the discriminator probabilities.
 
@@ -356,7 +495,7 @@ We can merge \ref{eq:loss-g} an \ref{eq:loss-eg} into one single formula \ref{eq
 
 So at the end our compression model has two terms, which is exactly the number of terms we want to have while training GAN, since GAN training is performed by incrementally repeating training steps of generator and discriminator. So, we use \ref{eq:loss-egp} during generator train step and we use \ref{eq:loss-d} during discriminator train step.
 
-So, this pipeline describes whole number of actions we need to perform in order to train image compression model. However, images obtained from such model have some unnecessary drawbacks, one of which is the fact that they are blurry \ref{forest-blurry}.
+So, this pipeline describes whole number of actions we need to perform in order to train image compression model. However, images obtained from such model have some unnecessary drawbacks. The example of such drawbacks can be seen from figure \ref{forest-blurry}.
 
 \begin{figure}[!ht]
     \centering
@@ -364,6 +503,14 @@ So, this pipeline describes whole number of actions we need to perform in order 
     \caption{Example of an image compressed with Hyperprior module.}
     \label{forest-blurry}
 \end{figure}
+
+Images have following drawbacks:
+
+\begin{enumerate}
+    \item blurry
+    \item noisy
+    \item
+\end{enumerate}
 
 To overcome this issue we propose a novel approach: we include several super resolution layers in our generator. These layers remove blurry artifacts and make resulting images more sharp.
 

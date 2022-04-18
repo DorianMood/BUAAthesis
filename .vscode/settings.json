@@ -1,9 +1,12 @@
 {
   "cSpell.words": [
     "autoencoders",
+    "backpropagation",
     "canonicalized",
     "convolutional",
+    "debluring",
     "deconvolution",
+    "denoising",
     "Dequantization",
     "downsampling",
     "Eigen",

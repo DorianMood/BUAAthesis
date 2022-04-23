@@ -463,7 +463,142 @@ To update the weight $w_{ij}$ using gradient descent, one must choose a learning
     \Delta w_{ij}=-\eta {\frac {\partial E}{\partial w_{ij}}}=-\eta o_{i}\delta _{j}
 \end{equation}
 
-TODO: furmulas of backpropagation
+Methods of updating weights are constantly updating. Algorithms of these methods are called optimizers: Nesterov Accelerated Gradient, Adgrad, RMSProp, Adadelta, Adam etc.
+
+Clearly written formulas for updating weights somewhere in the middle of the network look complicated, because each neuron depends on all the neurons with which it is connected, and those on all the neurons with which they are connected, and so on. At the same time, even in simple neural networks there can be about 10 layers, and among the networks holding the top classification of modern datasets — much, much more. Each weight is a variable in $L(W)$. Such an incredible number of degrees of freedom allows you to build very complex maps, but it gives researchers a headache.
+
+\begin{enumerate}
+    \item Getting stuck in local minima or saddle points, of which there can be a lot of variables for a function from $>10^6$.
+    \item The complex landscape of the objective function: plateaus alternate with regions of strong nonlinearity. The derivative on the plateau is almost zero, and a sudden break, on the contrary, can send us too far.
+    \item Some parameters are updated much less frequently than others, especially when there are informative but rare signs in the data, which has a bad effect on the nuances of the generalizing network rule. On the other hand, giving too much importance to all rare signs in general can lead to overfitting.
+    \item Too little learning speed causes the algorithm to converge for a very long time and get stuck in local minima, too much — to "fly over" narrow global minima or to diverge altogether
+\end{enumerate}
+
+In calculus there are an advanced second-order algorithms that can find a good minimum even on a complex landscape, but here the number of function parameters strikes again. To use the second—order method as it is, it is necessary to calculate the Hessian $J(W)$ — a matrix of derivatives for each pair of parameters of a pair of parameters, which is already bad in terms of computational time - and, say, for Newton's method, also the inverse of it. Working second-order optimizers exist, but for now let's focus on what we can achieve without considering the second derivatives.
+
+\subsection{Nesterov Accelerated Gradient}
+
+The idea of momentum accumulation methods is obviously simple. If we are moving in a certain direction for some time, then we should probably move there for some time in the future. To do this, we need to have an access to the recent history of changes of each parameter. We can store the last $n$ instances of $\Delta W$ and calculate the average at each step, but this approach takes up too much memory for large $n$. Fortunately, we do not need an exact average, but only an estimate, so we can use an exponential moving average.
+
+\begin{equation}
+    \label{eq:derivative-momentum-1}
+    v_t = \gamma v_{t-1} + (1-\gamma) x
+\end{equation}
+
+To accumulate we are going to multiply already accumulated value by the factor $0 < \gamma < 1$ and add another value multiplied by $1-\gamma$. The closer $\gamma$ is to $1$, the larger the accumulation window and the stronger the smoothing — the history of $x$ influences more strongly than each successive $x$. If $x=0$ from some point, $v_t$ fade exponentially. We apply an exponential running average to accumulate the gradient of the objective function of a network:
+
+\begin{equation}
+    v_t = \gamma v_{t-1} + \eta \nabla_W J(W)
+\end{equation}
+
+And update weights:
+
+\begin{equation}
+    W = W - v_t
+\end{equation}
+
+Where $\gamma$ is usually of the order $0.9$. Note that $1-\gamma$ is not missing, but included in $\eta$. The smaller the $\gamma$, the more the algorithm behaves like a regular SGD. To get a popular physical interpretation of the equations, we can imagine a ball rolling on a hilly surface. If at the moment $t$ there was a non-zero slope under the ball ($\nabla_W J(W)$), and when it hit a plateau, it will still continue rolling along this plateau. Moreover, the ball will continue to move a couple of updates in the same direction, even if the slope has changed to the opposite. Nevertheless every second it loses $1-\gamma$ of its speed.
+
+Note that accumulated value $v_t$ may very much exceed the value of each $\eta\nabla_W J(W)$. A simple accumulation of momentum already gives a good result, but Nesterov goes further and applies a well-known idea from calculus: looking ahead along the update vector. Since we are going to shift to $\gamma v_{t-1}$ anyway, let's calculate the gradient of the loss function not at the point $W$, but at $W - \gamma v_{t-1}$.
+
+\begin{equation}
+    v_t = \gamma v_{t-1} + \eta \nabla_W J( W - \gamma v_{t-1} )
+\end{equation}
+
+\begin{equation}
+    W = W - v_t
+\end{equation}
+
+Such a change fores loss to decay faster, if in the direction we are moving derivative is increasing, and slower, if opposite.
+
+\subsection{Adagrad}
+
+Some features can be very informative. It could happen that we have a pattern that only after few convolutional layers becomes a significant feature.. It would be great being able to update parameter with regard to its' feature change. It's not a difficult one, we just should store for a parameter a sum of squares of its' updates. It will stand for similarity: if the parameter belongs to a chain of frequently activated neurons, the sum is accumulating fast.
+
+\begin{equation}
+    G_{t} = G_{t} + g_{t}^2
+\end{equation}
+
+\begin{equation}
+    W_{t+1} = W_{t} - \frac{\eta}{\sqrt{G_{t} + \epsilon}} g_{t}
+\end{equation}
+
+Where $G_{t}$ is a sum of squares, аn $\epsilon$ is a smoothing parameter required to avoid division by $0$. If parameter updates frequently then $G_t$ is high and divisor is also big. $\epsilon$ is usually of order $10^{-6}$ or $10^{-8}$ for really aggressive updates, but it only plays a role in the beginning, near the middle $g_t$ starts to overcome $G_t$:
+
+Main idea of Adgrad is to use a mechanism to update frequently updated parameters less. Also, this formula is not the only one. Actually Adgrad is a family of algorithms, for example we can remove square root or store abs values of updates. Basically using Adgrad we automatically get so called learning rate decay.
+
+\subsection{RMSProp и Adadelta}
+
+Disadvantage of Adagrad is that $G_{t}$ could increase without any limit, and some time later it can stagnate. RMSProp and Adadelta are to overcome this disadvantage. To acheave this we still update parameters based on theirs update history. But instead of full sum of updates we can use an averaged square of gradient.
+
+\begin{equation}
+    E[g^2]_t = \gamma E[g^2]_{t-1} + (1 - \gamma) g^2_t
+\end{equation}
+
+Then we get
+
+\begin{equation}
+    W_{t+1} = W_{t} - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_{t}
+\end{equation}
+
+Divisor is a square root from gradient squares mean, thus RMSProp — root mean square propagation
+
+\begin{equation}
+    RMS[g]_t = \sqrt {E[g^2]_t + \epsilon }
+\end{equation}
+
+Adadelta differs from RMSProp by numerator, which uses $RMS$ from $\Delta W_t$. On step $t$ we do not know $RMS[\Delta W]_{t}$.
+
+\begin{equation}
+    \Delta W = -\frac{RMS[\Delta W]_{t-1}}{RMS[g]_{t}}g_{t}
+\end{equation}
+
+\begin{equation}
+    W_{t+1} = W_{t} - \frac{RMS[\Delta W]_{t-1}}{RMS[g]_{t}}g_{t}
+\end{equation}
+
+\begin{equation}
+    E[\Delta W^2]_t = \gamma E[\Delta W^2]_{t-1} + (1 - \gamma) \Delta W^2_t
+\end{equation}
+
+\begin{equation}
+    RMS[\Delta W]_{t} = \sqrt{E[\Delta W^2]_t + \epsilon}
+\end{equation}
+
+Note that we need $RMS[\Delta W]_{-1}$ to be $0$ for the first step, all the following $\Delta W$ and $RMS[\Delta W]_{t}$ are going to be $0$. that's why we need $RMS \epsilon$. For RMSProp and Adadelta and Adagrad we don't have to set parameters precisely. Usually it's good to start $\eta$ with $0.1 - 1$, and $\gamma$ with $0.9$.
+
+\subsection{Adam}
+
+Adam — adaptive moment estimation, yet another optimization algorithm. It combines an idea of value accumulation and an idea of Adgrad and RMSProp.
+
+\begin{equation}
+    m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t
+\end{equation}
+
+Unlike Nesterov we accumulate not $\Delta W$, but the values of the gradient though this is kind of a cosmetic change. Besides, we want to know how frequent does the gradient change. Authors of Adam purposed to measure mean variance:
+
+
+\begin{equation}
+    v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
+\end{equation}
+
+It's easy to find that $E[g^2]_t$ is the same in RMSProp.
+
+An important difference from RMSProp is in initial adjusting of $m_t$ and $v_t$: they suffer from the same problem as $E[g^2]_t$ from RMSProp: in case of starting value is $0$ it will take many iterations to calibrate especially with a big window of accumulation ($0 \ll \beta_1 < 1, 0 \ll \beta_2 < 1$). This can be solved by introducing two new hyperparameters, but there is another way: artificially increase $m_t$ and $v_t$ on the first steps ($0 < t < 10$ for $m_t$ and $0 < t < 1000$ for $v_t$)
+
+\begin{equation}
+    \hat{m}_t = \frac{m_t}{1 - \beta^t_1}, \;
+    \hat{v}_t = \frac{v_t}{1 - \beta^t_2}
+\end{equation}
+
+Finally rule of update:
+
+\begin{equation}
+    W_{t+1} = W_{t} - \dfrac{\eta}{\sqrt{\hat{v}_t + \epsilon}} \hat{m}_t
+\end{equation}
+
+Adam authors suggest to use following default values: $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\epsilon = 10^{-8}$ and claim that the algorithm performs better or at least not worse than previous algorithms of optimization.
+
 
 \subsection{Model training}
 

@@ -91,7 +91,27 @@ The next step is IDCT (Inverse Discrete Cosine Transform). IDCT takes the 64 DCT
 
 The last step of decompression is transformation from YCbCr representation to RGB. Ths transformation is a simple arithmetic which we omit here.
 
-TODO: formulas here
+In JPEG format conversation from RGB to Y'CbCr and backwards are described in \ref{eq:chroma-forward} and \ref{eq:chroma-backward}, where Y, CB and CR are in the 8-bit range 0-255:
+
+\begin{equation}
+    \label{eq:chroma-forward}
+    \begin{split}
+        Y'=0+(0.299\cdot R'_{D})+(0.587\cdot G'_{D})+(0.114\cdot B'_{D}) \\
+        C_{B}=128-(0.168736\cdot R'_{D})-(0.331264\cdot G'_{D})+(0.5\cdot B'_{D}) \\
+        C_{R}=128+(0.5\cdot R'_{D})-(0.418688\cdot G'_{D})-(0.081312\cdot B'_{D})
+    \end{split}
+\end{equation}
+
+Backwards:
+
+\begin{equation}
+    \label{eq:chroma-backward}
+    \begin{split}
+        R=Y+1.402\cdot (C_{R}-128) \\
+        G=Y-0.34414\cdot (C_{B}-128)-0.71414\cdot (C_{R}-128) \\
+        B=Y+1.772\cdot (C_{B}-128)
+    \end{split}
+\end{equation}
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
 

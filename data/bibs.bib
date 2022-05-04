@@ -1,4 +1,360 @@
-﻿@article{HinSal06,
+﻿
+// ========== Image compression ==========
+// ==========       BEGIN       ==========
+@article{agustsson_generative_2019,
+  title    = {Generative {Adversarial} {Networks} for {Extreme} {Learned} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/1804.02958},
+  abstract = {We present a learned image compression system based on GANs, operating at extremely low bitrates. Our proposed framework combines an encoder, decoder/generator and a multi-scale discriminator, which we train jointly for a generative learned compression objective. The model synthesizes details it cannot afford to store, obtaining visually pleasing results at bitrates where previous methods fail and show strong artifacts. Furthermore, if a semantic label map of the original image is available, our method can fully synthesize unimportant regions in the decoded image such as streets and trees from the label map, proportionally reducing the storage cost. A user study confirms that for low bitrates, our approach is preferred to state-of-the-art methods, even when they use more than double the bits.},
+  urldate  = {2021-12-15},
+  journal  = {arXiv:1804.02958 [cs]},
+  author   = {Agustsson, Eirikur and Tschannen, Michael and Mentzer, Fabian and Timofte, Radu and Van Gool, Luc},
+  month    = aug,
+  year     = {2019},
+  note     = {arXiv: 1804.02958},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+  annote   = {Comment: E. Agustsson, M. Tschannen, and F. Mentzer contributed equally to this work. ICCV 2019 camera ready version},
+  file     = {Agustsson et al_2019_Generative Adversarial Networks for Extreme Learned Image Compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\2CXCBXFG\\Agustsson et al_2019_Generative Adversarial Networks for Extreme Learned Image Compression.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\E7E3SI5K\\1804.html:text/html}
+}
+
+@article{zhou_end--end_nodate,
+  title    = {End-to-end {Optimized} {Image} {Compression} with {Attention} {Mechanism}},
+  abstract = {We present an end-to-end trainable image compression framework for low bit-rate and transparent image compression. Our method is based on variational autoencoder, which consists of a nonlinear encoder transformation, a soft quantizer, a nonlinear decoder transformation and an entropy estimation module. The prior probability of the latent representations is modeled by combining a hyperprior autoencoder and a Pixelcnn++ based context module and they are trained jointly with the transformation autoencoder with attention mechanism. In order to improve the compression performance, a non-local convolution based attention mechanism is designed for allocating bits adaptively. Finally, a novel rate allocation algorithm based on linear optimization is used to assign the bits for each image dynamically, considering the bits constraint of the challenge. Across the experimental results on validation and test sets, the optimized framework can generate the highest PSNR and MS-SSIM for low bit-rate compression competition, and cost the lowest bytes for transparent 40db competition.},
+  language = {en},
+  author   = {Zhou, Lei and Sun, Zhenhong and Wu, Xiangji and Wu, Junmin},
+  keywords = {compression},
+  pages    = {4},
+  file     = {Zhou et al. - End-to-end Optimized Image Compression with Attent.pdf:C\:\\Users\\nadol\\Zotero\\storage\\LS8JUPXI\\Zhou et al. - End-to-end Optimized Image Compression with Attent.pdf:application/pdf}
+}
+
+@article{balle_variational_2018,
+  title    = {Variational image compression with a scale hyperprior},
+  url      = {http://arxiv.org/abs/1802.01436},
+  abstract = {We describe an end-to-end trainable model for image compression based on variational autoencoders. The model incorporates a hyperprior to effectively capture spatial dependencies in the latent representation. This hyperprior relates to side information, a concept universal to virtually all modern image codecs, but largely unexplored in image compression using artificial neural networks (ANNs). Unlike existing autoencoder compression methods, our model trains a complex prior jointly with the underlying autoencoder. We demonstrate that this model leads to state-of-the-art image compression when measuring visual quality using the popular MS-SSIM index, and yields rate-distortion performance surpassing published ANN-based methods when evaluated using a more traditional metric based on squared error (PSNR). Furthermore, we provide a qualitative comparison of models trained for different distortion metrics.},
+  urldate  = {2021-11-21},
+  journal  = {arXiv:1802.01436 [cs, eess, math]},
+  author   = {Ballé, Johannes and Minnen, David and Singh, Saurabh and Hwang, Sung Jin and Johnston, Nick},
+  month    = may,
+  year     = {2018},
+  note     = {arXiv: 1802.01436},
+  keywords = {compression, Computer Science - Information Theory, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: accepted as a conference contribution to International Conference on Learning Representations 2018},
+  file     = {arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\KPM5HPU4\\1802.html:text/html;Ballé et al_2018_Variational image compression with a scale hyperprior.pdf:C\:\\Users\\nadol\\Zotero\\storage\\ZPJJ9VBZ\\Ballé et al_2018_Variational image compression with a scale hyperprior.pdf:application/pdf}
+}
+
+@article{li_comisr_nodate,
+  title    = {{COMISR}: {Compression}-{Informed} {Video} {Super}-{Resolution}},
+  abstract = {Most video super-resolution methods focus on restoring high-resolution video frames from low-resolution videos without taking into account compression. However, most videos on the web or mobile devices are compressed, and the compression can be severe when the bandwidth is limited. In this paper, we propose a new compressioninformed video super-resolution model to restore highresolution content without introducing artifacts caused by compression. The proposed model consists of three modules for video super-resolution: bi-directional recurrent warping, detail-preserving ﬂow estimation, and Laplacian enhancement. All these three modules are used to deal with compression properties such as the location of the intra-frames in the input and smoothness in the output frames. For thorough performance evaluation, we conducted extensive experiments on standard datasets with a wide range of compression rates, covering many real video use cases. We showed that our method not only recovers high-resolution content on uncompressed frames from the widely-used benchmark datasets, but also achieves state-of-the-art performance in super-resolving compressed videos based on numerous quantitative metrics. We also evaluated the proposed method by simulating streaming from YouTube to demonstrate its effectiveness and robustness. The source codes and trained models are available at https://github.com/google-research/googleresearch/tree/master/comisr.},
+  language = {en},
+  author   = {Li, Yinxiao and Jin, Pengchong and Yang, Feng and Liu, Ce and Yang, Ming-Hsuan and Milanfar, Peyman},
+  pages    = {10},
+  file     = {Li et al. - COMISR Compression-Informed Video Super-Resolutio.pdf:C\:\\Users\\nadol\\Zotero\\storage\\E5B7N8LS\\Li et al. - COMISR Compression-Informed Video Super-Resolutio.pdf:application/pdf}
+}
+
+
+@article{wang_substitutional_2021,
+  title    = {Substitutional {Neural} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/2105.07512},
+  abstract = {We describe Substitutional Neural Image Compression (SNIC), a general approach for enhancing any neural image compression model, that requires no data or additional tuning of the trained model. It boosts compression performance toward a flexible distortion metric and enables bit-rate control using a single model instance. The key idea is to replace the image to be compressed with a substitutional one that outperforms the original one in a desired way. Finding such a substitute is inherently difficult for conventional codecs, yet surprisingly favorable for neural compression models thanks to their fully differentiable structures. With gradients of a particular loss backpropogated to the input, a desired substitute can be efficiently crafted iteratively. We demonstrate the effectiveness of SNIC, when combined with various neural compression models and target metrics, in improving compression quality and performing bit-rate control measured by rate-distortion curves. Empirical results of control precision and generation speed are also discussed.},
+  urldate  = {2021-10-25},
+  journal  = {arXiv:2105.07512 [cs, eess]},
+  author   = {Wang, Xiao and Jiang, Wei and Wang, Wei and Liu, Shan and Kulis, Brian and Chin, Peter},
+  month    = may,
+  year     = {2021},
+  note     = {arXiv: 2105.07512},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Electrical Engineering and Systems Science - Image and Video Processing},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\D385N7NM\\Wang et al. - 2021 - Substitutional Neural Image Compression.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\BBNQJJMR\\2105.html:text/html}
+}
+
+@article{lu_progressive_2021,
+  title    = {Progressive {Neural} {Image} {Compression} with {Nested} {Quantization} and {Latent} {Ordering}},
+  url      = {http://arxiv.org/abs/2102.02913},
+  abstract = {We present PLONQ, a progressive neural image compression scheme which pushes the boundary of variable bitrate compression by allowing quality scalable coding with a single bitstream. In contrast to existing learned variable bitrate solutions which produce separate bitstreams for each quality, it enables easier rate-control and requires less storage. Leveraging the latent scaling based variable bitrate solution, we introduce nested quantization, a method that defines multiple quantization levels with nested quantization grids, and progressively refines all latents from the coarsest to the finest quantization level. To achieve finer progressiveness in between any two quantization levels, latent elements are incrementally refined with an importance ordering defined in the rate-distortion sense. To the best of our knowledge, PLONQ is the first learning-based progressive image coding scheme and it outperforms SPIHT, a well-known wavelet-based progressive image codec.},
+  urldate  = {2021-10-25},
+  journal  = {arXiv:2102.02913 [cs]},
+  author   = {Lu, Yadong and Zhu, Yinhao and Yang, Yang and Said, Amir and Cohen, Taco S.},
+  month    = feb,
+  year     = {2021},
+  note     = {arXiv: 2102.02913},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\RISEWSWG\\Lu et al. - 2021 - Progressive Neural Image Compression with Nested Q.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\EKTEFSR5\\2102.html:text/html}
+}
+
+@misc{noauthor_view_nodate,
+  title    = {View synthesis-based light field image compression using a generative adversarial network {\textbar} {Elsevier} {Enhanced} {Reader}},
+  url      = {https://reader.elsevier.com/reader/sd/pii/S0020025520307532?token=15F3E6BC7991BF1C37F7621B41FA02B4742CD5FE0B11C956F30BA4E6059428DA177B780F52871599B28FFFA79F042F97&originRegion=eu-west-1&originCreation=20211021092417},
+  language = {en},
+  urldate  = {2021-10-21},
+  doi      = {10.1016/j.ins.2020.07.073},
+  file     = {Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\MMK8RV3K\\S0020025520307532.html:text/html;View synthesis-based light field image compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\6UCGTB68\\View synthesis-based light field image compression.pdf:application/pdf}
+}
+
+@article{liu_unified_2020,
+  title    = {A {Unified} {End}-to-{End} {Framework} for {Efficient} {Deep} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/2002.03370},
+  abstract = {Image compression is a widely used technique to reduce the spatial redundancy in images. Recently, learning based image compression has achieved significant progress by using the powerful representation ability from neural networks. However, the current state-of-the-art learning based image compression methods suffer from the huge computational cost, which limits their capacity for practical applications. In this paper, we propose a unified framework called Efficient Deep Image Compression (EDIC) based on three new technologies, including a channel attention module, a Gaussian mixture model and a decoder-side enhancement module. Specifically, we design an auto-encoder style network for learning based image compression. To improve the coding efficiency, we exploit the channel relationship between latent representations by using the channel attention module. Besides, the Gaussian mixture model is introduced for the entropy model and improves the accuracy for bitrate estimation. Furthermore, we introduce the decoder-side enhancement module to further improve image compression performance. Our EDIC method can also be readily incorporated with the Deep Video Compression (DVC) framework to further improve the video compression performance. Simultaneously, our EDIC method boosts the coding performance significantly while bringing slightly increased computational cost. More importantly, experimental results demonstrate that the proposed approach outperforms the current state-of-the-art image compression methods and is up to more than 150 times faster in terms of decoding speed when compared with Minnen's method. The proposed framework also successfully improves the performance of the recent deep video compression system DVC. Our code will be released at https://github.com/liujiaheng/compression.},
+  urldate  = {2021-10-15},
+  journal  = {arXiv:2002.03370 [cs, eess]},
+  author   = {Liu, Jiaheng and Lu, Guo and Hu, Zhihao and Xu, Dong},
+  month    = may,
+  year     = {2020},
+  note     = {arXiv: 2002.03370},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: We will released our code and training data},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\HZL79KRE\\Liu et al. - 2020 - A Unified End-to-End Framework for Efficient Deep .pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\PANKZGT3\\2002.html:text/html;Liu et al_2020_A Unified End-to-End Framework for Efficient Deep Image Compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\SQASGTV4\\Liu et al_2020_A Unified End-to-End Framework for Efficient Deep Image Compression.pdf:application/pdf}
+}
+
+@article{mentzer_practical_2020,
+  title    = {Practical {Full} {Resolution} {Learned} {Lossless} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/1811.12817},
+  abstract = {We propose the first practical learned lossless image compression system, L3C, and show that it outperforms the popular engineered codecs, PNG, WebP and JPEG 2000. At the core of our method is a fully parallelizable hierarchical probabilistic model for adaptive entropy coding which is optimized end-to-end for the compression task. In contrast to recent autoregressive discrete probabilistic models such as PixelCNN, our method i) models the image distribution jointly with learned auxiliary representations instead of exclusively modeling the image distribution in RGB space, and ii) only requires three forward-passes to predict all pixel probabilities instead of one for each pixel. As a result, L3C obtains over two orders of magnitude speedups when sampling compared to the fastest PixelCNN variant (Multiscale-PixelCNN). Furthermore, we find that learning the auxiliary representation is crucial and outperforms predefined auxiliary representations such as an RGB pyramid significantly.},
+  urldate  = {2021-10-15},
+  journal  = {arXiv:1811.12817 [cs, eess]},
+  author   = {Mentzer, Fabian and Agustsson, Eirikur and Tschannen, Michael and Timofte, Radu and Van Gool, Luc},
+  month    = mar,
+  year     = {2020},
+  note     = {arXiv: 1811.12817},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: Updated preprocessing and Table 1, see A.1 in supplementary. Code and models: https://github.com/fab-jul/L3C-PyTorch},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\L2DIBHBA\\Mentzer et al. - 2020 - Practical Full Resolution Learned Lossless Image C.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\8YYURQKK\\1811.html:text/html;Mentzer et al_2020_Practical Full Resolution Learned Lossless Image Compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\TC7T6KJ2\\Mentzer et al_2020_Practical Full Resolution Learned Lossless Image Compression.pdf:application/pdf}
+}
+
+@article{mentzer_high-fidelity_2020,
+  title    = {High-{Fidelity} {Generative} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/2006.09965},
+  abstract = {We extensively study how to combine Generative Adversarial Networks and learned compression to obtain a state-of-the-art generative lossy compression system. In particular, we investigate normalization layers, generator and discriminator architectures, training strategies, as well as perceptual losses. In contrast to previous work, i) we obtain visually pleasing reconstructions that are perceptually similar to the input, ii) we operate in a broad range of bitrates, and iii) our approach can be applied to high-resolution images. We bridge the gap between rate-distortion-perception theory and practice by evaluating our approach both quantitatively with various perceptual metrics, and with a user study. The study shows that our method is preferred to previous approaches even if they use more than 2x the bitrate.},
+  urldate  = {2021-10-15},
+  journal  = {arXiv:2006.09965 [cs, eess]},
+  author   = {Mentzer, Fabian and Toderici, George and Tschannen, Michael and Agustsson, Eirikur},
+  month    = oct,
+  year     = {2020},
+  note     = {arXiv: 2006.09965
+              version: 3},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: This is the Camera Ready version for NeurIPS 2020. Project page: https://hific.github.io},
+  file     = {arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\PPVZMSZI\\2006.html:text/html;Full Text:C\:\\Users\\nadol\\Zotero\\storage\\NNU49WGY\\Mentzer et al. - 2020 - High-Fidelity Generative Image Compression.pdf:application/pdf}
+}
+
+@article{cao_lossless_2020,
+  title    = {Lossless {Image} {Compression} through {Super}-{Resolution}},
+  url      = {http://arxiv.org/abs/2004.02872},
+  abstract = {We introduce a simple and efficient lossless image compression algorithm. We store a low resolution version of an image as raw pixels, followed by several iterations of lossless super-resolution. For lossless super-resolution, we predict the probability of a high-resolution image, conditioned on the low-resolution input, and use entropy coding to compress this super-resolution operator. Super-Resolution based Compression (SReC) is able to achieve state-of-the-art compression rates with practical runtimes on large datasets. Code is available online at https://github.com/caoscott/SReC.},
+  urldate  = {2021-10-15},
+  journal  = {arXiv:2004.02872 [cs, eess]},
+  author   = {Cao, Sheng and Wu, Chao-Yuan and Krähenbühl, Philipp},
+  month    = apr,
+  year     = {2020},
+  note     = {arXiv: 2004.02872
+              version: 1},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: Tech report},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\6D8BQKPX\\Cao et al. - 2020 - Lossless Image Compression through Super-Resolutio.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\NXFXU9B8\\2004.html:text/html;Cao et al_2020_Lossless Image Compression through Super-Resolution.pdf:C\:\\Users\\nadol\\Zotero\\storage\\DIJ7Z4MI\\Cao et al_2020_Lossless Image Compression through Super-Resolution.pdf:application/pdf}
+}
+
+@article{toderici_full_2017,
+  title    = {Full {Resolution} {Image} {Compression} with {Recurrent} {Neural} {Networks}},
+  url      = {http://arxiv.org/abs/1608.05148},
+  abstract = {This paper presents a set of full-resolution lossy image compression methods based on neural networks. Each of the architectures we describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. All of our architectures consist of a recurrent neural network (RNN)-based encoder and decoder, a binarizer, and a neural network for entropy coding. We compare RNN types (LSTM, associative LSTM) and introduce a new hybrid of GRU and ResNet. We also study "one-shot" versus additive reconstruction architectures and introduce a new scaled-additive framework. We compare to previous work, showing improvements of 4.3\%-8.8\% AUC (area under the rate-distortion curve), depending on the perceptual metric used. As far as we know, this is the first neural network architecture that is able to outperform JPEG at image compression across most bitrates on the rate-distortion curve on the Kodak dataset images, with and without the aid of entropy coding.},
+  urldate  = {2021-10-13},
+  journal  = {arXiv:1608.05148 [cs]},
+  author   = {Toderici, George and Vincent, Damien and Johnston, Nick and Hwang, Sung Jin and Minnen, David and Shor, Joel and Covell, Michele},
+  month    = jul,
+  year     = {2017},
+  note     = {arXiv: 1608.05148},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  annote   = {Comment: Updated with content for CVPR and removed supplemental material to an external link for size limitations},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\AJPZVIPL\\Toderici et al. - 2017 - Full Resolution Image Compression with Recurrent N.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\N9CIMX9H\\1608.html:text/html}
+}
+
+@article{li_learning_2017,
+  title    = {Learning {Convolutional} {Networks} for {Content}-weighted {Image} {Compression}},
+  url      = {http://arxiv.org/abs/1703.10553},
+  abstract = {Lossy image compression is generally formulated as a joint rate-distortion optimization to learn encoder, quantizer, and decoder. However, the quantizer is non-differentiable, and discrete entropy estimation usually is required for rate control. These make it very challenging to develop a convolutional network (CNN)-based image compression system. In this paper, motivated by that the local information content is spatially variant in an image, we suggest that the bit rate of the different parts of the image should be adapted to local content. And the content aware bit rate is allocated under the guidance of a content-weighted importance map. Thus, the sum of the importance map can serve as a continuous alternative of discrete entropy estimation to control compression rate. And binarizer is adopted to quantize the output of encoder due to the binarization scheme is also directly defined by the importance map. Furthermore, a proxy function is introduced for binary operation in backward propagation to make it differentiable. Therefore, the encoder, decoder, binarizer and importance map can be jointly optimized in an end-to-end manner by using a subset of the ImageNet database. In low bit rate image compression, experiments show that our system significantly outperforms JPEG and JPEG 2000 by structural similarity (SSIM) index, and can produce the much better visual result with sharp edges, rich textures, and fewer artifacts.},
+  urldate  = {2021-10-12},
+  journal  = {arXiv:1703.10553 [cs]},
+  author   = {Li, Mu and Zuo, Wangmeng and Gu, Shuhang and Zhao, Debin and Zhang, David},
+  month    = sep,
+  year     = {2017},
+  note     = {arXiv: 1703.10553},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition},
+  file     = {arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\WKE7Y4WE\\1703.html:text/html;Full Text:C\:\\Users\\nadol\\Zotero\\storage\\5Y8LBIPY\\Li et al. - 2017 - Learning Convolutional Networks for Content-weight.pdf:application/pdf;Li et al_2017_Learning Convolutional Networks for Content-weighted Image Compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\JYSH27QH\\Li et al_2017_Learning Convolutional Networks for Content-weighted Image Compression.pdf:application/pdf}
+}
+
+@article{balle_end--end_2017,
+  title    = {End-to-end {Optimized} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/1611.01704},
+  abstract = {We describe an image compression method, consisting of a nonlinear analysis transformation, a uniform quantizer, and a nonlinear synthesis transformation. The transforms are constructed in three successive stages of convolutional linear filters and nonlinear activation functions. Unlike most convolutional neural networks, the joint nonlinearity is chosen to implement a form of local gain control, inspired by those used to model biological neurons. Using a variant of stochastic gradient descent, we jointly optimize the entire model for rate-distortion performance over a database of training images, introducing a continuous proxy for the discontinuous loss function arising from the quantizer. Under certain conditions, the relaxed loss function may be interpreted as the log likelihood of a generative model, as implemented by a variational autoencoder. Unlike these models, however, the compression model must operate at any given point along the rate-distortion curve, as specified by a trade-off parameter. Across an independent set of test images, we find that the optimized method generally exhibits better rate-distortion performance than the standard JPEG and JPEG 2000 compression methods. More importantly, we observe a dramatic improvement in visual quality for all images at all bit rates, which is supported by objective quality estimates using MS-SSIM.},
+  urldate  = {2021-05-10},
+  journal  = {arXiv:1611.01704 [cs, math]},
+  author   = {Ballé, Johannes and Laparra, Valero and Simoncelli, Eero P.},
+  month    = mar,
+  year     = {2017},
+  note     = {arXiv: 1611.01704},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Information Theory},
+  annote   = {Comment: Published as a conference paper at ICLR 2017},
+  file     = {arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\D4BUWB56\\1611.html:text/html;Ballé et al_2017_End-to-end Optimized Image Compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\FMCJZWPY\\Ballé et al_2017_End-to-end Optimized Image Compression.pdf:application/pdf}
+}
+
+@article{theis_lossy_2017,
+  title    = {Lossy {Image} {Compression} with {Compressive} {Autoencoders}},
+  url      = {http://arxiv.org/abs/1703.00395},
+  abstract = {We propose a new approach to the problem of optimizing autoencoders for lossy image compression. New media formats, changing hardware technology, as well as diverse requirements and content types create a need for compression algorithms which are more flexible than existing codecs. Autoencoders have the potential to address this need, but are difficult to optimize directly due to the inherent non-differentiabilty of the compression loss. We here show that minimal changes to the loss are sufficient to train deep autoencoders competitive with JPEG 2000 and outperforming recently proposed approaches based on RNNs. Our network is furthermore computationally efficient thanks to a sub-pixel architecture, which makes it suitable for high-resolution images. This is in contrast to previous work on autoencoders for compression using coarser approximations, shallower architectures, computationally expensive methods, or focusing on small images.},
+  urldate  = {2021-05-10},
+  journal  = {arXiv:1703.00395 [cs, stat]},
+  author   = {Theis, Lucas and Shi, Wenzhe and Cunningham, Andrew and Huszár, Ferenc},
+  month    = mar,
+  year     = {2017},
+  note     = {arXiv: 1703.00395},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition, Statistics - Machine Learning},
+  file     = {arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\YVAS6YL7\\1703.html:text/html;Theis et al_2017_Lossy Image Compression with Compressive Autoencoders.pdf:C\:\\Users\\nadol\\Zotero\\storage\\PMDULSW2\\Theis et al_2017_Lossy Image Compression with Compressive Autoencoders.pdf:application/pdf}
+}
+
+@article{liu_deep_nodate,
+  title    = {Deep {Image} {Compression} via {End}-to-{End} {Learning}},
+  abstract = {We present a lossy image compression method based on deep convolutional neural networks (CNNs), which outperforms the existing BPG, WebP, JPEG2000 and JPEG as measured via multi-scale structural similarity (MS-SSIM), at the same bit rate. Currently, most of the CNNs based approaches train the network using a l-2 loss between the reconstructions and the ground-truths in the pixel domain, which leads to over-smoothing results and visual quality degradation especially at a very low bit rate. Therefore, we improve the subjective quality with the combination of a perception loss and an adversarial loss additionally. To achieve better rate-distortion optimization (RDO), we also introduce an easy-to-hard transfer learning when adding quantization error and rate constraint. Finally, we evaluate our method on public Kodak and the Test Dataset P/M released by the Computer Vision Lab of ETH Zurich, resulting in averaged 7.81\% and 19.1\% BD-rate reduction over BPG, respectively.},
+  language = {en},
+  author   = {Liu, Haojie and Chen, Tong and Shen, Qiu and Yue, Tao and Ma, Zhan},
+  pages    = {4},
+  file     = {Liu et al. - Deep Image Compression via End-to-End Learning.pdf:C\:\\Users\\nadol\\Zotero\\storage\\89GMID4I\\Liu et al. - Deep Image Compression via End-to-End Learning.pdf:application/pdf}
+}
+
+@article{tellez_neural_2021,
+  title    = {Neural {Image} {Compression} for {Gigapixel} {Histopathology} {Image} {Analysis}},
+  volume   = {43},
+  issn     = {0162-8828, 2160-9292, 1939-3539},
+  url      = {http://arxiv.org/abs/1811.02840},
+  doi      = {10.1109/TPAMI.2019.2936841},
+  abstract = {We propose Neural Image Compression (NIC), a two-step method to build convolutional neural networks for gigapixel image analysis solely using weak image-level labels. First, gigapixel images are compressed using a neural network trained in an unsupervised fashion, retaining high-level information while suppressing pixel-level noise. Second, a convolutional neural network (CNN) is trained on these compressed image representations to predict image-level labels, avoiding the need for fine-grained manual annotations. We compared several encoding strategies, namely reconstruction error minimization, contrastive training and adversarial feature learning, and evaluated NIC on a synthetic task and two public histopathology datasets. We found that NIC can exploit visual cues associated with image-level labels successfully, integrating both global and local visual information. Furthermore, we visualized the regions of the input gigapixel images where the CNN attended to, and confirmed that they overlapped with annotations from human experts.},
+  number   = {2},
+  urldate  = {2022-03-25},
+  journal  = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  author   = {Tellez, David and Litjens, Geert and van der Laak, Jeroen and Ciompi, Francesco},
+  month    = feb,
+  year     = {2021},
+  note     = {arXiv: 1811.02840},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing},
+  pages    = {567--578},
+  annote   = {Comment: Accepted in the IEEE Transactions on Pattern Analysis and Machine Intelligence journal},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\XJ29JWG6\\Tellez et al. - 2021 - Neural Image Compression for Gigapixel Histopathol.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\GIKWDHQI\\1811.html:text/html}
+}
+
+@article{matsubara_sc2_2022,
+  title      = {{SC2}: {Supervised} {Compression} for {Split} {Computing}},
+  shorttitle = {{SC2}},
+  url        = {http://arxiv.org/abs/2203.08875},
+  abstract   = {Split computing distributes the execution of a neural network (e.g., for a classification task) between a mobile device and a more powerful edge server. A simple alternative to splitting the network is to carry out the supervised task purely on the edge server while compressing and transmitting the full data, and most approaches have barely outperformed this baseline. This paper proposes a new approach for discretizing and entropy-coding intermediate feature activations to efficiently transmit them from the mobile device to the edge server. We show that a efficient splittable network architecture results from a three-way tradeoff between (a) minimizing the computation on the mobile device, (b) minimizing the size of the data to be transmitted, and (c) maximizing the model's prediction performance. We propose an architecture based on this tradeoff and train the splittable network and entropy model in a knowledge distillation framework. In an extensive set of experiments involving three vision tasks, three datasets, nine baselines, and more than 180 trained models, we show that our approach improves supervised rate-distortion tradeoffs while maintaining a considerably smaller encoder size. We also release sc2bench, an installable Python package, to encourage and facilitate future studies on supervised compression for split computing (SC2).},
+  urldate    = {2022-04-01},
+  journal    = {arXiv:2203.08875 [cs, eess]},
+  author     = {Matsubara, Yoshitomo and Yang, Ruihan and Levorato, Marco and Mandt, Stephan},
+  month      = mar,
+  year       = {2022},
+  note       = {arXiv: 2203.08875
+                version: 1},
+  keywords   = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote     = {Comment: Preprint. Code and models are available at https://github.com/yoshitomo-matsubara/sc2-benchmark},
+  file       = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\32STGRD5\\Matsubara et al. - 2022 - SC2 Supervised Compression for Split Computing.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\J647R9SB\\2203.html:text/html}
+}
+
+@article{li_learning_2020,
+  title    = {Learning a {Single} {Model} with a {Wide} {Range} of {Quality} {Factors} for {JPEG} {Image} {Artifacts} {Removal}},
+  volume   = {29},
+  issn     = {1057-7149, 1941-0042},
+  url      = {http://arxiv.org/abs/2009.06912},
+  doi      = {10.1109/TIP.2020.3020389},
+  abstract = {Lossy compression brings artifacts into the compressed image and degrades the visual quality. In recent years, many compression artifacts removal methods based on convolutional neural network (CNN) have been developed with great success. However, these methods usually train a model based on one specific value or a small range of quality factors. Obviously, if the test image's quality factor does not match to the assumed value range, then degraded performance will be resulted. With this motivation and further consideration of practical usage, a highly robust compression artifacts removal network is proposed in this paper. Our proposed network is a single model approach that can be trained for handling a wide range of quality factors while consistently delivering superior or comparable image artifacts removal performance. To demonstrate, we focus on the JPEG compression with quality factors, ranging from 1 to 60. Note that a turnkey success of our proposed network lies in the novel utilization of the quantization tables as part of the training data. Furthermore, it has two branches in parallel---i.e., the restoration branch and the global branch. The former effectively removes the local artifacts, such as ringing artifacts removal. On the other hand, the latter extracts the global features of the entire image that provides highly instrumental image quality improvement, especially effective on dealing with the global artifacts, such as blocking, color shifting. Extensive experimental results performed on color and grayscale images have clearly demonstrated the effectiveness and efficacy of our proposed single-model approach on the removal of compression artifacts from the decoded image.},
+  urldate  = {2022-04-05},
+  journal  = {IEEE Transactions on Image Processing},
+  author   = {Li, Jianwei and Wang, Yongtao and Xie, Haihua and Ma, Kai-Kuang},
+  year     = {2020},
+  note     = {arXiv: 2009.06912},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing, enhance},
+  pages    = {8842--8854},
+  annote   = {Comment: Accepted for publication in the IEEE Transactions on Image Processing},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\RVZP7CK5\\Li et al. - 2020 - Learning a Single Model with a Wide Range of Quali.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\Y23DJW58\\2009.html:text/html}
+}
+
+@article{ehrlich_quantization_2020,
+  title    = {Quantization {Guided} {JPEG} {Artifact} {Correction}},
+  url      = {http://arxiv.org/abs/2004.09320},
+  abstract = {The JPEG image compression algorithm is the most popular method of image compression because of its ability for large compression ratios. However, to achieve such high compression, information is lost. For aggressive quantization settings, this leads to a noticeable reduction in image quality. Artifact correction has been studied in the context of deep neural networks for some time, but the current state-of-the-art methods require a different model to be trained for each quality setting, greatly limiting their practical application. We solve this problem by creating a novel architecture which is parameterized by the JPEG files quantization matrix. This allows our single model to achieve state-of-the-art performance over models trained for specific quality settings.},
+  urldate  = {2022-04-05},
+  journal  = {arXiv:2004.09320 [cs, eess, stat]},
+  author   = {Ehrlich, Max and Davis, Larry and Lim, Ser-Nam and Shrivastava, Abhinav},
+  month    = jul,
+  year     = {2020},
+  note     = {arXiv: 2004.09320},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Electrical Engineering and Systems Science - Image and Video Processing, enhance, Statistics - Machine Learning},
+  annote   = {Comment: Published in the proceedings of ECCV 2020, please see our released code and models at https://gitlab.com/Queuecumber/quantization-guided-ac},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\LXZ4WS7P\\Ehrlich et al. - 2020 - Quantization Guided JPEG Artifact Correction.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\7YETI785\\2004.html:text/html}
+}
+
+@article{kamisli_end--end_2022,
+  title    = {End-to-{End} {Learned} {Block}-{Based} {Image} {Compression} with {Block}-{Level} {Masked} {Convolutions} and {Asymptotic} {Closed} {Loop} {Training}},
+  url      = {http://arxiv.org/abs/2203.11686},
+  abstract = {Learned image compression research has achieved state-of-the-art compression performance with auto-encoder based neural network architectures, where the image is mapped via convolutional neural networks (CNN) into a latent representation that is quantized and processed again with CNN to obtain the reconstructed image. CNN operate on entire input images. On the other hand, traditional state-of-the-art image and video compression methods process images with a block-by-block processing approach for various reasons. Very recently, work on learned image compression with block based approaches have also appeared, which use the auto-encoder architecture on large blocks of the input image and introduce additional neural networks that perform intra/spatial prediction and deblocking/post-processing functions. This paper explores an alternative learned block-based image compression approach in which neither an explicit intra prediction neural network nor an explicit deblocking neural network is used. A single auto-encoder neural network with block-level masked convolutions is used and the block size is much smaller (8x8). By using block-level masked convolutions, each block is processed using reconstructed neighboring left and upper blocks both at the encoder and decoder. Hence, the mutual information between adjacent blocks is exploited during compression and each block is reconstructed using neighboring blocks, resolving the need for explicit intra prediction and deblocking neural networks. Since the explored system is a closed loop system, a special optimization procedure, the asymptotic closed loop design, is used with standard stochastic gradient descent based training. The experimental results indicate competitive image compression performance.},
+  urldate  = {2022-04-05},
+  journal  = {arXiv:2203.11686 [cs, eess]},
+  author   = {Kamisli, Fatih},
+  month    = mar,
+  year     = {2022},
+  note     = {arXiv: 2203.11686
+              version: 1},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Multimedia, Electrical Engineering and Systems Science - Image and Video Processing},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\PJ5UKITZ\\Kamisli - 2022 - End-to-End Learned Block-Based Image Compression w.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\6E4YMXQ2\\2203.html:text/html}
+}
+
+@article{xie_enhanced_2021,
+  title    = {Enhanced {Invertible} {Encoding} for {Learned} {Image} {Compression}},
+  url      = {http://arxiv.org/abs/2108.03690},
+  abstract = {Although deep learning based image compression methods have achieved promising progress these days, the performance of these methods still cannot match the latest compression standard Versatile Video Coding (VVC). Most of the recent developments focus on designing a more accurate and flexible entropy model that can better parameterize the distributions of the latent features. However, few efforts are devoted to structuring a better transformation between the image space and the latent feature space. In this paper, instead of employing previous autoencoder style networks to build this transformation, we propose an enhanced Invertible Encoding Network with invertible neural networks (INNs) to largely mitigate the information loss problem for better compression. Experimental results on the Kodak, CLIC, and Tecnick datasets show that our method outperforms the existing learned image compression methods and compression standards, including VVC (VTM 12.1), especially for high-resolution images. Our source code is available at https://github.com/xyq7/InvCompress.},
+  urldate  = {2022-04-05},
+  journal  = {arXiv:2108.03690 [cs, eess]},
+  author   = {Xie, Yueqi and Cheng, Ka Leong and Chen, Qifeng},
+  month    = aug,
+  year     = {2021},
+  note     = {arXiv: 2108.03690
+              version: 1},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: Accepted to ACM Multimedia 2021 as Oral},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\EYPM9P23\\Xie et al. - 2021 - Enhanced Invertible Encoding for Learned Image Com.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\Q3I2SZ9Y\\2108.html:text/html}
+}
+
+@article{bai_towards_2021,
+  title    = {Towards {End}-to-{End} {Image} {Compression} and {Analysis} with {Transformers}},
+  url      = {http://arxiv.org/abs/2112.09300},
+  abstract = {We propose an end-to-end image compression and analysis model with Transformers, targeting to the cloud-based image classification application. Instead of placing an existing Transformer-based image classification model directly after an image codec, we aim to redesign the Vision Transformer (ViT) model to perform image classification from the compressed features and facilitate image compression with the long-term information from the Transformer. Specifically, we first replace the patchify stem (i.e., image splitting and embedding) of the ViT model with a lightweight image encoder modelled by a convolutional neural network. The compressed features generated by the image encoder are injected convolutional inductive bias and are fed to the Transformer for image classification bypassing image reconstruction. Meanwhile, we propose a feature aggregation module to fuse the compressed features with the selected intermediate features of the Transformer, and feed the aggregated features to a deconvolutional neural network for image reconstruction. The aggregated features can obtain the long-term information from the self-attention mechanism of the Transformer and improve the compression performance. The rate-distortion-accuracy optimization problem is finally solved by a two-step training strategy. Experimental results demonstrate the effectiveness of the proposed model in both the image compression and the classification tasks.},
+  urldate  = {2022-04-05},
+  journal  = {arXiv:2112.09300 [cs, eess]},
+  author   = {Bai, Yuanchao and Yang, Xu and Liu, Xianming and Jiang, Junjun and Wang, Yaowei and Ji, Xiangyang and Gao, Wen},
+  month    = dec,
+  year     = {2021},
+  note     = {arXiv: 2112.09300
+              version: 1},
+  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing},
+  annote   = {Comment: Accepted by AAAI 2022; Code: https://github.com/BYchao100/Towards-Image-Compression-and-Analysis-with-Transformers},
+  file     = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\PQP2M57N\\Bai et al. - 2021 - Towards End-to-End Image Compression and Analysis .pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\FGJSYMXZ\\2112.html:text/html}
+}
+
+@article{zou_devil_2022,
+  title      = {The {Devil} {Is} in the {Details}: {Window}-based {Attention} for {Image} {Compression}},
+  shorttitle = {The {Devil} {Is} in the {Details}},
+  url        = {http://arxiv.org/abs/2203.08450},
+  abstract   = {Learned image compression methods have exhibited superior rate-distortion performance than classical image compression standards. Most existing learned image compression models are based on Convolutional Neural Networks (CNNs). Despite great contributions, a main drawback of CNN based model is that its structure is not designed for capturing local redundancy, especially the non-repetitive textures, which severely affects the reconstruction quality. Therefore, how to make full use of both global structure and local texture becomes the core problem for learning-based image compression. Inspired by recent progresses of Vision Transformer (ViT) and Swin Transformer, we found that combining the local-aware attention mechanism with the global-related feature learning could meet the expectation in image compression. In this paper, we first extensively study the effects of multiple kinds of attention mechanisms for local features learning, then introduce a more straightforward yet effective window-based local attention block. The proposed window-based attention is very flexible which could work as a plug-and-play component to enhance CNN and Transformer models. Moreover, we propose a novel Symmetrical TransFormer (STF) framework with absolute transformer blocks in the down-sampling encoder and up-sampling decoder. Extensive experimental evaluations have shown that the proposed method is effective and outperforms the state-of-the-art methods. The code is publicly available at https://github.com/Googolxx/STF.},
+  urldate    = {2022-04-05},
+  journal    = {arXiv:2203.08450 [cs]},
+  author     = {Zou, Renjie and Song, Chunfeng and Zhang, Zhaoxiang},
+  month      = mar,
+  year       = {2022},
+  note       = {arXiv: 2203.08450
+                version: 1},
+  keywords   = {compression, Computer Science - Computer Vision and Pattern Recognition},
+  annote     = {Comment: Accepted by CVPR 2022},
+  file       = {arXiv Fulltext PDF:C\:\\Users\\nadol\\Zotero\\storage\\VVAXI3UU\\Zou et al. - 2022 - The Devil Is in the Details Window-based Attentio.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\6UP6WC6L\\2203.html:text/html}
+}
+
+// ========== Image compression ==========
+// ==========        END        ==========
+
+@article{Autoencoder-2006,
   author  = {Geoffrey Hinton and Ruslan Salakhutdinov},
   title   = {Reducing the Dimensionality of Data with Neural 
              Networks},
@@ -14,8 +370,7 @@
   url      = {https://paperswithcode.com/method/autoencoder},
   abstract = {An Autoencoder is a bottleneck architecture that turns a high-dimensional input into a latent low-dimensional code (encoder), and then performs a reconstruction of the input with this latent code (the decoder). Image: Michael Massi},
   language = {en},
-  urldate  = {2022-04-14},
-  file     = {Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\D965PEBF\\autoencoder.html:text/html}
+  urldate  = {2022-04-14}
 }
 
 @article{mentzer_high_fidelity_2020,
@@ -34,7 +389,7 @@
   file     = {arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\PPVZMSZI\\2006.html:text/html;Full Text:C\:\\Users\\nadol\\Zotero\\storage\\NNU49WGY\\Mentzer et al. - 2020 - High-Fidelity Generative Image Compression.pdf:application/pdf}
 }
 
-@article{wallace_jpeg_1992,
+@article{JPEG-1992,
   title   = {The JPEG still picture compression standard},
   volume  = {38},
   number  = {1},
@@ -45,6 +400,55 @@
   pages   = {xviii--xxxiv}
 }
 
+@article{Huffman-Coding,
+  author  = {Huffman, David A.},
+  journal = {Proceedings of the IRE},
+  title   = {A Method for the Construction of Minimum-Redundancy Codes},
+  year    = {1952},
+  volume  = {40},
+  number  = {9},
+  pages   = {1098-1101},
+  doi     = {10.1109/JRPROC.1952.273898}
+}
+
+@article{Arithmetic-Coding,
+  author     = {Witten, Ian H. and Neal, Radford M. and Cleary, John G.},
+  title      = {Arithmetic Coding for Data Compression},
+  year       = {1987},
+  issue_date = {June 1987},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {30},
+  number     = {6},
+  issn       = {0001-0782},
+  url        = {https://doi.org/10.1145/214762.214771},
+  doi        = {10.1145/214762.214771},
+  abstract   = {The state of the art in data compression is arithmetic coding, not the better-known Huffman method. Arithmetic coding gives greater compression, is faster for adaptive models, and clearly separates the model from the channel encoding.},
+  journal    = {Commun. ACM},
+  month      = {jun},
+  pages      = {520–540},
+  numpages   = {21}
+}
+
+@article{pca,
+  author    = { Karl   Pearson   F.R.S. },
+  title     = {LIII. On lines and planes of closest fit to systems of points in space},
+  journal   = {The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science},
+  volume    = {2},
+  number    = {11},
+  pages     = {559-572},
+  year      = {1901},
+  publisher = {Taylor & Francis},
+  doi       = {10.1080/14786440109462720},
+  url       = { 
+               https://doi.org/10.1080/14786440109462720
+               
+               },
+  eprint    = { 
+               https://doi.org/10.1080/14786440109462720
+               
+               }
+}
  @article{Ballé_Minnen_Singh_Hwang_Johnston_2018,
   title        = {Variational image compression with a scale hyperprior},
   url          = {http://arxiv.org/abs/1802.01436},

@@ -133,6 +133,7 @@ However, several issues are still remaining unsolved:
     \item False textures.
     \item Limited compression power.
     \item Fixed output size.
+    \item Noise artifacts.
 \end{enumerate}
 
 We separate neural image compression to two main groups:
@@ -142,9 +143,9 @@ We separate neural image compression to two main groups:
     \item Methods that create a new pipeline, while using some parts from traditional pipeline.
 \end{enumerate}
 
-For now a general approach is to encode an image to compressed representation using convolutional neural network and take the convolutional features from one of the top layers of network. In this work we are going to use a slightly different architecture.
+For now a general approach is to encode an image to a compressed representation using convolutional neural network and take the convolutional features from one of the top layers of network. Then these features can be stored and later with the use of another convolutional neural network that employs deconvolution the initial image can be obtained.
 
-In this work we are going to apply fully convolutional neural network to extract features from given image, compress those features using another encoder and arithmetic coding algorithm. Then this compressed representation will be restored using decoder and upsample modules. It worth to mention that the algorithm we are working on is lossy. Our method will combine traditional image compression approaches and neural network image compression approach.
+In this work we are going to apply fully convolutional neural network to extract features from given image, afterwards we compress those features using another encoder and arithmetic coding algorithm. Then this compressed representation is restored using decoder and upsample modules. It worth to mention that the algorithm we are working on is lossy. Our method will combine traditional image compression approaches and neural network image compression approach.
 
 \chapter{Objective}
 
@@ -207,11 +208,7 @@ Similarly to PCA, autoencoder reduces dimensionality of an original data point, 
     \label{autoencoder-schema}
 \end{figure}
 
-Autoencoder is trained in supervised manner: feed data, pass it through encoder and decoder, calculate difference between original image in the output, then back propagate. After sufficient amount of iterations autoencoder finds its' local minimum. At this moment we need to stop training process, store weights and fix them.
-
-Autoencoders have many applications \ref{autoencoder-popularity-stats} in compression, denoising, debluring, upscaling etc. The conceptual idea in all these applications is that hidden representation is a compressed version of input data, then original data is restored by generator. The loss here is significant since this is actually the criteria of autoencoder performance and for different tasks the criteria is formulated differently.
-
-TODO: difference between these models
+Autoencoder architecture is a very popular choice. Recent years a number of publications that use an autoencoder model one way or another \ref{autoencoder-popularity-dynamics}.
 
 \begin{figure}[!ht]
     \centering
@@ -220,7 +217,9 @@ TODO: difference between these models
     \label{autoencoder-popularity-dynamics}
 \end{figure}
 
-TODO: About autoencoder application and spheres of applications.
+Autoencoder is trained in supervised manner: feed data, pass it through encoder and decoder, calculate difference between original image in the output, then back propagate. After sufficient amount of iterations autoencoder finds its' local minimum. At this moment we need to stop training process, store weights and fix them.
+
+Autoencoders have many applications \ref{autoencoder-popularity-stats} in compression, denoising, debluring, upscaling etc. The conceptual idea in all these applications is that hidden representation is a compressed version of input data, then original data is restored by generator. The loss here is significant since this is actually the criteria of autoencoder performance and for different tasks the criteria is formulated differently.
 
 \begin{figure}[!ht]
     \centering
@@ -233,7 +232,7 @@ We use fully convolutional neural networks (FCN) in the encoder \ref{encoder}. F
 
 \subsection{Encoder}
 
-Let us consider a pooling layer as an example to make our concern clear. Pooling layer takes a patch from an image (or from a feature map) and aggregates all those values into single output value. Pooling layers usually make use of aggregation functions such as \textit{max}, \textit{min}, \textit{avg} etc. Those functions are permutation invariant, which means we cannot reverse them. Even in theory it is impossible to get an inverse functions for pooling layers kernels, since pooling operation causes information loss.
+Let us consider a pooling layer as an example to make our concern clear. Pooling layer takes a patch from an image (or from a feature map) and aggregates all those values into single output value. Pooling layers usually make use of aggregation functions such as \textit{max}, \textit{min}, \textit{avg} etc. Those functions are permutation invariant and they do not have an inverse function, which means we cannot reverse them. Even in theory it is impossible to get an inverse functions for pooling layers kernels, since pooling operation causes information loss.
 
 \begin{figure}[!ht]
     \centering

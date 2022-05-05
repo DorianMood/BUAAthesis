@@ -18,6 +18,10 @@ Neural image compression usually follows an autoencoder pipeline.
 
 Fully convolutional neural network is a type of neural network without an aggregate layer. Usually such an aggregation operation is a pooling. Pooling layer mechanics is simple: we need some functions that is a permutation invariant, so, it can make a generalization. This function for example can be a min, max, sum or average. These functions are irreversible, so we can not find a reverse function. Since conceptually decoder of an autoencoder is basically a reverse function for an encoder, we need something like this. The compression process must be reversible, otherwise we can not decompress an original image.
 
+Fully convolutional neural networks is well-described in \cite{fcn}. Authors use fully convolutional network for semantic segmentation. Semantic segmentation is a special task in computer vision, where the final proposal is to label each pixel of image according to the object it belongs to. Traditionally this task is solved with clustering algorithms. The FCN (fully convolutional network) authors use is a network with only convolutional elements, this network only has a convolutional layers. Since convolutional layer architecture doesn't require a fixed-size input, it is extremely convenient to use these network with non-fixed size input data.
+
+Each input for convolutional layer is a tensor of size $H \times W \times D$, where $H$ and $W$ are spatial dimensions and $D$ is depth dimension. Each next layer is connected to certain area in the previous layers and the more deep we go through the network the bigger is this area. This area is called a \textit{receptive field}
+
 \chapter{Applications}
 
 \chapter{Conclusion}

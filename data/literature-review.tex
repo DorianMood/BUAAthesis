@@ -42,7 +42,25 @@ GANs were first time introduced by \cite[Goodfellow et al]{Goodfellow_Pouget-Aba
     min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
 \end{equation}
 
-\ref{toderici_full_2017}
+First time introduced in \ref{toderici_full_2017}, convolutional neural compression employs an autoencoder architecture and some steps from traditional image compression pipeline. They optimize a tradeoff between a number of bits used to store data (based on symbol frequencies and called an \textit{entropy coding}) and distortion \ref{eq:rate-distortion}.
+
+\begin{equation}
+    \label{eq:rate-distortion}
+    − log_2 Q ([f (x)]) + \beta · d (x, g([f (x)]))
+\end{equation}
+
+Where $\beta$ controls a rate-distortion tradeoff, $Q$ is compression rate and $d$ is distortion rate.
+
+The first problem we encounter going through this problem is that quantization operation is not differentiable. Since quantization employs rounding, it is zero everywhere except integers, where it is undefined. Authors propose to use a smooth approximation for quantization during backward pass.
+
+\begin{equation}
+    \label{eq:quantization}
+    \frac{d}{dy}[y]:=\frac{d}{dy}r(y)
+\end{equation}
+
+Where $r$ is an approximation function. For simplicity authors used $r(y)=y$, this makes the operation much more easy to implement. Gradients simply pass from the decoder to encoder.
+
+Authors use elements from \cite{shi_real-time_2016}, basically employing such operations as convolution, residual blocks in the middle and sub-pixel convolutions in the decoder network.
 
 \chapter{Applications}
 

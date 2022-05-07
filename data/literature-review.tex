@@ -41,7 +41,7 @@ In \cite{odena_deconvolution_2016} authors claim checkerboard artifacts to be a 
 
 In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement based on quantization table and YCbCr channels neural processing. JPEG \cite{JPEG-1992} luminance channel is twice bigger than Cb and Cr channels. Authors first enhance luminance channel and only then enhance Cb and Cr channels. They do it this way because luminance channel can be used in Cb and Cr channels, since their structure is similar within one image. So, the pipeline they propose has several steps.Firstly they take quantization matrix, which the image was compressed with. This matrix is stored inside JPEG container, so we can have it as an input without any additional actions. Then the luminance channel and quantization matrix are being fed to neural network, that enhances luminance channel based on its' structure and quantization matrix. Having luminance channel enhanced they use it as an input to color channel correlation network, which is another enhancer for Cb and Cr - color channels.
 
-
+In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
 
 \section{Autoencoder applications in image processing}
 

@@ -43,8 +43,6 @@ In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement base
 
 In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
 
-ESRGAN \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019} and RealESRGAN \cite{Wang_Xie_Dong_Shan_2021} are two similar papers where authors try to resolve the issue of image quality enhancement. More concrete, in those papers authors propose a model to perform a super-resolution.They use a common pipeline which has already widely spread among image super-resolution models. They use a convolution to map original image to lower spatial dimensional space, but higher channel dimensional space. Then they follow convolution by applying several residual blocks. This residual network doesn't change the data dimensionality and the number of residual blocks can vary over different variants of network. Then they upscale image with interpolation (different ones were used: bicubic, bilinear, Nearest-neighbor interpolation) followed by convolutions to reduce number of channels and increase spatial dimensions back to the initial state of 3.
-
 \section{Autoencoder applications in image processing}
 
 First time introduced in \cite{toderici_full_2017}, convolutional neural compression employs an autoencoder architecture and some steps from traditional image compression pipeline. They optimize a tradeoff between a number of bits used to store data (based on symbol frequencies and called an \textit{entropy coding}) and distortion \ref{eq:rate-distortion}.
@@ -77,6 +75,19 @@ GANs were first time introduced by \cite[Goodfellow et al]{Goodfellow_Pouget-Aba
     \label{eq:gan}
     min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
 \end{equation}
+
+ESRGAN \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019} and RealESRGAN \cite{Wang_Xie_Dong_Shan_2021} are two similar papers where authors try to resolve the issue of image quality enhancement. More concrete, in those papers authors propose a model to perform a super-resolution.They use a common pipeline which has already widely spread among image super-resolution models. They use a convolution to map original image to lower spatial dimensional space, but higher channel dimensional space. Then they follow convolution by applying several residual blocks. This residual network doesn't change the data dimensionality and the number of residual blocks can vary over different variants of network. Then they upscale image with interpolation (different ones were used: bicubic, bilinear, Nearest-neighbor interpolation) followed by convolutions to reduce number of channels and increase spatial dimensions back to the initial state of 3. This model is trained in GAN manner, so Discriminator is used.
+
+Recently a U-Net based discriminator was proposed in \cite{schonfeld_u-net_2021}. This U-Net discriminator classifies the input images on a global and local per-pixel level. Due to the skip-connections between the encoder and the decoder, the channels in the output layer contain both high-level and low-level information. Brighter colors in the decoder output correspond to the discriminator confidence of pixel being real (and darker of being fake). So the discriminator has a confidence map with size of the image. The discriminator consists of the original downsampling network and an upsampling network. The two modules are connected via a bottleneck, as well as skip-connections that copy and concatenate feature maps from the encoder and the decoder modules. Discriminator loss is described in \ref{eq:u-net-discriminator}.
+
+\begin{equation}
+    \label{eq:u-net-discriminator}
+    \begin{split}
+        L_D = -E_z[log D_{enc}^U(G(z)) + \sum_{i,j}{log [D_{dec}^U(G(z))]_{i,j}}]
+    \end{split}
+\end{equation}
+
+Where $D_{enc}^U$ is an encoder part of the discriminator, $D_{dec}^U$ is a decoder part of the discriminator. The first term of this formula stands for distinguishing the whole picture to be fake or real and the second term stands for every pixel of an image to be fake or real. The second term generalize each pixel data of the generated fake/real confidence map by summing them up. In this formula $[D_{dec}^U(G(z))]_{i,j}$ refer to the discriminator decision at pixel $(i,j)$.
 
 \chapter{Applications}
 

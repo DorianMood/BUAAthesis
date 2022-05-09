@@ -10,6 +10,7 @@
     "Dequantization",
     "downsampling",
     "Eigen",
+    "FBCNN",
     "FDCT",
     "hyperlatent",
     "hyperlatents",

@@ -89,6 +89,8 @@ Recently a U-Net based discriminator was proposed in \cite{schonfeld_u-net_2021}
 
 Where $D_{enc}^U$ is an encoder part of the discriminator, $D_{dec}^U$ is a decoder part of the discriminator. The first term of this formula stands for distinguishing the whole picture to be fake or real and the second term stands for every pixel of an image to be fake or real. The second term generalize each pixel data of the generated fake/real confidence map by summing them up. In this formula $[D_{dec}^U(G(z))]_{i,j}$ refer to the discriminator decision at pixel $(i,j)$.
 
+In \cite{jiang_towards_2021} authors propose FBCNN for JPEG artifacts removal. FBCNN is also based on U-Net \cite{ronneberger_u-net_2015} and consists of four parts: encoder, quality factor predictor, flexible controller, and decoder. The encoder extracts the deep features from the input corrupted JPEG image and then splits them into image features and QF features which are subsequently fed into the decoder and predictor, respectively. The controller gets the estimated QF from the predictor and then generates QF embeddings. The QF attention block enables the controller to make the decoder produce different results according to different QF embeddings. The predicted quality factor can be changed with interactive selections to have a balance between artifacts removal and details preservation.
+
 \chapter{Applications}
 
 \chapter{Conclusion}

@@ -101,14 +101,25 @@ A single iteration of their network can be represented using following formula \
 
 \begin{equation}
     \label{eq:rnn-compression-1}
-    b_t = B(E_t(r_{t-1})), \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1}
+    \begin{split}
+        b_t = B(E_t(r_{t-1})), \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1} \\
+        r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0
+    \end{split}
 \end{equation}
+
+Where $D_t$ and $E_t$ represent the decoder and the encoder with their states at iteration $t$ respectively, $b_t$ is the binary representation, $\hat{x}_t$ is the reconstruction of the original image $x$ and $r_t$ is the residual between $x$ and the reconstruction $\hat{x}_t$. While $\gamma$ is a parameter that controls the mode of the network: "one-shot" reconstruction or additive reconstruction.
+
+They use recurrent units in both encoder and decoder and control the affect of these recurrent units by hyperparameter. For example in case of using LSTM as a recurrent unit, they use following rules \ref{eq:rnn-compression-2}:
 
 \begin{equation}
-    \label{eq:enn-compression-2}
-    r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0
+    \label{eq:rnn-compression-2}
+    \begin{split}
+        [f, i, o, j]^T = [\sigma, \sigma, \sigma, tanh]^T((W x_t + U h_{t-1}) + b) \\
+        c_t = f \odot c_{t-1} + i \odot j
+        h_t = o \odot tanh(c_t)
+    \end{split}
 \end{equation}
 
-Where $D_t$ and $E_t$ represent the decoder and the encoder with their states at iteration $t$ respectively, $b_t$ is the binary representation, $\hat{x}_t$ is the reconstruction of the original image $x$ and $r_t$ is the residual between $x$ and the reconstruction $\hat{x}_t$. While $\gamma$ is a parameter that controls the mode of the network:"one-shot" reconstruction or additive reconstruction.
+Where $x_t$ denotes input, $c_t$ denotes cell state, $h_t$ denotes hidden state on the step $t$, $\odot$ is an element-wise multiplication, $b$ is bias, $\sigma$ is sigmoid activation function. The output of the LSTM network on the $t$ step is $h_t$.
 
 \chapter{Conclusion}

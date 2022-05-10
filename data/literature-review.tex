@@ -122,4 +122,13 @@ They use recurrent units in both encoder and decoder and control the affect of t
 
 Where $x_t$ denotes input, $c_t$ denotes cell state, $h_t$ denotes hidden state on the step $t$, $\odot$ is an element-wise multiplication, $b$ is bias, $\sigma$ is sigmoid activation function. The output of the LSTM network on the $t$ step is $h_t$.
 
+With the rise of the GANs \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}, many application were proposed especially in neural image processing. Neural image compression is not an exception: GANs significantly outperform previous approaches. In \cite{agustsson_generative_2019} authors propose a technique for image compression that uses GAN training pipeline: encoder for dimensionality reduction is followed by quantizer that quantizes the intermediate representation and performs a compression for further storing the data on disk, then data flows into decoder, which reconstructs the image and ont top of this they put a discriminator for adversarial training. The objective is described by formula \ref{eq:gan-compression}.
+
+\begin{equation}
+    \label{eq:gan-compression}
+    \min_{E,G} L_{GAN} + \lambda E[d(x, G(z))] + \beta H(\hat{w}).
+\end{equation}
+
+Where $L_{GAN}$ is GAN discriminator loss, $E[d(x, G(z))]$ is distortion loss, and $H(\hat{w})$ is a compression loss. $\lambda$ and $\beta$ are hyperparameters tht balance compression rate and distortion tradeoff.
+
 \chapter{Conclusion}

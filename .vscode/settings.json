@@ -1,7 +1,9 @@
 {
   "cSpell.words": [
     "autoencoders",
+    "backpropagate",
     "backpropagation",
+    "binarizer",
     "canonicalized",
     "convolutional",
     "debluring",

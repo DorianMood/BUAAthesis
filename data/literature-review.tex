@@ -10,7 +10,7 @@ Image compression has a several conventional steps, which are usually employed i
 
 To understand main neural image compression approaches, we need to get familiar with autoencoder architecture first. First time introduced in 2006 \cite{Autoencoder_2006}. In this paper authors propose an unusual method to reduce a dimensionality of data: use neural network build up from two components, encoder and decoder. They significantly overcome efficiency of Principal component analysis \cite{pca} in dimensionality reduction. Dimensionality reduction late has become a closely related to neural image compression. Autoencoder consists of two very specific for its' architecture parts: Encoder and Decoder. In the original paper they have (2-4) hidden layers in the encoder and decoder, but now modern approaches can be much more deep. A main principle of autoencoder is that we use encoder to reduce dimensionality (this results to some kind of data compression, and in other words with the help of encoder we compress data to some compact representation). Afterwards we use Decoder to reconstruct data from intermediate representation to it's original shape. Both encoder and decoder are multilayer neural networks, which makes it extremely flexible and open to all the machine learning progress we have and potentially will have in the future. To train such a model we need to initialize these two networks and propagate the information through encoder and decoder sequentially. Then we need to calculate an error. Decoder output has the same shape as the original sample and usually we define loss as a distance from input sample to the decoder output (such as L1 or L2 distances). Later we use any of existing optimizers perform a backpropagation this loss value and adjust weights.
 
-\chapter{Neural image compression}
+\chapter{Neural image processing}
 
 Neural image compression usually follows an autoencoder pipeline.
 
@@ -91,6 +91,24 @@ Recently a U-Net based discriminator was proposed in \cite{schonfeld_u-net_2021}
 
 Where $D_{enc}^U$ is an encoder part of the discriminator, $D_{dec}^U$ is a decoder part of the discriminator. The first term of this formula stands for distinguishing the whole picture to be fake or real and the second term stands for every pixel of an image to be fake or real. The second term generalize each pixel data of the generated fake/real confidence map by summing them up. In this formula $[D_{dec}^U(G(z))]_{i,j}$ refer to the discriminator decision at pixel $(i,j)$.
 
-\chapter{Applications}
+\chapter{Neural image compression}
+
+In this section we will show that neural networks can also be used in image compression. As it was mentioned in the paper \cite[Reducing the Dimensionality of Data with Neural Networks]{Autoencoder_2006}, autoencoders are a very powerful tool for reducing a dimensionality of data, which makes them a suitable choice for image compression. The task of image compression is to reduce the size of given image while keeping it's visual features. In other words the objective in image compression is to maximize the quality of compressed and decompressed image and minimize the number of bytes required to store the image.
+
+One of the first approaches here has been described in \cite{toderici_full_2017}. It was the first paper that has successfully outperformed JPEG. Each of the architectures they describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. The framework consists of three modules: encoder, binarizer and decoder. The structure of the framework is similar to \cite[Autoencoder]{Autoencoder_2006}: uncompressed image goes through encoder; then features with reduced dimensionality go to the binarizer and being compressed into binary codes, that can be stored on drive; those codes can also be transmitted to decoder, which creates an estimate of the original image based on the binary code.
+
+A single iteration of their network can be represented using following formula \ref{eq:rnn-compression-1}:
+
+\begin{equation}
+    \label{eq:rnn-compression-1}
+    b_t = B(E_t(r_{t-1})), \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1}
+\end{equation}
+
+\begin{equation}
+    \label{eq:enn-compression-2}
+    r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0
+\end{equation}
+
+Where $D_t$ and $E_t$ represent the decoder and the encoder with their states at iteration $t$ respectively, $b_t$ is the binary representation, $\hat{x}_t$ is the reconstruction of the original image $x$ and $r_t$ is the residual between $x$ and the reconstruction $\hat{x}_t$. While $\gamma$ is a parameter that controls the mode of the network:"one-shot" reconstruction or additive reconstruction.
 
 \chapter{Conclusion}

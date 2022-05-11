@@ -241,6 +241,8 @@ Let us consider a pooling layer as an example to make our concern clear. Pooling
     \label{encoder}
 \end{figure}
 
+This is the reason pooling layers are not used or seldom used in neural image compression and other neural compression models. As a fairly good alternative for traditional convolutional networks with pooling layers we use FCNs mentioned the the previous subsection.
+
 \subsection{Decoder}
 
 After a motivation for using FCNs in our encoder, let us take a look on the decoder \ref{decoder}. And the logic here is absolutely same: To restore an image given hidden feature map we need to learn an inverse function, which can be only obtained by reverse of encoder. In practice it means that we need both encoder and decoder to be FCNs \ref{autoencoder}. It will make the entire pipeline less lossy and make an intermediate features more interpretable, since using only convolutional layers helps to achieve a certain consistency in mapping features from input of one layer to its output.
@@ -310,6 +312,19 @@ Compressed sequence is stored as a single number. It's also required to remember
 \section{Generative adversarial network}
 
 Generative adversarial networks (GANs) show a great performance in training generative models. For GANs training pipeline is slightly different from traditional deep learning pipeline. In \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014} they introduced a neural network training pipeline with two networks: generator and discriminator. Generators objective is to produce a good enough synthetic data. Discriminators objective is to find out, whether given sample synthetic or real. So, trained generator network can be used then to solve a problem.
+
+Usually when we deal with some operation that modifies an original image, but that also must keep a consistency from image to image and keep some features that are significant for the model performance, it is reasonable to use GAN pipeline for training. Such features can be style features for example. In case of image compression it's more simple: the discriminator network is penalized to till apart images that are original and images that were passed through the model (compressed and decompressed).
+
+Since our model is a neural network and compression power of the network is due to its' convolutional neural network nature, we can use GAN training pipeline to further improve model performance.
+
+GAN objective is formulated in \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}. Main GAN loss is described in \ref{eq:gan-loss} it consists of two terms: generator and discriminator losses.
+
+\begin{equation}
+    \label{eq:gan-loss}
+    min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
+\end{equation}
+
+During training GAN learns a generator distribution $p_g$ over data $x$, $p_z(z)$ is a prior on input noise variables. $G(z, \Theta_g)$ is a mapping to data space, where $G$ is a differentiable function (neural network with parameters $\Theta_g$). There also is a second network $D(x, \Theta_d)$ that outputs a single scalar. $D(x)$ represents the probability that input $x$ came from the data rather than $p_g$. $D$ is trained to maximize the probability of assigning the correct label to both training examples and samples from $G$. $G$ simultaneously trained to minimize $log(1 − D(G(z)))$. The objective is to maximize discriminator loss and minimize generator loss.
 
 \section{Training}
 
@@ -618,7 +633,6 @@ Finally rule of update:
 
 Adam authors suggest to use following default values: $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\epsilon = 10^{-8}$ and claim that the algorithm performs better or at least not worse than previous algorithms of optimization.
 
-
 \subsection{Model training}
 
 To train such a system we need two losses: discriminator loss and generator loss. Discriminator loss will penalize discriminator network for it's wrong classification results. The loss we are using in this work is non-saturating loss \ref{eq:loss-g} and \ref{eq:loss-d}, which is just a stable variation of standard GAN loss function. It maximizes the log of the discriminator probabilities.
@@ -635,7 +649,13 @@ To train such a system we need two losses: discriminator loss and generator loss
 
 The formula above has a following intuition: instead of minimizing a probability of images being fake, it maximizes a probability of images being real, which leads to more stable weight update mechanism.
 
-Since our work is about image compression, we also need to introduce an image compression term in our loss function \ref{eq:loss-eg}. This term is a combination of two values: compression rate loss, which states for a good compression rate of given image and distortion rate, which states for a good quality of reconstructed images. The second term helps to reduce a noise in generated images.
+In image compression it is common to combine losses in the final loss term. When designing a loss functions for image compression model we need to take into account those model characteristics that are the most significant when judging model performance. As always we should start from simple question: based on what factors do we decide that model performs good or model performs bad?
+
+In image compression we say that model performs good if the compressed representation takes less memory to be stored on drive. This characteristic is called a \textit{compression rate} and it is a separate term in every neural image and video compression model.
+
+Another significant characteristic is a compressed and restored images quality. Image quality is a complex term by itself, since it is quite difficult to define it formally. The problem is that it is not an obvious task to say that one image is a better quality than another. However, though we can not measure or calculate an image quality directly, we can assume that quality is strongly related to some other characteristics that we can measure already. As an example of such characteristic we can use a distortion term.
+
+Next we introduce an image compression term in our loss function \ref{eq:loss-eg}. This term is a combination of two values: compression rate loss, which states for a good compression rate of given image and distortion rate, which states for a good quality of reconstructed images. The second term helps to reduce a noise in generated images.
 
 \begin{equation}
     \label{eq:loss-eg}
@@ -698,7 +718,7 @@ We train our networks on datasets described in \nameref{section:data}. We set $\
     \label{road}
 \end{figure}
 
-By increasing and decreasing $\beta$ and $\lambda$ we can control a tradeoff between compression and distortion loss trams on the training stage. This allows us to select a better hyperparameter for the network. The process of hyperparameter selection is following: start training network and after some number of iterations (we usually wait few epochs) we compare the results of validation dataset. If this set of hyperparameters performs better than previous set, we should use this one. It is clear from \ref{compession-losses}, how compression and distortion losses in combination together give final loss term \ref{eq:loss-egp}.
+By increasing and decreasing $\beta$ and $\lambda$ we can control a tradeoff between compression and distortion loss terms on the training stage. This allows us to select a better hyperparameter for the network. The process of hyperparameter selection is following: start training network and after some number of iterations (we usually wait few epochs) we compare the results of validation dataset. If this set of hyperparameters performs better than previous set, we should use this one. It is clear from \ref{compession-losses}, how compression and distortion losses in combination together give final loss term \ref{eq:loss-egp}.
 
 \begin{figure}[!ht]
     \centering
@@ -709,7 +729,37 @@ By increasing and decreasing $\beta$ and $\lambda$ we can control a tradeoff bet
     \label{compession-losses}
 \end{figure}
 
-We still do not have enough metric to plot many charts. We figure out, however, that compressed image takes less than 3 times space than JPEG compressed image.
+We found an optimal parameter setting to be $\lambda = 2^{-4}$ and $\beta = 0.15$.
+
+We trained our networks with different configurations and evaluated it on separate dataset. We use Open Images \cite{OpenImages2} for training. It is a a huge dataset of 9 million images. Those images are annotated with image-level and object-level annotations, bounding boxes, visual relations and segmentation masks. We use this dataset to train and test models of image compression, which means we do only need clean images without annotations. We use near 150,000 images subset from 9,000,000 images dataset. This amount is sufficient to train a compression model.
+
+We evaluate our model on KODAK \cite{kodak} dataset. The pictures from this dataset are lossless compressed, true color (24 bits per pixel, aka "full color") images in PNG format. This dataset is a very common choice in image compression models evaluation, since the images from that dataset are given in high quality and have various structure.
+
+\section{Metrics}
+
+For evaluation we use different existing metrics and also propose a novel metric that supposedly better reflect the performance of compression models. The metrics we use in our work are Multi-Scale Structural Similarity (MS-SSIM), Pike Signal to Noise Ratio (PSNR), BPP (Bits Per Pixel).
+
+\subsection{Multi-Scale Structural Similarity}
+
+\subsection{Pike Signal to Noise Ratio}
+
+\subsection{Bits Per Pixel}
+
+\section{Evaluation}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/mssim.png}
+    \caption{MS-SSIM metrics we got during our experiments}
+    \label{mssim}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/psnr.png}
+    \caption{PSNR metrics we got during our experiments}
+    \label{psnr}
+\end{figure}
 
 \chapter{Data}
 \label{section:data}
@@ -738,8 +788,15 @@ It might be more adequate to split the Visual Genome dataset on the following ge
 
 The dataset itself is quite big (more then 30 Gb), so we implemented a data loader that can work with such amounts of data. There were some efforts \cite{Yang_2018_Graph} to build a framework capable of working with the Visual Genome dataset, however there are no any stable version to work with.
 
-Another dataset we are using in this work is Open Images dataset \cite{OpenImages2}, which is a a huge dataset of 9 million images. Those images are annotated with image-level and object-level annotations, bounding boxes, visual relations and segmentation masks. We use this dataset to train and test models of image compression, which means we do only need clean images without annotations. We use near 150,000 images subset from 9,000,000 images dataset. This amount is sufficient to train a compression model.
+Another dataset we use in this work is Open Images \cite{OpenImages2}. Open Images is a dataset of ~9M images annotated with image-level labels, object bounding boxes, object segmentation masks, visual relationships, and localized narratives:
 
+\begin{enumerate}
+    \item It contains a total of 16M bounding boxes for 600 object classes on 1.9M images, making it the largest existing dataset with object location annotations. The boxes have been largely manually drawn by professional annotators to ensure accuracy and consistency. The images are very diverse and often contain complex scenes with several objects (8.3 per image on average).
+    \item Open Images also offers visual relationship annotations, indicating pairs of objects in particular relations (e.g. "woman playing guitar", "beer on table"), object properties (e.g. "table is wooden"), and human actions (e.g. "woman is jumping"). In total it has 3.3M annotations from 1,466 distinct relationship triplets.
+    \item In V5 we added segmentation masks for 2.8M object instances in 350 classes. Segmentation masks mark the outline of objects, which characterizes their spatial extent to a much higher level of detail.
+    \item In V6 we added 675k localized narratives: multimodal descriptions of images consisting of synchronized voice, text, and mouse traces over the objects being described. (Note we originally launched localized narratives only on train in V6, but since July 2020 we also have validation and test covered.)
+    \item Finally, the dataset is annotated with 59.9M image-level labels spanning 19,957 classes.
+\end{enumerate}
 \chapter{Future work}
 
 Future work mainly incudes improvements of Generator network. We plan to reduce number of layers in generator by applying the same backbone network to both upscale and deconvolution networks. This will help to reduce a number of training and fine tuning iterations and help to reduce number of parameters, which will directly affect portability of the network to devices with small GPU. We also think that by improving a backbone we can increase an accuracy of reconstructions and resolve a false textures issue, but it still needs to be tested.

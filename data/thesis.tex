@@ -195,7 +195,7 @@ In our work we compared several approaches to compress images. At first we tried
 
 \section{Autoencoder}
 
-Autoencoder is a popular architecture for neural networks. It has been first introduced in \cite{HinSal06} and proven to be a powerful tool in dimensionality reduction tasks. Basically, autoencoders were introduced to solve a particular problem of dimensionality reduction. The goal of an original autoencoder is to reduce dimensionality of input tensor. PCA (principal component analysis) is a widely used method to perform a dimensionality reduction. PCA finds the directions of greatest variance over a dataset, and then represents each point in a dataset by its coordinates along these directions. These directions are called principal components and the number of principal components is significantly less than number of components of original data point.
+Autoencoder is a popular architecture for neural networks. It has been first introduced in \cite{Autoencoder_2006} and proven to be a powerful tool in dimensionality reduction tasks. Basically, autoencoders were introduced to solve a particular problem of dimensionality reduction. The goal of an original autoencoder is to reduce dimensionality of input tensor. PCA (principal component analysis) is a widely used method to perform a dimensionality reduction. PCA finds the directions of greatest variance over a dataset, and then represents each point in a dataset by its coordinates along these directions. These directions are called principal components and the number of principal components is significantly less than number of components of original data point.
 
 PCA uses a statistical approach to fit data. More precise, PCA is based on Eigen-decomposition, where we find a matrix of eigenvectors and eigenvalues of the covariance matrix and take $N$ biggest eigenvalues and $N$ corresponding eigenvectors. These are called principal components.
 
@@ -243,6 +243,21 @@ Let us consider a pooling layer as an example to make our concern clear. Pooling
 
 This is the reason pooling layers are not used or seldom used in neural image compression and other neural compression models. As a fairly good alternative for traditional convolutional networks with pooling layers we use FCNs mentioned the the previous subsection.
 
+Our encoder has a common structure and has a relatively small size \ref{tab:encoder}.
+
+
+\begin{table}
+    \centering
+    \caption{Encoder}
+    \label{tab:encoder}
+    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
+        \hline
+        Total parameters & Parameters size (Mb) & Forward/backward pass size with input shape (3, 128, 128) (Mb) \\
+        \hline
+        7,419,700        & 28.30                & 237.36
+    \end{tabular}
+\end{table}
+
 \subsection{Decoder}
 
 After a motivation for using FCNs in our encoder, let us take a look on the decoder \ref{decoder}. And the logic here is absolutely same: To restore an image given hidden feature map we need to learn an inverse function, which can be only obtained by reverse of encoder. In practice it means that we need both encoder and decoder to be FCNs \ref{autoencoder}. It will make the entire pipeline less lossy and make an intermediate features more interpretable, since using only convolutional layers helps to achieve a certain consistency in mapping features from input of one layer to its output.
@@ -262,6 +277,18 @@ We are also using normalization layers in encoder and decoder to make a network 
     \caption{Simple autoencoder architecture, which is used in this work. Encoder and decoder are FCNs. Data flow is highlighted to blue. Features in the middle have more channels but less height and width than original image, and this hidden representation takes less space than initial image.}
     \label{autoencoder}
 \end{figure}
+
+\begin{table}
+    \centering
+    \caption{Generator}
+    \label{tab:generator}
+    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
+        \hline
+        Total parameters & Parameters size (Mb) & Forward/backward pass size with input shape (3, 128, 128) (Mb) \\
+        \hline
+        123,554,523      & 471.32               & 87.04
+    \end{tabular}
+\end{table}
 
 \subsection{Autoencoder training}
 

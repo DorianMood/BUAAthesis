@@ -786,21 +786,44 @@ Where $x$ is the first image and $y$ is the second image, $\mu_x$ is mean of $x$
 
 \subsection{Pike Signal to Noise Ratio}
 
-PSNR is most easily defined via the mean squared error (MSE). Given a noise-free m×n monochrome image I and its noisy approximation K, MSE is defined as
+Pike Signal to Noise Ratio (PSNR) is a term that is used to measure the quality of an image. More precise it shows the ratio between the maximum signal power and maximum noise power in concrete image. This metrics is usually used in lossy image or video compression to evaluate the compression models based on the quality of reconstructed images.
 
-    {\displaystyle {\mathit {MSE}}={\frac {1}{m\,n}}\sum _{i=0}^{m-1}\sum _{j=0}^{n-1}[I(i,j)-K(i,j)]^{2}.}{\displaystyle {\mathit {MSE}}={\frac {1}{m\,n}}\sum _{i=0}^{m-1}\sum _{j=0}^{n-1}[I(i,j)-K(i,j)]^{2}.}
-The PSNR (in dB) is defined as
+PSNR is defined using mean squared error term (MSE) \ref{eq:mse}.
 
-    {\displaystyle {\begin{aligned}{\mathit {PSNR}}&=10\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}^{2}}{\mathit {MSE}}}\right)\\&=20\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}}{\sqrt {\mathit {MSE}}}}\right)\\&=20\cdot \log _{10}({\mathit {MAX}}_{I})-10\cdot \log _{10}({\mathit {MSE}}).\end{aligned}}}{\displaystyle {\begin{aligned}{\mathit {PSNR}}&=10\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}^{2}}{\mathit {MSE}}}\right)\\&=20\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}}{\sqrt {\mathit {MSE}}}}\right)\\&=20\cdot \log _{10}({\mathit {MAX}}_{I})-10\cdot \log _{10}({\mathit {MSE}}).\end{aligned}}}
-Here, MAXI is the maximum possible pixel value of the image. When the pixels are represented using 8 bits per sample, this is 255. More generally, when samples are represented using linear PCM with B bits per sample, MAXI is 2B − 1.
+\begin{equation}
+    \label{eq:mse}
+    \mathit{MSE} = \frac{1}{m,n} \sum _{i=0}^{m-1} \sum _{j=0}^{n-1} [I(i,j)-\hat{I}(i,j)]^{2}
+\end{equation}
+
+The PSNR (in dB) is defined as \ref{eq:psnr}
+
+\begin{equation}
+    \label{eq:psnr}
+    \begin{aligned}
+        \mathit {PSNR} & = 10 * log_{10} \left(\frac{\mathit{{MAX}_{I}^{2}}}{\mathit {MSE}} \right)   \\
+                       & = 20 * log_{10} \left(\frac{\mathit{{MAX}_{I}}}{\sqrt{\mathit{MSE}}} \right) \\
+                       & = 20 * log_{10}(\mathit{{MAX}_{I}}) - 10 * log_{10}(\mathit{MSE})
+    \end{aligned}
+\end{equation}
+
+Where $MAX_I$ is the maximum possible pixel value of the image. When the pixels are represented using $8$ bits per sample, this is $255$. More generally, when samples are represented using linear PCM with $B$ bits per sample, $MAX_I$ is $2B − 1$.
 
 \subsection{Bits Per Pixel}
 
-TODO: describe BPP
+When we want to measure the effectiveness of image compression it is also important to take into account the compression power of a model in the concrete image setting. To further do it, we can employ a Bits Per Pixel (BPP) metrics, which shows an average number of bits required to store one pixel in compressed representation.
 
-\subsection{Actual Bits Per Pixel}
+Image compression algorithms and image compression models different BPP ratio, image that is raw (not compressed) has a fixed amount of bits per each pixel of this image. However after  the compression procedure we have a smaller amount of bits required to store a concrete pixel.
 
-TODO: describe actual BPP
+\begin{equation}
+    \label{eq:bpp}
+    \mathit{BPP} = \frac{N}{P}
+\end{equation}
+
+Where $N$ is the amount of memory required to store the image, $P$ is the number of pixels in the image.
+
+In traditional image compression algorithms like JPEG we have a fixed compression rate, which we can only calculate \textit{posteriori}.
+
+In our work we calculate an actual bitrate of all compressed images. This means that even though the model is targeted to compress the images with some fixed bitrate, we still get different bitrate for different images, and, in most of the cases this bitrate is even smaller than the model was trained for.
 
 \section{Evaluation}
 

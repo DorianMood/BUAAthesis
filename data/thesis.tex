@@ -731,19 +731,38 @@ By increasing and decreasing $\beta$ and $\lambda$ we can control a tradeoff bet
 
 \section{Training}
 
-We start training from autoencoder (no GAN). It takes $1.5$ hour to complete one epoch on Nvidia TESLA K80.
+We trained our networks with different configurations and evaluated it on separate dataset. We use Open Images \cite{OpenImages2} for training. It is a a huge dataset of 9 million images. Those images are annotated with image-level and object-level annotations, bounding boxes, visual relations and segmentation masks. We use this dataset to train and test models of image compression, which means we do only need clean images without annotations. We use near 150,000 images subset from 9,000,000 images dataset. This amount is sufficient to train a compression model.
+
+We evaluate our model on KODAK \cite{kodak} dataset. The pictures from this dataset are lossless compressed, true color (24 bits per pixel, aka "full color") images in PNG format. This dataset is a very common choice in image compression models evaluation, since the images from that dataset are given in high quality and have various structure.
+
+\subsection{Pretraining autoencoder}
+
+We start training from autoencoder (no GAN). It takes $1.5$ hour to complete one epoch on Nvidia TESLA K80. We complete $10$ epochs to train an autoencoder. However, the autoencoder even after training has a noisy artifacts \ref{training-compression-examples}, that will be fixed on the next stages.
 
 \begin{figure}[!ht]
     \label{training-compression-examples}
     \centering
     \includegraphics[width=\textwidth]{figure/step_1000.png}
+    a) First epoch
     \includegraphics[width=\textwidth]{figure/step_15000.png}
-    \caption{Training process of compression model (no GAN)}
+    b) Second epoch
+    \caption{Training process of compression model (no GAN). The first set of pictures (a) displays the images state after the first epoch of training. The second set of pictures (b) displays the images state after the second epoch of training.}
 \end{figure}
 
-We trained our networks with different configurations and evaluated it on separate dataset. We use Open Images \cite{OpenImages2} for training. It is a a huge dataset of 9 million images. Those images are annotated with image-level and object-level annotations, bounding boxes, visual relations and segmentation masks. We use this dataset to train and test models of image compression, which means we do only need clean images without annotations. We use near 150,000 images subset from 9,000,000 images dataset. This amount is sufficient to train a compression model.
+Compression is optimized on this step. This means that the compressed representation size is optimized to be smaller and smaller each step \ref{training-compression-q-rate}.
 
-We evaluate our model on KODAK \cite{kodak} dataset. The pictures from this dataset are lossless compressed, true color (24 bits per pixel, aka "full color") images in PNG format. This dataset is a very common choice in image compression models evaluation, since the images from that dataset are given in high quality and have various structure.
+\begin{figure}[!ht]
+    \label{training-compression-q-rate}
+    \centering
+    \includegraphics{figure/compression-q-rate-hyperlatent.png}
+    \caption{The hyperlatents compression rate.}
+\end{figure}
+
+
+
+\subsection{GAN}
+
+TODO: fininsh GAN here
 
 \section{Metrics}
 
@@ -751,7 +770,7 @@ For evaluation we use different existing metrics and also propose a novel metric
 
 \subsection{Multi-Scale Structural Similarity}
 
-Multi-Scale Structural Similarity (MS-SSIM). TODO: describe MS-SSIM
+Multi-Scale Structural Similarity (MS-SSIM) is a metric that measures similarity between two images. It measures a relative similarity between two images based on statistics such as mean $\mu$, mean squared error $\sigma$ \ref{eq:ms-ssim}.
 
 \begin{equation}
     \label{eq:ms-ssim}
@@ -763,6 +782,8 @@ Multi-Scale Structural Similarity (MS-SSIM). TODO: describe MS-SSIM
     \end{split}
 \end{equation}
 
+Where $x$ is the first image and $y$ is the second image, $\mu_x$ is mean of $x$ and $\mu_y$ is mean of $y$, $\sigma_x$ is mean squared error of $x$ and $\sigma_y$ is mean squared error of $y$, $\sigma_{xy}$ is covariance between $x$ and $y$. $l(x, y)$ is luminance similarity component, $c(x, y)$ is color similarity and $s(x, y)$ is structure similarity. $\alpha$, $\beta$ and $\gamma$ are weights of these components. $C_1$, $C_2$, $C_3$ are adjustable coefficients.
+
 \subsection{Pike Signal to Noise Ratio}
 
 TODO: describe PSNR
@@ -770,6 +791,10 @@ TODO: describe PSNR
 \subsection{Bits Per Pixel}
 
 TODO: describe BPP
+
+\subsection{Actual Bits Per Pixel}
+
+TODO: describe actual BPP
 
 \section{Evaluation}
 

@@ -754,11 +754,11 @@ Compression is optimized on this step. This means that the compressed representa
 \begin{figure}[!ht]
     \label{training-compression-q-rate}
     \centering
-    \includegraphics{figure/compression-q-rate-hyperlatent.png}
+    \includegraphics[width=\textwidth]{figure/compression-q-rate-hyperlatent.png}
     \caption{The hyperlatents compression rate.}
 \end{figure}
 
-
+TODO: write some water here
 
 \subsection{GAN}
 
@@ -786,7 +786,13 @@ Where $x$ is the first image and $y$ is the second image, $\mu_x$ is mean of $x$
 
 \subsection{Pike Signal to Noise Ratio}
 
-TODO: describe PSNR
+PSNR is most easily defined via the mean squared error (MSE). Given a noise-free m×n monochrome image I and its noisy approximation K, MSE is defined as
+
+    {\displaystyle {\mathit {MSE}}={\frac {1}{m\,n}}\sum _{i=0}^{m-1}\sum _{j=0}^{n-1}[I(i,j)-K(i,j)]^{2}.}{\displaystyle {\mathit {MSE}}={\frac {1}{m\,n}}\sum _{i=0}^{m-1}\sum _{j=0}^{n-1}[I(i,j)-K(i,j)]^{2}.}
+The PSNR (in dB) is defined as
+
+    {\displaystyle {\begin{aligned}{\mathit {PSNR}}&=10\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}^{2}}{\mathit {MSE}}}\right)\\&=20\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}}{\sqrt {\mathit {MSE}}}}\right)\\&=20\cdot \log _{10}({\mathit {MAX}}_{I})-10\cdot \log _{10}({\mathit {MSE}}).\end{aligned}}}{\displaystyle {\begin{aligned}{\mathit {PSNR}}&=10\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}^{2}}{\mathit {MSE}}}\right)\\&=20\cdot \log _{10}\left({\frac {{\mathit {MAX}}_{I}}{\sqrt {\mathit {MSE}}}}\right)\\&=20\cdot \log _{10}({\mathit {MAX}}_{I})-10\cdot \log _{10}({\mathit {MSE}}).\end{aligned}}}
+Here, MAXI is the maximum possible pixel value of the image. When the pixels are represented using 8 bits per sample, this is 255. More generally, when samples are represented using linear PCM with B bits per sample, MAXI is 2B − 1.
 
 \subsection{Bits Per Pixel}
 

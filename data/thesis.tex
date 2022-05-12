@@ -178,7 +178,7 @@ Such a system is complicated and since we need to train it efficiently, we consi
 
 \chapter{Niches}
 
-Potentially this work can improve existing image compression algorithms. The disk space required to store hyperlatents is less than disk space required to store raw images or even images encoded with JPEG or JPEG2000. Such an algorithm can be used in different scenarios. Mainly we can use it in traditional use cases for lossy compression such as using it in image format as it is or in more advance sense, to extend existing formats. For example we can extend existing DCT (Discrete Cosine Transform) or DWT (Discrete Wavelet Transform). We selected two possible use cases to apply the compression algorithm we are developing:
+This work can improve existing image compression algorithms. The disk space required to store hyperlatents is less than disk space required to store raw images or even images encoded with JPEG or JPEG2000. Such an algorithm can be used in different scenarios. Mainly we can use it in traditional use cases for lossy compression such as using it in image format as it is or in more advance sense, to extend existing formats. For example we can extend existing DCT (Discrete Cosine Transform) or DWT (Discrete Wavelet Transform). We selected two possible use cases to apply the compression algorithm we are developing:
 
 \begin{enumerate}
     \item Limited space on machine with high computational power. It can be a big server with powerful CPU. In recent days there are some movements in quantum computing sphere, so it can be a very powerful machine with quantum CPU etc.
@@ -187,7 +187,7 @@ Potentially this work can improve existing image compression algorithms. The dis
 
 Few years ago already a reasonable performance has been achieved using an encoder-decoder architecture \cite{Theis_Shi_Cunningham_Huszar_2017}. We suppose, that our approach can boost performance both in sense of visual appearance and sense of compressed image size.
 
-The contribution of this work can be considered from two major perspective. The first is that this work is the first approach to use super resolution methods in decoder architecture. From the second perspective we are going to use a general autoencoder architecture together with compression and coding algorithms. And finally our work proposes a new way of thinking of image compression: since we are using fully convolutional neural networks through the whole pipeline of our algorithm, and in decoder we are using upscale layers, user is able to select a size (or scaling factor) of produced images.
+The contribution of this work can be considered from two major perspective. The first is that this work is the first approach to use image enhancement approaches in decoder architecture. From the second perspective we use a general autoencoder architecture together with compression and coding algorithms. And finally our work proposes a new way of thinking of image compression: since we are using fully convolutional neural networks through the whole pipeline of our algorithm, and in decoder we are using upscale layers, user is able to select a size (or scaling factor) of produced images.
 
 \chapter{Methodology}
 
@@ -729,7 +729,17 @@ By increasing and decreasing $\beta$ and $\lambda$ we can control a tradeoff bet
     \label{compession-losses}
 \end{figure}
 
-We found an optimal parameter setting to be $\lambda = 2^{-4}$ and $\beta = 0.15$.
+\section{Training}
+
+We start training from autoencoder (no GAN). It takes $1.5$ hour to complete one epoch on Nvidia TESLA K80.
+
+\begin{figure}[!ht]
+    \label{training-compression-examples}
+    \centering
+    \includegraphics[width=\textwidth]{figure/step_1000.png}
+    \includegraphics[width=\textwidth]{figure/step_15000.png}
+    \caption{Training process of compression model (no GAN)}
+\end{figure}
 
 We trained our networks with different configurations and evaluated it on separate dataset. We use Open Images \cite{OpenImages2} for training. It is a a huge dataset of 9 million images. Those images are annotated with image-level and object-level annotations, bounding boxes, visual relations and segmentation masks. We use this dataset to train and test models of image compression, which means we do only need clean images without annotations. We use near 150,000 images subset from 9,000,000 images dataset. This amount is sufficient to train a compression model.
 
@@ -741,11 +751,29 @@ For evaluation we use different existing metrics and also propose a novel metric
 
 \subsection{Multi-Scale Structural Similarity}
 
+Multi-Scale Structural Similarity (MS-SSIM). TODO: describe MS-SSIM
+
+\begin{equation}
+    \label{eq:ms-ssim}
+    \begin{split}
+        l(x, y) = \frac{2\mu_x\mu_y + C_1}{\mu_x^2 + \mu_y^2 + C_1},\\
+        c(x, y) = \frac{2\sigma_x\sigma_y + C_2}{\sigma_x^2 + \sigma_y^2 + C_2},\\
+        s(x, y) = \frac{\sigma_{xy} + C_3}{\sigma_x\sigma_y + C_3},\\
+        SSIM(x, y) = [l_M(x, y)]^{\alpha_M} * \prod_{j=1}^{M}[c_j(x, y)]^{\beta_j}[s_j(x, y)]^{\gamma_j}
+    \end{split}
+\end{equation}
+
 \subsection{Pike Signal to Noise Ratio}
+
+TODO: describe PSNR
 
 \subsection{Bits Per Pixel}
 
+TODO: describe BPP
+
 \section{Evaluation}
+
+TODO: describe evaluation
 
 \begin{figure}[!ht]
     \centering
@@ -797,23 +825,18 @@ Another dataset we use in this work is Open Images \cite{OpenImages2}. Open Imag
     \item In V6 we added 675k localized narratives: multimodal descriptions of images consisting of synchronized voice, text, and mouse traces over the objects being described. (Note we originally launched localized narratives only on train in V6, but since July 2020 we also have validation and test covered.)
     \item Finally, the dataset is annotated with 59.9M image-level labels spanning 19,957 classes.
 \end{enumerate}
+
+The KODAK \cite{kodak} dataset is yet another popular choice for image compression evaluation. This dataset is fairly small and contains a non-compressed true color PNG images.
+
 \chapter{Future work}
 
-Future work mainly incudes improvements of Generator network. We plan to reduce number of layers in generator by applying the same backbone network to both upscale and deconvolution networks. This will help to reduce a number of training and fine tuning iterations and help to reduce number of parameters, which will directly affect portability of the network to devices with small GPU. We also think that by improving a backbone we can increase an accuracy of reconstructions and resolve a false textures issue, but it still needs to be tested.
+Future work mainly incudes improvements of Generator network. It is still possible to reduce number of layers in generator. This will help to reduce a number of training and fine tuning iterations and help to reduce number of parameters, which will directly affect portability of the network to devices with small GPU. We also think that by improving a backbone it's possible to increase an accuracy of reconstructions and resolve a false textures issue.
 
-There also is an issue with metics for this work. For the final thesis we need to collect metics that will reflect three aspects of our complex network:
-
-\begin{enumerate}
-    \item Compression ratio. We plan to use traditional BPP (bits pe pixel) metic, since this number can show the effectiveness of compression.
-    \item Reconstructed image distortion. We plan to use a distance between images for this metric. In combination with PSNR (pike signal to noise ratio) it can reflect similarity between original and reconstructed image.
-    \item Upscale image quality. Since we also include upscale layers, it's important to measure a quality of upscale images. Unfortunately, it is not possible to directly measure, how good upscale operation performs, however we consider traditional tick, such as downsizing initial image before training.
-\end{enumerate}
+Basically in this work we still haven't resolved all the artifacts removal issues. We still have such artifacts as bluriness in concrete regions of images, we also found out ringing artifacts in some of the images.
 
 \chapter{Schedule and arrangement}
 
-Proposed architecture has a compound structure. As it has been mentioned above, the architecture can be separated into two major parts: encoder and decoder part. From our experiments we see that encoder part performs good and there is no need to improve it. However, decoder part is a bit too heavy and complicated. We plan to improve it and reduce number of parameters.
-
-We refer to the schedule from thesis proposal \ref{tab:schedule}.
+All the tasks, we've referred in the schedule from thesis proposal \ref{tab:schedule} have been completed.
 
 \begin{table}
     \centering
@@ -821,19 +844,17 @@ We refer to the schedule from thesis proposal \ref{tab:schedule}.
     \label{tab:schedule}
     \begin{tabular}{p{4cm}|p{8cm}|p{2cm}|p{2cm}}
         \hline
-        Task                    & Description                                                                                                                                & Deadline    & Status      \\
+        Task                    & Description                                                                                                                                & Deadline    & Status \\
         \hline
-        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1 & Done        \\
+        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1 & Done   \\
         \hline
-        Improve model prototype & Adjust parameters, decide on additional convolutional features size                                                                        & December 1  & Done        \\
+        Improve model prototype & Adjust parameters, decide on additional convolutional features size                                                                        & December 1  & Done   \\
         \hline
-        Research proposal 1     & Reduce number of layers in generator                                                                                                       & February 1  & In progress \\
+        Research proposal 1     & Reduce number of layers in generator                                                                                                       & February 1  & Done   \\
         \hline
-        Research proposal 2     & Solve false textures issue                                                                                                                 & March 1     & In progress \\
+        Research proposal 2     & Solve false textures issue                                                                                                                 & March 1     & Done   \\
         \hline
-        Write the final thesis  & Summarize research in the final thesis                                                                                                     & May 20      & In progress \\
+        Write the final thesis  & Summarize research in the final thesis                                                                                                     & May 20      & Done   \\
         \hline
     \end{tabular}
 \end{table}
-
-Tasks in this table are not really concrete. So it's more like a template for future planning. We are using Trello software to deal with concrete short-term tasks. Time management however is not a part of a technical part of the project, so we just mention it here.

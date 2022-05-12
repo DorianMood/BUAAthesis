@@ -685,7 +685,6 @@ Images have following drawbacks:
 \begin{enumerate}
     \item blurry
     \item noisy
-    \item
 \end{enumerate}
 
 To overcome this issue we propose a novel approach: we include several super resolution layers in our generator. These layers remove blurry artifacts and make resulting images more sharp.
@@ -762,7 +761,42 @@ We see that compression rate is optimized much more easy than the reconstruction
 
 \subsection{GAN}
 
-TODO: fininsh GAN here
+The next stage of training is adversarial training. On this stage we not only optimize autoencoder loss, but also put the discriminator on top of the autoencoder network and optimize the network in GAN manner. This means that we split the training iteration on two steps: compression model step and GAN step.
+
+One training epoch of GAN model takes up to $3$ hours on Nvidia TESLA K80. We complete $10$ such epochs.
+
+The GAN loss is displayed on \ref{training-compression-gan-discriminator}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figure/compression-gan-discriminator.png}
+    \caption{The GAN loss.}
+    \label{training-compression-gan-discriminator}
+\end{figure}
+
+As we can see from the figure, the loss converges not as well as in compression autoencoder model. This is probably due to the fact that the model is overcomplicated and we already have a pretrained compression model, which weights are already ner local minima, but GAN weights are not. Anyways, the sufficient number of epochs resolves this issue, and converges the loss, but more slowly than the compression autoencoder model.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figure/gan_1000.jpg}
+    \caption{The images after training first epoch with GAN loss.}
+    \label{gan-first-epoch}
+\end{figure}
+
+When we first tried the GAN version of the model, we also oriented on the loss and were disappointed with the result. However, it's important to mention that the actual results of compressed images are much better than the loss figure shows. This is one side of a more complex problem. It is difficult to define a good loss function for image compression and restoration, especially to define, how different are two images. We described some of the approaches in the previous chapter.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figure/gan_14000.jpg}
+    \caption{The images after training 10th epoch with GAN loss.}
+    \label{gan-tenth-epoch}
+\end{figure}
+
+As we clearly see, the performance of a model grows with more training. GAN makes the image smoother and removes noise artifacts. However, noise is still a thing in these images. This is why we do not stop on this step, but also append several enhancement layers on top of our network.
+
+\section{Finetuning with enhancement models}
+
+TODO: describe finetuning with enhancement models
 
 \section{Metrics}
 

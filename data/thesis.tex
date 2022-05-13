@@ -230,6 +230,111 @@ Autoencoders have many applications \ref{autoencoder-popularity-stats} in compre
 
 We use fully convolutional neural networks (FCN) in the encoder \ref{encoder}. FCNs are a family of convolutional neural networks which does not use pooling layers or bilinear interpolation or any other layer that can cause an information loss. Layers like pooling layer only propagate one value though itself. It causes a situation when we cannot determine or learn any information about input to this layer knowing it's output.
 
+\subsection{Autoencoder probability model}
+
+Autoencoder is a sequential application of the encoder function $z=g(x)$ and decoder $x^*=f(z)$, where $x$ is the input vector and $z$ is the latent representation. In some subset of the input data (usually close to the training one) $x^*=x+n=f(g(x))$, where $n$ is the residual. We will take the discrepancy by Gaussian noise (its parameters can be estimated after training the autoencoder). As a result, a number of fairly strong assumptions are made:
+
+\begin{itemize}
+    \item The discrepancy is Gaussian noise
+    \item The autoencoder is already "trained" and works
+\end{itemize}
+
+But, importantly, there will be almost no restrictions imposed on the autoencoder itself.
+
+Then we can get a qualitative estimate of the probability density $p(x)$, on the basis of which you can draw several very important conclusions in the future.
+
+The distribution density for $x\in X$ and $z\in Z$ are related as follows:
+
+\begin{equation}
+    \label{eq:autoencoder-density}
+    p(x) = \int_{z} p(x|z)p(z)dz
+\end{equation}
+
+We need to determine the relation $p(x)$ and $p(z)$. For some autoencoders, $p(z)$ is set at the stage of their training, for others it is still easier to get $p(z)$ due to the smaller dimension of $Z$.
+
+The noise distribution density $n$ is known, so:
+
+\begin{equation}
+    \label{eq:autoencoder-noise-density}
+    p(n)=const\times exp( -\frac{(x-f(z))^T (x-f(z))}{2\sigma^2} )=p(x|z)
+\end{equation}
+
+$(x-f(z))^T (x-f(z))$ is the distance between $x$ and its projection $x^*$. At some point $z^*$ this distance will reach its minimum. At this point, the partial derivatives of the exponent argument in formula \ref{eq:autoencoder-noise-density} by $z_i$ ($Z$ axes) are zero:
+
+\begin{equation}
+    \label{eq:autoencoder-derivatives}
+    0 = \frac{\partial f(z^*)}{\partial z_i}^T(x-f(z^*))+(x-f(z^*))^T\frac{\partial f(z^*)}{\partial z_i}
+\end{equation}
+
+Here $\frac{\partial f(z^*)}{\partial z_i}^T(x-f(z^*))$ is a scalar, then:
+
+\begin{equation}
+    \label{eq:autoencoder-derivatives-1}
+    0 = \frac{\partial f(z^*)}{\partial z_i}^T(x-f(z^*))
+\end{equation}
+
+Selecting a point $z^*$, where the distance is $(x-f(z))^T (x-f(z))$ is minimal, due to the autoencoder optimization process. During training, it is the quadratic discrepancy that is minimized (as a rule):
+
+\begin{equation}
+    \label{eq:autoencoder-minimized}
+    \min\limits_{\theta, \forall x\in X train} L2_{norm}({x-f_\theta(g_\theta(x))})
+\end{equation}
+
+Where $\theta$ is the weights of the autoencoder. I.e. after training, $g(x)$ tends to $z^*$.
+
+We can also decompose $f(z)$ into a Taylor series (up to the first term) around $z^*$:
+
+\begin{equation}
+    \label{eq:autoencoder-taylor}
+    f(z)=f(z^*)+\nabla f(z^*)(z-z^*)+o((z-z^*))
+\end{equation}
+
+So, now equation \ref{eq:autoencoder-noise-density} will become:
+
+\begin{equation}
+    \label{eq:autoencoder-}
+    p(x|z) \approx const\times exp( -\frac{((x-f(z^*))-\nabla f(z^*)(z-z^*))^T ((x-f(z^*))-\nabla f(z^*)(z-z^*))}{2\sigma^2} )=
+    const\times exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2})exp(-\frac{(\nabla f(z^*)(z-z^*))^T(\nabla f(z^*)(z-z^*))}{2\sigma^2}) \times
+    \times exp(-\frac{( \nabla f(z^*)^T(x-f(z^*))+(x-f(z^*))^T\nabla f(z^*))(z-z^*)}{2\sigma^2})
+\end{equation}
+
+Note that the last multiplier is equal to 1 due to expression \ref{eq:autoencoder-derivatives-1}. The first multiplier can be taken as the sign of the integral (it does not contain $z$) in \ref{eq:autoencoder-density}. And also assume that $p(z)$ is a fairly smooth function and does not change much in the neighborhood of $z^*$, i.e. replace $p(z)$ byt $p(z^*)$.
+
+After all assumptions, integral \ref{eq:autoencoder-density} has an estimate:
+
+\begin{equation}
+    \label{eq:autoencoder-probability-estimation}
+    p(x) = const\times p(z^*)exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2}) \int_{z}exp(-(z-z^*)^TW(x)^TW(x)(z-z^*)) dz, z^*=g(x)
+\end{equation}
+
+Where $W(x)=\frac{\nabla f(z^*)}{\sigma}, z^* = g(x)$
+
+The last integral is the n-dimensional Euler-Poisson integral:
+
+\begin{equation}
+    \label{eq:autoencoder-euler-poisson}
+    \int_{z}exp(-\frac{(z-z^*)^TW(x)^TW(x)(z-z^*)}{2}) dz=\sqrt{\frac{1}{det(W(x)^TW(x)/2\pi)}}
+\end{equation}
+
+As a result, we got the final estimate of $p(x)$:
+
+\begin{equation}
+    \label{eq:autoencoder-density-final}
+    p(x) = const\times exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2})p(z^*)\sqrt{\frac{1}{det(W(x)^TW(x)/2\pi)}}, z^*=g(x)
+\end{equation}
+
+All this math was needed to show that $p(x)$ depends on three factors:
+
+\begin{itemize}
+    \item The distances between the input vector and its reconstruction, the worse the reconstruction, the smaller the $p(x)$
+    \item Probability density $p(z^*)$ at the point $z^*=g(x)$
+    \item Normalization of the function $p(z)$ at the point $z^*$, which is calculated for the autoencoder from partial derivatives of the function $f$
+\end{itemize}
+
+And also from the normalization constant, which will subsequently be responsible for the a priori probability of choosing an autoencoder to describe the input data.
+
+Despite all the assumptions, the result turned out to be very meaningful and useful from the point of view of calculations.
+
 \subsection{Encoder}
 
 Let us consider a pooling layer as an example to make our concern clear. Pooling layer takes a patch from an image (or from a feature map) and aggregates all those values into single output value. Pooling layers usually make use of aggregation functions such as \textit{max}, \textit{min}, \textit{avg} etc. Those functions are permutation invariant and they do not have an inverse function, which means we cannot reverse them. Even in theory it is impossible to get an inverse functions for pooling layers kernels, since pooling operation causes information loss.

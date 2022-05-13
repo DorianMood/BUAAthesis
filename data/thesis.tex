@@ -838,6 +838,10 @@ Having convolutional features propagated through the network body we apply two s
 
 We imply L1 loss \ref{eq:1}, L2 loss \ref{eq:2} and GAN loss \ref{eq:loss-d}, \ref{eq:loss-g} to pretrain super resolution module. Afterwards we fine tune an entire framework. Using same loss functions mentioned above.
 
+For debluring and denoising we use a common architectures. We compare enhancement models \cite{jiang_towards_2021, zhang2017learning, zhang2020plug} in combination with our compression model to further improve image compression results.
+
+TODO: describe these models
+
 \chapter{Experiments}
 
 We train our networks on datasets described in \nameref{section:data}. We set $\lambda$ to $1$ and $\beta$ to $0.15$ parameters from \ref{eq:loss-g}. We set a learning rate of $10^{-4}$ and train the network using Adam optimizer. We train the networks in 2 steps: first step is training compression and upscale networks in GAN manner (using generator and discriminator losses), the second step is to fine tune them together.

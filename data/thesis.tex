@@ -232,16 +232,16 @@ We use fully convolutional neural networks (FCN) in the encoder \ref{encoder}. F
 
 \subsection{Autoencoder probability model}
 
-Autoencoder is a sequential application of the encoder function $z=g(x)$ and decoder $x^*=f(z)$, where $x$ is the input vector and $z$ is the latent representation. In some subset of the input data (usually close to the training one) $x^*=x+n=f(g(x))$, where $n$ is the residual. We will take the discrepancy by Gaussian noise (its parameters can be estimated after training the autoencoder). As a result, a number of fairly strong assumptions are made:
+Autoencoder is a sequential application of the encoder function $z=g(x)$ and decoder $x^*=f(z)$, where $x$ is the input vector and $z$ is the latent representation. In some subset of the input data (usually close to the training set) $x^*=x+n=f(g(x))$, where $n$ is the residual. We will take the residual as a Gaussian noise (its' parameters can be estimated after training the autoencoder). As a result, a number of fairly strong assumptions are made:
 
 \begin{itemize}
-    \item The discrepancy is Gaussian noise
+    \item The residual is Gaussian noise
     \item The autoencoder is already "trained" and works
 \end{itemize}
 
 But, importantly, there will be almost no restrictions imposed on the autoencoder itself.
 
-Then we can get a qualitative estimate of the probability density $p(x)$, on the basis of which you can draw several very important conclusions in the future.
+Then we can get a qualitative estimate of the probability density $p(x)$, based on which we can draw several very important conclusions.
 
 The distribution density for $x\in X$ and $z\in Z$ are related as follows:
 
@@ -250,7 +250,7 @@ The distribution density for $x\in X$ and $z\in Z$ are related as follows:
     p(x) = \int_{z} p(x|z)p(z)dz
 \end{equation}
 
-We need to determine the relation $p(x)$ and $p(z)$. For some autoencoders, $p(z)$ is set at the stage of their training, for others it is still easier to get $p(z)$ due to the smaller dimension of $Z$.
+We need to determine the relation $p(x)$ and $p(z)$. For some autoencoders, $p(z)$ is set at the stage of their training, for others it is easier to get $p(z)$ with the smaller dimensionality of $Z$.
 
 The noise distribution density $n$ is known, so:
 
@@ -259,7 +259,7 @@ The noise distribution density $n$ is known, so:
     p(n)=const\times exp( -\frac{(x-f(z))^T (x-f(z))}{2\sigma^2} )=p(x|z)
 \end{equation}
 
-$(x-f(z))^T (x-f(z))$ is the distance between $x$ and its projection $x^*$. At some point $z^*$ this distance will reach its minimum. At this point, the partial derivatives of the exponent argument in formula \ref{eq:autoencoder-noise-density} by $z_i$ ($Z$ axes) are zero:
+Where $(x-f(z))^T (x-f(z))$ is the distance between $x$ and its projection $x^*$. At some point $z^*$ this distance will reach its minimum. At this point, the partial derivatives of the exponent argument in formula \ref{eq:autoencoder-noise-density} by $z_i$ ($Z$ axes) are zero:
 
 \begin{equation}
     \label{eq:autoencoder-derivatives}
@@ -273,7 +273,7 @@ Here $\frac{\partial f(z^*)}{\partial z_i}^T(x-f(z^*))$ is a scalar, then:
     0 = \frac{\partial f(z^*)}{\partial z_i}^T(x-f(z^*))
 \end{equation}
 
-Selecting a point $z^*$, where the distance is $(x-f(z))^T (x-f(z))$ is minimal, due to the autoencoder optimization process. During training, it is the quadratic discrepancy that is minimized (as a rule):
+Selecting a point $z^*$, where the distance is $(x-f(z))^T (x-f(z))$ is minimal, happens during the autoencoder optimization process. During training, it is the quadratic residual that is minimized (usually):
 
 \begin{equation}
     \label{eq:autoencoder-minimized}
@@ -298,7 +298,7 @@ So, now equation \ref{eq:autoencoder-noise-density} will become:
     \times exp(-\frac{( \nabla f(z^*)^T(x-f(z^*))+(x-f(z^*))^T\nabla f(z^*))(z-z^*)}{2\sigma^2})
 \end{equation}
 
-Note that the last multiplier is equal to 1 due to expression \ref{eq:autoencoder-derivatives-1}. The first multiplier can be taken as the sign of the integral (it does not contain $z$) in \ref{eq:autoencoder-density}. And also assume that $p(z)$ is a fairly smooth function and does not change much in the neighborhood of $z^*$, i.e. replace $p(z)$ byt $p(z^*)$.
+Note that the last multiplier is equal to 1 due to expression \ref{eq:autoencoder-derivatives-1}. The first multiplier can be taken as the sign of the integral (it does not contain $z$) in \ref{eq:autoencoder-density}. And also assume that $p(z)$ is a fairly smooth function and does not change much in the neighborhood of $z^*$, i.e. replace $p(z)$ by $p(z^*)$.
 
 After all assumptions, integral \ref{eq:autoencoder-density} has an estimate:
 
@@ -333,7 +333,7 @@ All this math was needed to show that $p(x)$ depends on three factors:
 
 And also from the normalization constant, which will subsequently be responsible for the a priori probability of choosing an autoencoder to describe the input data.
 
-Despite all the assumptions, the result turned out to be very meaningful and useful from the point of view of calculations.
+Despite all the assumptions, the result turned out to be very meaningful and useful from the calculations.
 
 \subsection{Encoder}
 

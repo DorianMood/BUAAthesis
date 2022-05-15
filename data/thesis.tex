@@ -432,7 +432,7 @@ The last step of compression is coding. Coding is lossless, and basically it is 
 
 \subsection{Huffman coding}
 
-We have briefly described Huffman coding algorithm in \ref{section:traditional-compression}. Now let us trace the Huffman algorithm step by step.
+We have briefly described Huffman coding algorithm in \nameref{section:traditional-compression}. Now let us trace the Huffman algorithm step by step.
 
 The method is based on the binary trees data structure. In it, the node can be either terminal or internal. Initially, all nodes are considered leaves (terminal), which represent the symbol itself and its weight (that is, the frequency of occurrence in the sequence). The internal nodes contain the weight of the symbol and refer to two successor nodes. By general convention, bit $0$ represents following the left branch, and $1$ represents following the right. There are $N$ leaves and $N-1$ internal nodes in a complete tree. It is recommended that when constructing the Huffman tree, unused characters are discarded to obtain codes of optimal length.
 
@@ -454,49 +454,49 @@ Let us consider some text that consists only of the characters "a", "b", "c", "d
 On the first state we have a set of leaf nodes with attached frequencies and characters they encode \ref{huffman-0}.
 
 \begin{figure}[!ht]
-    \label{huffman-0}
     \includegraphics[width=0.7\textwidth]{figure/huffman-0.png}
     \caption{Huffman tree on the beginning of the algorithm}
+    \label{huffman-0}
 \end{figure}
 
 We take two less frequent symbols from the queue and attach them to one newly created internal node and the frequency of this node is the sum of its' children frequencies \ref{huffman-1}. The newly created node is added to priority queue.
 
 \begin{figure}[!ht]
-    \label{huffman-1}
     \includegraphics[width=0.7\textwidth]{figure/huffman-1.png}
     \caption{Huffman tree}
+    \label{huffman-1}
 \end{figure}
 
 On the next step we take next two most frequent nodes from the queue and create a new node, obtain frequency by summing up its' children. The newly created node is added to priority queue.
 
 \begin{figure}[!ht]
-    \label{huffman-2}
     \includegraphics[width=0.7\textwidth]{figure/huffman-2.png}
     \caption{Huffman tree}
+    \label{huffman-2}
 \end{figure}
 
 Continue by taking two less frequent nodes from the queue and attach them to newly created node, obtain frequency for it. The newly created node is added to priority queue.
 
 \begin{figure}[!ht]
-    \label{huffman-3}
     \includegraphics[width=0.7\textwidth]{figure/huffman-3.png}
     \caption{Huffman tree}
+    \label{huffman-3}
 \end{figure}
 
 The last node is taken from the queue and attached to newly created tree, the root node frequency is sum of all the frequencies of its' children.
 
 \begin{figure}[!ht]
-    \label{huffman-4}
     \includegraphics[width=0.7\textwidth]{figure/huffman-4.png}
     \caption{Huffman tree}
+    \label{huffman-4}
 \end{figure}
 
 Priority queue is empty now an it means that the tree building is completed. every left edge is labeled as $0$ and every right edge is labeled as $1$. Each symbols' code is obtained by traversing this tree from root to the symbol. The path is determined by labels of the edge we pas through. For example, the code for symbol "b" is $100$.
 
 \begin{figure}[!ht]
-    \label{huffman-5}
     \includegraphics[width=0.7\textwidth]{figure/huffman-5.png}
     \caption{Huffman tree}
+    \label{huffman-5}
 \end{figure}
 
 Since efficient priority queue data structures require $O(log(N))$ time to insert, and there are $2N-1$ nodes in a complete binary tree with $N$ leaves, and the Huffman tree is a complete binary tree, the algorithm works in $O(N log(N))$ time, where $N$ is the number of characters.
@@ -996,7 +996,7 @@ The third model \cite[Towards Flexible Blind JPEG Artifacts Removal]{jiang_towar
 
 \chapter{Experiments}
 
-We train our networks on datasets described in \nameref{section:data}. We set $\lambda$ to $1$ and $\beta$ to $0.15$ parameters from \ref{eq:loss-g}. We set a learning rate of $10^{-4}$ and train the network using Adam optimizer. We train the networks in 2 steps: first step is training compression and upscale networks in GAN manner (using generator and discriminator losses), the second step is to fine tune them together.
+We train our networks on datasets described in \nameref{section:data}. We set $\lambda$ to $1$ and $\beta$ to $0.15$ parameters from \ref{eq:loss-g}. We set a learning rate of $10^{-4}$ and train the network using Adam optimizer \cite{kingma_adam_2017}. We train the networks in 2 steps: first step is training compression and upscale networks in GAN manner (using generator and discriminator losses), the second step is to fine tune them together.
 
 \begin{figure}[!ht]
     \centering
@@ -1207,6 +1207,8 @@ Another dataset we use in this work is Open Images \cite{OpenImages2}. Open Imag
 \end{enumerate}
 
 The KODAK \cite{kodak} dataset is yet another popular choice for image compression evaluation. This dataset is fairly small and contains a non-compressed true color PNG images.
+
+CLIC \cite{noauthor_clic_nodate} is a dataset for the Challenge on Learned Image Compression 2020 lossy image compression track. These images contain a mix of the professional and mobile datasets used to train and benchmark rate-distortion performance. The dataset contains both RGB and grayscale images. This may require special handling if a grayscale image is processed as a 1 channel Tensor and a 3 channel Tensor is expected.
 
 \chapter{Future work}
 

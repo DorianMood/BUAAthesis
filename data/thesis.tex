@@ -16,6 +16,8 @@ JPEG is widely used in image compression applications. It was introduced in 1992
 
 \subsection{Compression algorithm}
 
+\label{section:traditional-compression}
+
 Chroma subsampling is a process of transformations from RGB format to YCbCr. YCbCr is a special format of storing image data not in Red, Green and Blue channels, but in Y, Cb and Cr channels. Y is the brightness channel of an image, Cb is the blue difference relative to the green color, Cr is the red difference relative to the green channel. After that it is already possible to reduce size by rescaling Cb and Cr channels by four. By doing so, the space is reduced by 1.5.
 
 Compression of each channel is an performed in parallel. Image is partitioned into blocks 8x8 pixels. Each block is processed independently. Block values are centered at 0, so the values are in range (-127, 127). Then Discrete Cosine Transform (DCT) is being applied.
@@ -426,7 +428,80 @@ It is possible to use another autoencoder to encode latents obtained from the en
 
 \section{Coding}
 
-The last step of compression is coding. Coding is lossless, and basically it is an independent algorithm. Usually arithmetic coding is used.
+The last step of compression is coding. Coding is lossless, and basically it is an independent algorithm. Usually arithmetic coding or Huffman coding are used.
+
+\subsection{Huffman coding}
+
+We have briefly described Huffman coding algorithm in \ref{section:traditional-compression}. Now let us trace the Huffman algorithm step by step.
+
+The method is based on the binary trees data structure. In it, the node can be either terminal or internal. Initially, all nodes are considered leaves (terminal), which represent the symbol itself and its weight (that is, the frequency of occurrence in the sequence). The internal nodes contain the weight of the symbol and refer to two successor nodes. By general convention, bit $0$ represents following the left branch, and $1$ represents following the right. There are $N$ leaves and $N-1$ internal nodes in a complete tree. It is recommended that when constructing the Huffman tree, unused characters are discarded to obtain codes of optimal length.
+
+We will use a priority queue to build a Huffman tree, where the node with the lowest frequency will be assigned the highest priority. The construction steps are described below:
+
+\begin{enumerate}
+    \item Create a leaf node for each symbol and add them to the priority queue.
+    \item While there is more than one sheet in the queue, we do the following:
+          \begin{enumerate}
+              \item Remove the two nodes with the highest priority (with the lowest frequency) from the queue;
+              \item Create a new internal node where these two nodes will be children, and the frequency of occurrence will be equal to the sum of the frequencies of these two nodes.
+              \item Add a new node to the priority queue.
+          \end{enumerate}
+    \item The only remaining node will be the root node, and the tree construction will end there.
+\end{enumerate}
+
+Let us consider some text that consists only of the characters "a", "b", "c", "d" and "e", and the frequencies of their occurrence are 15, 7, 6, 6 and 5, respectively. Below are illustrations that reflect the steps of the algorithm.
+
+On the first state we have a set of leaf nodes with attached frequencies and characters they encode \ref{huffman-0}.
+
+\begin{figure}[!ht]
+    \label{huffman-0}
+    \includegraphics[width=0.7\textwidth]{figure/huffman-0.png}
+    \caption{Huffman tree on the beginning of the algorithm}
+\end{figure}
+
+We take two less frequent symbols from the queue and attach them to one newly created internal node and the frequency of this node is the sum of its' children frequencies \ref{huffman-1}. The newly created node is added to priority queue.
+
+\begin{figure}[!ht]
+    \label{huffman-1}
+    \includegraphics[width=0.7\textwidth]{figure/huffman-1.png}
+    \caption{Huffman tree}
+\end{figure}
+
+On the next step we take next two most frequent nodes from the queue and create a new node, obtain frequency by summing up its' children. The newly created node is added to priority queue.
+
+\begin{figure}[!ht]
+    \label{huffman-2}
+    \includegraphics[width=0.7\textwidth]{figure/huffman-2.png}
+    \caption{Huffman tree}
+\end{figure}
+
+Continue by taking two less frequent nodes from the queue and attach them to newly created node, obtain frequency for it. The newly created node is added to priority queue.
+
+\begin{figure}[!ht]
+    \label{huffman-3}
+    \includegraphics[width=0.7\textwidth]{figure/huffman-3.png}
+    \caption{Huffman tree}
+\end{figure}
+
+The last node is taken from the queue and attached to newly created tree, the root node frequency is sum of all the frequencies of its' children.
+
+\begin{figure}[!ht]
+    \label{huffman-4}
+    \includegraphics[width=0.7\textwidth]{figure/huffman-4.png}
+    \caption{Huffman tree}
+\end{figure}
+
+Priority queue is empty now an it means that the tree building is completed. every left edge is labeled as $0$ and every right edge is labeled as $1$. Each symbols' code is obtained by traversing this tree from root to the symbol. The path is determined by labels of the edge we pas through. For example, the code for symbol "b" is $100$.
+
+\begin{figure}[!ht]
+    \label{huffman-5}
+    \includegraphics[width=0.7\textwidth]{figure/huffman-5.png}
+    \caption{Huffman tree}
+\end{figure}
+
+Since efficient priority queue data structures require $O(log(N))$ time to insert, and there are $2N-1$ nodes in a complete binary tree with $N$ leaves, and the Huffman tree is a complete binary tree, the algorithm works in $O(N log(N))$ time, where $N$ is the number of characters.
+
+\subsection{Arithmetic coding}
 
 Arithmetic coding is a form of entropy coding \ref{arithmetic_coding}. It is lossless, which means that after compression and decompression no information is lost. It is used to compress numeric sequencies, which makes it perfect for the task of image compression since after quantization process we have exactly what is required - a list of integers. According to Shannon's source coding theorem an optimal representation converges to $log_2P$ bits per symbol for a symbol with frequency $P$.
 

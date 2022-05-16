@@ -109,13 +109,13 @@ The LaTeX template for thesis of BUAA]
     \fancyfoot{}
         \if@twoside
             \fancyhead[CO]{\zihao{-5}\songti
-                \buaa@universityeng\ \buaa@degreeeng\ Thesis\vspace{1.5mm}
+                北京航空航天大学硕士学位论文\vspace{1.5mm}
             }
             \fancyhead[CE]{\zihao{-5}\songti\leftmark\vspace{1.5mm}}
         \else
             \fancyhead[C]{\zihao{-5}\songti
                 \ifthenelse{\isodd{\value{page}}}
-                    {\buaa@universityeng\ \buaa@degreeeng\ Thesis}
+                    {北京航空航天大学硕士学位论文}
                     {\leftmark}
                 \vspace{1.5mm}
             }
@@ -163,26 +163,26 @@ The LaTeX template for thesis of BUAA]
     },
 }
 
-    \ctexset{
-        chapter={
-            name={},
-            number={\arabic{chapter}},
-        },
-        section={
-            format={\zihao{4}\heiti},
-        },
-    }
+\ctexset{
+    chapter={
+        name={},
+        number={\arabic{chapter}},
+    },
+    section={
+        format={\zihao{4}\heiti},
+    },
+}
 
 %%%%%%%%%% contents %%%%%%%%%%
 % 目录
 
 \RequirePackage{titletoc}
-    \titlecontents{chapter}[0pt]{\vspace{-0.25\baselineskip}\heiti\zihao{4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.07\baselineskip}]
-    \titlecontents{section}[2em]{\songti\zihao{-4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
-    \titlecontents{subsection}[4em]{\vspace{-0.2\baselineskip}\songti\zihao{5}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
+\titlecontents{chapter}[12pt]{\vspace{-0.25\baselineskip}\heiti\zihao{4}}{\thecontentslabel\ }{}
+    {\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.07\baselineskip}]
+\titlecontents{section}[12pt]{\songti\zihao{-4}}{\thecontentslabel\ }{}
+    {\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
+\titlecontents{subsection}[12pt]{\vspace{-0.2\baselineskip}\songti\zihao{5}}{\thecontentslabel\ }{}
+    {\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
 
 % 取消图片、表格目录中的章节空格
 \newcommand*{\noaddvspace}{\renewcommand*{\addvspace}[1]{}}
@@ -193,20 +193,16 @@ The LaTeX template for thesis of BUAA]
 %表目录与图目录数字前增加“表”与“图”字，并且使目录行间距与section行间距一致
 
 \titlecontents{figure}[0pt]{\vspace{0.15\baselineskip}\songti\zihao{-4}}{\makebox[3em][l]{图~\thecontentslabel\quad}}{}
-    {\hspace{.5em}\titlerule*[4pt]{$\cdot$}\contentspage}[\vspace{0.15\baselineskip}]
+    {\hspace{.5em}\titlerule*[4pt]{.}\contentspage}[\vspace{0.15\baselineskip}]
 
 \titlecontents{table}[0pt]{\vspace{0.15\baselineskip}\songti\zihao{-4}}{\makebox[3em][l]{表~\thecontentslabel\quad}}{}
-    {\hspace{.5em}\titlerule*[4pt]{$\cdot$}\contentspage}[\vspace{0.15\baselineskip}]
+    {\hspace{.5em}\titlerule*[4pt]{.}\contentspage}[\vspace{0.15\baselineskip}]
 
 %%%%%%%%%% cross reference %%%%%%%%%%
 % 交叉引用
 
 \RequirePackage[xetex,unicode]{hyperref}
-\ifbuaa@color
-    \hypersetup{colorlinks}
-\else
-    \hypersetup{hidelinks}
-\fi
+\hypersetup{hidelinks}
 \hypersetup{
     bookmarksnumbered,
     bookmarksopen,
@@ -218,8 +214,8 @@ The LaTeX template for thesis of BUAA]
 
 %%%%%%%%%% reference %%%%%%%%%%
 % 参考文献
-\RequirePackage[sort&compress]{natbib}
-\bibpunct{[}{]}{,}{n}{}{}
+\RequirePackage[super,sort&compress]{natbib}
+%\bibpunct{[}{]}{,}{n}{}{}
 \setlength{\bibsep}{0pt}
 \newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
 
@@ -377,25 +373,17 @@ The LaTeX template for thesis of BUAA]
 \DeclareCaptionFormat{masterfigure}{\bf\songti\zihao{5}{#1\textrm{#2}#3}}
 \DeclareCaptionFormat{mastertable}{\bf\songti\zihao{5}{#1\textrm{#2}#3}}
 \DeclareCaptionFormat{masterlstlisting}{\bf\songti\zihao{5}{#1\textrm{#2}#3}}
-\ifbuaa@bachelor
-    \captionsetup[figure]{format=bachelorfigure,labelsep=quad}
-    \captionsetup[table]{format=bachelortable,labelsep=quad}
-    \captionsetup[lstlisting]{format=bachelorlstlisting,labelsep=quad}
-    \renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
-    \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
-    \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
-\else
-    \RequirePackage{remreset}
-    \@removefromreset{table}{chapter}
-    \@removefromreset{figure}{chapter}
-    %使图表的标号与章节无关
-    \captionsetup[figure]{format=masterfigure,labelsep=quad}
-    \captionsetup[table]{format=mastertable,labelsep=quad}
-    \captionsetup[lstlisting]{format=masterlstlisting,labelsep=quad}
-    \renewcommand{\thefigure}{\arabic{figure}}
-    \renewcommand{\thetable}{\arabic{table}}
-    \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
-\fi
+
+\RequirePackage{remreset}
+\@removefromreset{table}{chapter}
+\@removefromreset{figure}{chapter}
+%使图表的标号与章节无关
+\captionsetup[figure]{format=masterfigure,labelsep=quad}
+\captionsetup[table]{format=mastertable,labelsep=quad}
+\captionsetup[lstlisting]{format=masterlstlisting,labelsep=quad}
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
 
 % Fix subfigure reference bug
 \let\p@subfigure=\thefigure
@@ -435,11 +423,7 @@ The LaTeX template for thesis of BUAA]
 \renewcommand{\frontmatter}{
     \cleardoublepage
     \@mainmatterfalse
-    \ifbuaa@bachelor
-        \pagenumbering{Roman}
-    \else
-        \pagenumbering{roman}
-    \fi
+    \pagenumbering{roman}
 }
 
 % 保证偶数页结束章节
@@ -468,117 +452,52 @@ The LaTeX template for thesis of BUAA]
 
 % 中文首页
 \newcommand{\titlech}{
-    \ifbuaa@bachelor
-        \begin{titlepage}
-            % 第二个()里的参数表示左移35pt，下移55pt
-            \begin{picture}(0,0)(35,55)
-                \includegraphics[width=90pt]{figure/buaamark.eps}
-            \end{picture}
-            \hfill
-            \raisebox{-.2cm}[0pt][0pt]{
-                \zihao{5}\heiti
-                \begin{tabular}{c}
-                    单位代码~\ulinecvrtc{\bf\buaa@unicode}\\[.1ex]
-                    学\qquad 号~\ulinecvrtc{\bf\buaa@studentID}\\[.1ex]
-                    分~~类~~号~\ulinecvrtc{\bf\buaa@category}\\
-                \end{tabular}
-            }
-            \vskip 95bp
-            \begin{center}
-                \includegraphics[width=360bp]{figure/buaaname.eps}
-                \vskip 45bp
-                \centerline{\zihao{-0}\heiti 毕业设计(论文)}
-                ~~\\
-                \vspace*{\stretch{4}}
-                \begin{minipage}[h]{.8\textwidth}
-                    \centering{\heiti\zihao{2}\buaa@thesistitle}
-                \end{minipage}
-                \vskip 20bp
-                \begin{minipage}[h]{.75\textwidth}
-                    \centering{\heiti\zihao{3}\buaa@thesissubtitle}
-                \end{minipage}
-                \vspace*{\stretch{3}}
-                ~~\\
+    \begin{titlepage}
+        \begin{center}
+            \begin{spacing}{1.5}
                 {
-                    \zihao{-3}\heiti
-                    \ifbuaa@twoteacher
-                        \begin{tabular}{cc}
-                            学~~~院~~~名~~~称~~&\ulinecvcbc{\buaa@school 学院}\\[.4ex]
-                            专~~~业~~~名~~~称~~&\ulinecvcbc{\buaa@major 专业}\\[.4ex]
-                            学~~~生~~~姓~~~名~~&\ulinecvcbc{\buaa@thesisauthor}\\[.4ex]
-                            指~~~导~~~教~~~师~~&\ulinecvcbc{\buaa@teacher \quad \buaa@subteacher}\\
-                        \end{tabular}
-                    \else
-                        \begin{tabular}{cc}
-                            学~~~院~~~名~~~称~~&\ulinecvcbc{\buaa@school 学院}\\[.4ex]
-                            专~~~业~~~名~~~称~~&\ulinecvcbc{\buaa@major 专业}\\[.4ex]
-                            学~~~生~~~姓~~~名~~&\ulinecvcbc{\buaa@thesisauthor}\\[.4ex]
-                            指~~~导~~~教~~~师~~&\ulinecvcbc{\buaa@teacher}\\
-                        \end{tabular}
-                    \fi
+                    \zihao{5}\heiti
+                    \begin{flushleft}
+                        \textbf{中图分类号：\buaa@category}  \\
+						%中图分类号：\buaa@category\hfill 密级\ding{73}~~\buaa@mibao \\ % 保密论文时用此行代码替换上行代码即可
+                        \textbf{论\,\,文\,\,编\,\,号：\buaa@thesisID} \\
+                    \end{flushleft}
                 }
-                \vskip 60bp
-                \centerline{\heiti\zihao{-3}\buaa@thesisdateyear ~~年~~\buaa@thesisdatemonth ~~月}
-            \end{center}
-        \end{titlepage}
-    \else
-        \begin{titlepage}
-            \begin{center}
-                \begin{spacing}{1.5}
-                    {
-                        \zihao{5}\heiti
-                        \begin{flushleft}
-                            中图分类号：\buaa@category  \\
-							%中图分类号：\buaa@category\hfill 密级\ding{73}~~\buaa@mibao \\ % 保密论文时用此行代码替换上行代码即可
-                            论\,\,文\,\,编\,\,号：\buaa@thesisID\\
-                        \end{flushleft}
-                    }
-                    \vskip 80bp
-                    \includegraphics[width=.5\textwidth]{figure/buaaname.jpg}
-                    \vskip 30bp
-                    \centerline{\zihao{0}\ziju{0.2}\buaa@degree 论文}
-                    ~~\\
-                    %\vskip 100bp
-                    \vspace*{\stretch{5}}
-                    \begin{minipage}[h]{.85\textwidth}
-                        \begin{spacing}{3}
-                            % actually, it should be 1.5, but I think 3 will be prefect.
-                            \centering{\xiaochuhao\songti \buaa@thesistitle}
-                        \end{spacing}
-                    \end{minipage}
-                    %\vspace{5bp}
-                    % the space between title and subtitle, however, it seems doesn't work.
-                    \begin{minipage}[h]{.75\textwidth}
-                        \begin{spacing}{1.5}
-                            \centering{\heiti\zihao{3}\buaa@thesissubtitle}
-                        \end{spacing}
-                    \end{minipage}
-                    \vspace*{\stretch{4}}
-                    ~~\\
-                    %\vskip 80bp
-                    {
-                        \heiti\zihao{4}\ziju{0.2}
-                        \ifbuaa@twoteacher
-                            \begin{tabular}[b]{ll}
-                                作~~者~~姓~~名~~ & \buaa@thesisauthor\\[.3ex]
-                                学~~科~~专~~业~~ & \buaa@major\\[.3ex]
-                                指~~导~~教~~师~~ & \buaa@teacher\quad\buaa@teacherdegree\\[.3ex]
-                                ~~ & \buaa@subteacher\quad\buaa@subteacherdegree\\[.3ex]
-                                培~~养~~学~~院~~ & \buaa@school 学院\\
-                            \end{tabular}
-                        \else
-                            \begin{tabular}[b]{ll}
-                                作~~者~~姓~~名~~ & \buaa@thesisauthor\\[.4ex]
-                                学~~科~~专~~业~~ & \buaa@major\\[.4ex]
-                                指~~导~~教~~师~~ & \buaa@teacher \quad\buaa@teacherdegree\\[.4ex]
-                                培~~养~~学~~院~~ & \buaa@school 学院\\
-                            \end{tabular}
-                        \fi
-                    }
-                \end{spacing}
-            \end{center}
-        \end{titlepage}
-    \fi
+                \vskip 80bp
+                \includegraphics[width=.5\textwidth]{figure/buaaname.jpg}
+                \vskip 30bp
+                \centerline{\zihao{0}\ziju{0.2}\buaa@degree 论文}
+                ~~\\
+                %\vskip 100bp
+                \vspace*{\stretch{5}}
+                \begin{minipage}[h]{.85\textwidth}
+                    \begin{spacing}{3}
+                        % actually, it should be 1.5, but I think 3 will be prefect.
+                        \centering{\xiaochuhao\songti \buaa@thesistitle}
+                    \end{spacing}
+                \end{minipage}
+                %\vspace{5bp}
+                % the space between title and subtitle, however, it seems doesn't work.
+                \begin{minipage}[h]{.75\textwidth}
+                    \begin{spacing}{1.5}
+                        \centering{\heiti\zihao{3}\buaa@thesissubtitle}
+                    \end{spacing}
+                \end{minipage}
+                \vspace*{\stretch{4}}
+                ~~\\
+                %\vskip 80bp
+                {
+                    \heiti\zihao{4}\ziju{0.2}
+                    \begin{tabular}[b]{ll}
+                        作~~者~~姓~~名~~ & \buaa@thesisauthor\\[.4ex]
+                        学~~科~~专~~业~~ & \buaa@major\\[.4ex]
+                        指~~导~~教~~师~~ & \buaa@teacher \quad\buaa@teacherdegree\\[.4ex]
+                        培~~养~~学~~院~~ & \buaa@school 学院\\
+                    \end{tabular}
+                }
+            \end{spacing}
+        \end{center}
+    \end{titlepage}
 }
 
 % 英文首页
@@ -601,18 +520,10 @@ The LaTeX template for thesis of BUAA]
         \vskip 110bp
         \begin{center}
             \zihao{-3}
-            \ifbuaa@twoteacher
-                \begin{tabular}{rl}
-                    \textbf{Candidate:\ }&\textbf{\buaa@thesisauthoreng}\\[0.5ex]
-                    \textbf{Supervisor:\ }&\textbf{\buaa@teacherdegreeeng ~~\buaa@teachereng}\\
-                    ~~ & \textbf{\buaa@subteacherdegreeeng ~~\buaa@subteachereng}\\
-                \end{tabular}
-            \else
-                \begin{tabular}{rl}
-                    \textbf{Candidate:\ }&\textbf{\buaa@thesisauthoreng}\\[0.5ex]
-                    \textbf{Supervisor:\ }&\textbf{\buaa@teacherdegreeeng ~~\buaa@teachereng}\\
-                \end{tabular}
-            \fi
+            \begin{tabular}{rl}
+                \textbf{Candidate:\ }&\textbf{\buaa@thesisauthoreng}\\[0.5ex]
+                \textbf{Supervisor:\ }&\textbf{\buaa@teacherdegreeeng ~~\buaa@teachereng}\\
+            \end{tabular}
         \end{center}
         \vskip 125bp
         \zihao{3}{
@@ -628,48 +539,11 @@ The LaTeX template for thesis of BUAA]
 \newenvironment{cabstract}{%
     \newpage
     \vspace*{2bp}
-    \ifbuaa@bachelor
-        \begin{center}
-            \begin{minipage}[h]{.75\textwidth}
-                \centering{\zihao{3}\heiti\buaa@thesistitle}
-            \end{minipage}
-            \begin{minipage}[h]{.8\textwidth}
-                \begin{flushright}
-                    {\zihao{3}\heiti\buaa@thesissubtitle}
-                \end{flushright}
-                % subtitle should be flush right?
-            \end{minipage}
-        \end{center}
-        %\vskip 10bp
-        \begin{flushright}
-            \ifbuaa@twoteacher
-                {\begin{tabular}{cl}
-                    学\qquad 生：&\buaa@thesisauthor\\
-                    指导教师：&\buaa@teacher\\
-                    ~~ & \buaa@subteacher\\
-                    % I don't know is this corrent and properly.
-                \end{tabular}}
-            \else
-                {\begin{tabular}{cl}
-                    学\qquad 生：&\buaa@thesisauthor\\
-                    指导教师：&\buaa@teacher\\
-                \end{tabular}}
-            \fi
-        \end{flushright}
-    \fi
     \centerline{\heiti\zihao{3} 摘~~~~要}
-    \ifbuaa@bachelor
-        \vskip 10bp
-        \par
-    \else
-        \vspace{5ex}
-    \fi
+    \vspace{5ex}
     \setlength{\parindent}{24bp}
     }{%
     \vskip 21bp
-    \ifbuaa@bachelor
-        \noindent
-    \fi
     {\heiti\zihao{-4} 关键词：}\buaa@ckeyword
 }
 
@@ -677,47 +551,11 @@ The LaTeX template for thesis of BUAA]
 \newenvironment{eabstract}{%
     \newpage
     \vspace*{2bp}
-    \ifbuaa@bachelor
-        \begin{center}
-            \begin{minipage}[h]{.75\textwidth}
-                \centering{\bf\zihao{3}\buaa@thesistitleeng}
-            \end{minipage}
-            \begin{minipage}[h]{.8\textwidth}
-                \begin{flushright}
-                    {\zihao{3}\heiti\buaa@thesissubtitleeng}
-                \end{flushright}
-            % subtitle should be flushright?
-            \end{minipage}
-        \end{center}
-        \vskip 10bp
-        \begin{flushright}
-            \ifbuaa@twoteacher
-                {\begin{tabular}{rl}
-                    Author:\ &\buaa@thesisauthoreng\\
-                    Tutor:\ &\buaa@teachereng\\
-                    ~~ & \buaa@subteachereng\\
-                \end{tabular}}
-            \else
-                {\begin{tabular}{rl}
-                    Author:\ &\buaa@thesisauthoreng\\
-                    Tutor:\ &\buaa@teachereng\\
-                \end{tabular}}
-            \fi
-        \end{flushright}
-    \fi
     \centerline{\bf\zihao{3} Abstract}
-    \ifbuaa@bachelor
-        \vskip 10bp
-        \par
-    \else
-        \vspace{5ex}
-    \fi
+    \vspace{5ex}
     \setlength{\parindent}{24bp}
     }{%
     \vskip 21bp
-    \ifbuaa@bachelor
-        \noindent
-    \fi
     {\bf\zihao{-4} Key words: }\buaa@ekeyword
 }
 
@@ -966,18 +804,8 @@ The LaTeX template for thesis of BUAA]
 % 首页重定义
 
 \renewcommand{\maketitle}{%
-    \ifbuaa@bachelor
-        \pagestyle{empty}
-        \loadgeometry{bachelortaskgeometry}
-        \buaa@bachelor@assign     %本科生论文任务书
-        \loadgeometry{bachelorgeometry}
-        \announce                 %本科生声明
-        \pagestyle{fancy}
-        \frontmatter
-    \else
-        \titlech
-        \titleeng                 %研究生英文封面
-    \fi
+    \titlech
+    \titleeng                 %研究生英文封面
     \zihao{-4}
 }
 
@@ -1086,19 +914,7 @@ The LaTeX template for thesis of BUAA]
     \def\buaa@degreeeng{#2}
     \def\buaa@headdegree{#3}
 }
-\ifbuaa@doctor
-    \degree{博士学位}{Doctor of Philosophy}{博士}
-\else
-    \ifbuaa@engineer
-        \degree{专业硕士学位}{Master}{硕士}
-    \else
-        \ifbuaa@bachelor
-            \degree{学士学位}{Bachelor}{学士}
-        \else
-            \degree{硕士学位}{Master}{硕士}
-        \fi
-    \fi
-\fi
+\degree{硕士学位}{Master}{硕士}
 
 %%%%%%%%%% bachelor user info %%%%%%%%%%
 % 本科生信息

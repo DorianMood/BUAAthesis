@@ -151,13 +151,13 @@ The LaTeX template for thesis of BUAA]
     \else
         \if@twoside
             \fancyhead[CO]{\zihao{-5}\songti
-                \buaa@universityeng\ \buaa@degreeeng\ Thesis proposal\vspace{1.5mm}
+                \buaa@universityeng\ \buaa@degreeeng\ Thesis\vspace{1.5mm}
             }
             \fancyhead[CE]{\zihao{-5}\songti\leftmark\vspace{1.5mm}}
         \else
             \fancyhead[C]{\zihao{-5}\songti
                 \ifthenelse{\isodd{\value{page}}}
-                    {\buaa@universityeng\ \buaa@degreeeng\ Thesis proposal}
+                    {\buaa@universityeng\ \buaa@degreeeng\ Thesis}
                     {\leftmark}
                 \vspace{1.5mm}
             }
@@ -274,7 +274,7 @@ The LaTeX template for thesis of BUAA]
 \hypersetup{
     bookmarksnumbered,
     bookmarksopen,
-    pdftitle={BUAA thesis proposal},
+    pdftitle={BUAA thesis},
     pdfauthor={BHOSC},
     pdfsubject={北航毕业设计论文},
     pdfcreator={LaTeXed~By~BHOSC}
@@ -600,7 +600,7 @@ The LaTeX template for thesis of BUAA]
                     \vskip 80bp
                     \includegraphics[width=.5\textwidth]{figure/buaaname.jpg}
                     \vskip 30bp
-                    \centerline{\zihao{0}\ziju{0.2}\hwxingkai\buaa@degree 论文}
+                    \centerline{\zihao{0}\ziju{0.2}\buaa@degree 论文}
                     ~~\\
                     %\vskip 100bp
                     \vspace*{\stretch{5}}
@@ -1039,6 +1039,7 @@ The LaTeX template for thesis of BUAA]
         \pagestyle{fancy}
         \frontmatter
     \else
+        \titlech
         \titleeng                 %研究生英文封面
     \fi
     \zihao{-4}

@@ -149,6 +149,152 @@ For now a general approach is to encode an image to a compressed representation 
 
 In this work we are going to apply fully convolutional neural network to extract features from given image, afterwards we compress those features using another encoder and arithmetic coding algorithm. Then this compressed representation is restored using decoder and upsample modules. It worth to mention that the algorithm we are working on is lossy. Our method will combine traditional image compression approaches and neural network image compression approach.
 
+\chapter{Literature review}
+
+
+Convolutional neural networks have shown a high performance in a variety of tasks during recent decade. Power of convolutional neural networks (CNNs) is mainly due to their ability to aggregate and generalize local features. It turns out that CNN architecture is extremely good and effective when we deal with \textit{structured data}. In early beginning of CNNs milestone works were VGG-19 \cite{Simonyan_Zisserman_2015} and AlexNet \cite{Krizhevsky_Sutskever_Hinton_2017}, where authors proved that convolutional architectures can be way more computationally effective than we thought before. It has also been shown that learned convolutional filters can reflect a local structure of sample.
+
+Nowadays CNNs are used in a variety of tasks such as classification,  image generation, clustering, dimensionality reduction etc. One of possible applications of CNN is neural image compression. In neural image compression we use a compression power of convolutional neural network, which is a stack of convolutional layers, such as \cite{Krizhevsky_Sutskever_Hinton_2017}.
+
+\section{Preliminary and background}
+
+Image compression has a several conventional steps, which are usually employed in neural image compression too. These steps are well described in \cite{JPEG-1992}. JPEG standard was introduced in 1992 and adopted as an image compression standard by Joint Photography Expert Group. JPEG has a module structure, so these modules implementation can be changed drastically, while having same interaction with other modules. This helps to replace an old modules by more advanced and modern ones. For example, Huffman Coding \cite{Huffman-Coding} in Coding stage of JPEG algorithm can be replaced by Arithmetic coding \cite{Arithmetic-Coding}. Many papers employ this module structure, so authors can use already existing ones and only work on one part of the whole compression algorithm to further improve exactly the part they are interested in.
+
+To understand main neural image compression approaches, we need to get familiar with autoencoder architecture first. First time introduced in 2006 \cite{Autoencoder_2006}. In this paper authors propose an unusual method to reduce a dimensionality of data: use neural network build up from two components, encoder and decoder. They significantly overcome efficiency of Principal component analysis \cite{pca} in dimensionality reduction. Dimensionality reduction late has become a closely related to neural image compression. Autoencoder consists of two very specific for its' architecture parts: Encoder and Decoder. In the original paper they have (2-4) hidden layers in the encoder and decoder, but now modern approaches can be much more deep. A main principle of autoencoder is that we use encoder to reduce dimensionality (this results to some kind of data compression, and in other words with the help of encoder we compress data to some compact representation). Afterwards we use Decoder to reconstruct data from intermediate representation to it's original shape. Both encoder and decoder are multilayer neural networks, which makes it extremely flexible and open to all the machine learning progress we have and potentially will have in the future. To train such a model we need to initialize these two networks and propagate the information through encoder and decoder sequentially. Then we need to calculate an error. Decoder output has the same shape as the original sample and usually we define loss as a distance from input sample to the decoder output (such as L1 or L2 distances). Later we use any of existing optimizers perform a backpropagation this loss value and adjust weights.
+
+\section{Neural image processing}
+
+Neural image compression usually follows an autoencoder pipeline.
+
+\subsection{Fully convolutional neural networks in image processing}
+
+Fully convolutional neural network is a type of neural network without an aggregate layer. Usually such an aggregation operation is a pooling. Pooling layer mechanics is simple: we need some functions that is a permutation invariant, so, it can make a generalization. This function for example can be a min, max, sum or average. These functions are irreversible, so we can not find a reverse function. Since conceptually decoder of an autoencoder is basically a reverse function for an encoder, we need something like this. The compression process must be reversible, otherwise we can not decompress an original image.
+
+Fully convolutional neural networks is well-described in \cite{fcn}. Authors use fully convolutional network for semantic segmentation. Semantic segmentation is a special task in computer vision, where the final proposal is to label each pixel of image according to the object it belongs to. Traditionally this task is solved with clustering algorithms. The FCN (fully convolutional network) authors use is a network with only convolutional elements, this network only has a convolutional layers. Since convolutional layer architecture doesn't require a fixed-size input, it is extremely convenient to use these network with non-fixed size input data.
+
+Each input for convolutional layer is a tensor of size $H \times W \times D$, where $H$ and $W$ are spatial dimensions and $D$ is depth dimension. Each next layer is connected to certain area in the previous layers and the more deep we go through the network the bigger is this area. This area is called a \textit{receptive field}. Convolutional neural networks are translation invariant. Components FCNs are build up with are pooling layers, convolutional layers and activation functions operate on local receptive fields, some regions of input data. Formula can be seen in \ref{eq:fcn-1}
+
+\begin{equation}
+    \label{eq:fcn-1}
+    y_{ij} = f_{ks}(\{ x_{si + \delta i, sj + \delta j} \}_{0 \le \delta i, \delta j \le k})
+\end{equation}
+
+Where $k$ is a kernel size, $s$ is stride and $f$ is layer type.
+
+A real-valued loss function defines a task. As well as in many other machine learning models, we use loss function as a start for backpropagation process. So, next we can use any of existing optimizers to converge network to its' local minima.
+
+\subsection{Neural image enhancement}
+
+Neural image enhancement is yet another application of autoencoders in neural image processing. Neural image enhancement models are designed to enhance images quality. Enhancer networks are used in image and video debluring, upscaling, denoising. The core of these methods is autoencoder architecture and ideas from here are widely used in neural image compression methods, that will be mentioned in the next section.
+
+One of the most popular model for image enhancement is U-Net \cite{ronneberger_u-net_2015}. U-net is a convolutional autoencoder with encoder and decoder models, but it also has skip connections: some outputs of encoder are connected with skip-connections to corresponding decoder outputs. This type of model is highly capable of enhancing images while keeping its' main features and structure.
+
+In \cite{odena_deconvolution_2016} authors claim checkerboard artifacts to be a significant drawback while processing a bright images. \textit{Checkerboard artifacts} are a special artifacts that appear on synthetically generated images, received from neural network. These artifacts are due to deconvolution nature: while performing a deconvolution the output of each patch in deconvolution layer ha an overlap with other patches outputs, tis leads to highly contrast artifacts similar to white-black checkerboard structure. Authors claim that this situation happens in many researches \cite{dumoulin_adversarially_2017,donahue_adversarial_2017,salimans_improved_2016,radford_unsupervised_2016}. They propose several approaches to overcome this issue: one approach is to make sure that kernel size is divided by the stride is used, another approach is to separate out an upsampling from lower to higher resolution and convolution (for example we can first use interpolation to roughly upscale an image and then apply a convolution). Conceptually they state that deconvolution operation can be separated into two operations mentioned above and this can help to reduce checkerboard artifacts.
+
+In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement based on quantization table and YCbCr channels neural processing. JPEG \cite{JPEG-1992} luminance channel is twice bigger than Cb and Cr channels. Authors first enhance luminance channel and only then enhance Cb and Cr channels. They do it this way because luminance channel can be used in Cb and Cr channels, since their structure is similar within one image. So, the pipeline they propose has several steps.Firstly they take quantization matrix, which the image was compressed with. This matrix is stored inside JPEG container, so we can have it as an input without any additional actions. Then the luminance channel and quantization matrix are being fed to neural network, that enhances luminance channel based on its' structure and quantization matrix. Having luminance channel enhanced they use it as an input to color channel correlation network, which is another enhancer for Cb and Cr - color channels.
+
+In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
+
+\subsection{Autoencoder applications in image processing}
+
+First time introduced in \cite{toderici_full_2017}, convolutional neural compression employs an autoencoder architecture and some steps from traditional image compression pipeline. They optimize a tradeoff between a number of bits used to store data (based on symbol frequencies and called an \textit{entropy coding}) and distortion \ref{eq:rate-distortion}.
+
+\begin{equation}
+    \label{eq:rate-distortion}
+    − log_2 Q ([f (x)]) + \beta · d (x, g([f (x)]))
+\end{equation}
+
+Where $\beta$ is a hyperparameter that controls a rate-distortion tradeoff, $Q$ is compression rate and $d$ is distortion rate.
+
+The first problem we encounter going through this problem is that quantization operation is not differentiable. Since quantization employs rounding, it is zero everywhere except integers, where it is undefined. Authors propose to use a smooth approximation for quantization during backward pass.
+
+\begin{equation}
+    \label{eq:quantization}
+    \frac{d}{dy}[y]:=\frac{d}{dy}r(y)
+\end{equation}
+
+Where $r$ is an approximation function. For simplicity authors used $r(y)=y$, this makes the operation much more easy to implement. Gradients simply pass from the decoder to encoder.
+
+Authors use elements from \cite{shi_real-time_2016}, basically employing such operations as convolution, residual blocks in the middle and sub-pixel convolutions in the decoder network.
+
+In \cite{jiang_towards_2021} authors propose FBCNN for JPEG artifacts removal. FBCNN is also based on U-Net \cite{ronneberger_u-net_2015} and consists of four parts: encoder, quality factor predictor, flexible controller, and decoder. The encoder extracts the deep features from the input corrupted JPEG image and then splits them into image features and QF features which are subsequently fed into the decoder and predictor, respectively. The controller gets the estimated QF from the predictor and then generates QF embeddings. The QF attention block enables the controller to make the decoder produce different results according to different QF embeddings. The predicted quality factor can be changed with interactive selections to have a balance between artifacts removal and details preservation.
+
+\subsection{Generative adversarial networks in image processing}
+
+Generative adversarial networks (GANs) are neural networks, that are deigned to be trained in a special manner. Almost every existing network can be trained in adversarial manner, since the structure of the network itself doesn't change. Adversarial training uses same approaches as regular training, but with some modification: for adversarial training we need to construct a neural network that is capable of distinguishing between \textit{real} images (input images from dataset) and \textit{fake} ones (those, generated by the network). To train this model, we separate each iteration of training on two steps: firstly we pass input through general pipeline (without discriminator) and calculate loss, then we pass input through general pipeline and then feed this output to discriminator network. Then we can calculate discriminator loss and backpropagate.
+
+GANs were first time introduced by \cite[Goodfellow et al]{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}. They learn generator distribution $p_g$ over data $x$, they define a prior on input noise variables $p_z(z)$, then represent a mapping to data space as $G(z, \Theta_g)$, where $G$ is a differentiable function (neural network with parameters $\Theta_g$) They also define a second network $D(x, \Theta_d)$ that outputs a single scalar. $D(x)$ represents the probability that input $x$ came from the data rather than $p_g$. They train $D$ to maximize the probability of assigning the correct label to both training examples and samples from $G$. They simultaneously train $G$ to minimize $log(1 − D(G(z)))$ \ref{eq:gan}:
+
+\begin{equation}
+    \label{eq:gan}
+    min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
+\end{equation}
+
+ESRGAN \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019} and RealESRGAN \cite{Wang_Xie_Dong_Shan_2021} are two similar papers where authors try to resolve the issue of image quality enhancement. More concrete, in those papers authors propose a model to perform a super-resolution.They use a common pipeline which has already widely spread among image super-resolution models. They use a convolution to map original image to lower spatial dimensional space, but higher channel dimensional space. Then they follow convolution by applying several residual blocks. This residual network doesn't change the data dimensionality and the number of residual blocks can vary over different variants of network. Then they upscale image with interpolation (different ones were used: bicubic, bilinear, Nearest-neighbor interpolation) followed by convolutions to reduce number of channels and increase spatial dimensions back to the initial state of 3. This model is trained in GAN manner, so Discriminator is used.
+
+Recently a U-Net based discriminator was proposed in \cite{schonfeld_u-net_2021}. This U-Net discriminator classifies the input images on a global and local per-pixel level. Due to the skip-connections between the encoder and the decoder, the channels in the output layer contain both high-level and low-level information. Brighter colors in the decoder output correspond to the discriminator confidence of pixel being real (and darker of being fake). So the discriminator has a confidence map with size of the image. The discriminator consists of the original downsampling network and an upsampling network. The two modules are connected via a bottleneck, as well as skip-connections that copy and concatenate feature maps from the encoder and the decoder modules. Discriminator loss is described in \ref{eq:u-net-discriminator}.
+
+\begin{equation}
+    \label{eq:u-net-discriminator}
+    \begin{split}
+        L_D = -E_z[log D_{enc}^U(G(z)) + \sum_{i,j}{log [D_{dec}^U(G(z))]_{i,j}}]
+    \end{split}
+\end{equation}
+
+Where $D_{enc}^U$ is an encoder part of the discriminator, $D_{dec}^U$ is a decoder part of the discriminator. The first term of this formula stands for distinguishing the whole picture to be fake or real and the second term stands for every pixel of an image to be fake or real. The second term generalize each pixel data of the generated fake/real confidence map by summing them up. In this formula $[D_{dec}^U(G(z))]_{i,j}$ refer to the discriminator decision at pixel $(i,j)$.
+
+\section{Neural image compression}
+
+In this section we will show that neural networks can also be used in image compression. As it was mentioned in the paper \cite[Reducing the Dimensionality of Data with Neural Networks]{Autoencoder_2006}, autoencoders are a very powerful tool for reducing a dimensionality of data, which makes them a suitable choice for image compression. The task of image compression is to reduce the size of given image while keeping it's visual features. In other words the objective in image compression is to maximize the quality of compressed and decompressed image and minimize the number of bytes required to store the image.
+
+One of the first approaches here has been described in \cite{toderici_full_2017}. It was the first paper that has successfully outperformed JPEG. Each of the architectures they describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. The framework consists of three modules: encoder, binarizer and decoder. The structure of the framework is similar to \cite[Autoencoder]{Autoencoder_2006}: uncompressed image goes through encoder; then features with reduced dimensionality go to the binarizer and being compressed into binary codes, that can be stored on drive; those codes can also be transmitted to decoder, which creates an estimate of the original image based on the binary code.
+
+A single iteration of their network can be represented using following formula \ref{eq:rnn-compression-1}:
+
+\begin{equation}
+    \label{eq:rnn-compression-1}
+    \begin{split}
+        b_t = B(E_t(r_{t-1})), \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1} \\
+        r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0
+    \end{split}
+\end{equation}
+
+Where $D_t$ and $E_t$ represent the decoder and the encoder with their states at iteration $t$ respectively, $b_t$ is the binary representation, $\hat{x}_t$ is the reconstruction of the original image $x$ and $r_t$ is the residual between $x$ and the reconstruction $\hat{x}_t$. While $\gamma$ is a parameter that controls the mode of the network: "one-shot" reconstruction or additive reconstruction.
+
+They use recurrent units in both encoder and decoder and control the affect of these recurrent units by hyperparameter. For example in case of using LSTM as a recurrent unit, they use following rules \ref{eq:rnn-compression-2}:
+
+\begin{equation}
+    \label{eq:rnn-compression-2}
+    \begin{split}
+        [f, i, o, j]^T = [\sigma, \sigma, \sigma, tanh]^T((W x_t + U h_{t-1}) + b) \\
+        c_t = f \odot c_{t-1} + i \odot j
+        h_t = o \odot tanh(c_t)
+    \end{split}
+\end{equation}
+
+Where $x_t$ denotes input, $c_t$ denotes cell state, $h_t$ denotes hidden state on the step $t$, $\odot$ is an element-wise multiplication, $b$ is bias, $\sigma$ is sigmoid activation function. The output of the LSTM network on the $t$ step is $h_t$.
+
+With the rise of the GANs \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}, many application were proposed especially in neural image processing. Neural image compression is not an exception: GANs significantly outperform previous approaches. In \cite{agustsson_generative_2019} authors propose a technique for image compression that uses GAN training pipeline: encoder for dimensionality reduction is followed by quantizer that quantizes the intermediate representation and performs a compression for further storing the data on disk, then data flows into decoder, which reconstructs the image and ont top of this they put a discriminator for adversarial training. The objective is described by formula \ref{eq:gan-compression}.
+
+\begin{equation}
+    \label{eq:gan-compression}
+    \min_{E,G} L_{GAN} + \lambda E[d(x, G(z))] + \beta H(\hat{w}).
+\end{equation}
+
+Where $L_{GAN}$ is GAN discriminator loss, $E[d(x, G(z))]$ is distortion loss, and $H(\hat{w})$ is a compression loss. $\lambda$ and $\beta$ are hyperparameters tht balance compression rate and distortion tradeoff.
+
+In \cite{balle_variational_2018, mentzer_high-fidelity_2020} they use a Hyperprior module for compression. As well as other models they first reduce dimensionality of an image using convolutional encoder. Also, similarly to what we've converted above, they use convolutional decoder. Hyperprior module is another autoencoder with the loss \ref{eq:hyperprior}
+
+\begin{equation}
+    \label{eq:hyperprior}
+    E_{x~p_x} D_{KL}[q || p_{\tilde{y},\tilde{z}|x}] = E_{x~p_x} E_{\tilde{y}, \tilde{z}~q} [log q(\tilde{y}, \tilde{z} | x) − log p_{x|\tilde{y}}(x | \tilde{y}) − log p_{\tilde{y}| \tilde{z}}(\tilde{y}|\tilde{z}) − log p_{\tilde{z}}(\tilde{z}) ] + const
+\end{equation}
+
+Where the second term encapsulates distortion, the third and the fourth terms stand for the cross-entropies encoding respectively. We can clearly see from this formula that two layers of autoencoder are being applied. This is why the model is effective and this is why it is called a \textit{hyperprior}.
+
+Worth to mention that recently many other models were proposed. In \cite{zhou_end--end_nodate} they . In \cite{wang_substitutional_2021} authors . In \cite{lu_progressive_2021} they . In \cite{noauthor_view_nodate} they . In \cite{liu_unified_2020} . In \cite{mentzer_practical_2020}.
+
+
 \chapter{Objective}
 
 Our motivation is that traditional image compression methods are simple and computationally efficient. However, using more heavy neural models we can compress image much more efficient. By combining these two methods we can reach equilibrium.

@@ -77,29 +77,12 @@ The LaTeX template for thesis of BUAA]
 
 \RequirePackage{geometry}
 \newgeometry{
-    top=30mm, bottom=25mm, left=30mm, right=20mm,
-    headsep=5mm, includefoot
-}
-\savegeometry{bachelorgeometry}
-
-% geometry for tasks pages for bachelor thesis, see also #270
-\newgeometry{
-    top=30mm, bottom=25mm, left=30mm, right=20mm,
-    headsep=5mm
-}
-\savegeometry{bachelortaskgeometry}
-
-\newgeometry{
     top=25mm, bottom=25mm, left=30mm, right=20mm,
-    headsep=5mm, headheight=10mm, footskip=10mm,
+    headsep=15mm, headheight=10mm, footskip=15mm,
 }
 \savegeometry{mastergeometry}
 
-\ifbuaa@bachelor
-    \loadgeometry{bachelorgeometry}
-\else
-    \loadgeometry{mastergeometry}
-\fi
+\loadgeometry{mastergeometry}
 
 %%%%%%%%%% space %%%%%%%%%%
 % 其他间距
@@ -113,25 +96,7 @@ The LaTeX template for thesis of BUAA]
 %%%%%%%%%% header & footer %%%%%%%%%%
 % 页眉页脚
 
-% Force enter compat v3 mode when requires fancyhdr.
-%
-% There's chances after v3 that breaks BUAAThesis, see issue report:
-%
-%   https://github.com/BHOSC/BUAAthesis/issues/265
-%
-% and commit from fancyhdr
-%
-%   https://github.com/pietvo/fancyhdr/commit/00a7445aec70d3246de8faf108900d06e9caea1b
-%
-% The fix is tricky, but I think it is the best option we currently have...
-%
 \RequirePackage{fancyhdr}
-%\ifbuaa@bachelor
-%    \newif\iff@nch@compatViii
-%    \let\f@nch@gbl\relax
-%    \let\f@nch@gbl\global
-%        \f@nch@compatViiitrue
-%\fi
 
 \fancypagestyle{frontmatter}{
     \renewcommand{\headrulewidth}{0pt}
@@ -142,13 +107,6 @@ The LaTeX template for thesis of BUAA]
 \fancypagestyle{mainmatter}{
     \fancyhead{}
     \fancyfoot{}
-    \ifbuaa@bachelor
-        \fancyhead[C]{
-            \includegraphics[width=37bp]{figure/buaamark.eps}\hfill
-            \raisebox{2ex}{\heiti\zihao{4}\buaa@university 毕业设计(论文)}\hfill
-            \raisebox{2ex}{\songti\zihao{5}第\quad\thepage\quad 页}
-        }
-    \else
         \if@twoside
             \fancyhead[CO]{\zihao{-5}\songti
                 \buaa@universityeng\ \buaa@degreeeng\ Thesis\vspace{1.5mm}
@@ -163,7 +121,6 @@ The LaTeX template for thesis of BUAA]
             }
         \fi
         \fancyfoot[C]{\zihao{5}\thepage}
-    \fi
 
     \renewcommand{\headrulewidth}{0.5bp} % 页眉线宽度
 }
@@ -186,7 +143,7 @@ The LaTeX template for thesis of BUAA]
 % 格式
 \ctexset{
     chapter={
-        format={\centering\zihao{3}\heiti},
+        format={\centering},
         nameformat={},
         aftername={\quad},
         titleformat={},
@@ -206,17 +163,6 @@ The LaTeX template for thesis of BUAA]
     },
 }
 
-\ifbuaa@bachelor
-    \ctexset{
-        chapter={
-            name={,},
-            number={\arabic{chapter}},
-        },
-        section={
-            format={\zihao{-4}\heiti},
-        },
-    }
-\else
     \ctexset{
         chapter={
             name={},
@@ -226,27 +172,17 @@ The LaTeX template for thesis of BUAA]
             format={\zihao{4}\heiti},
         },
     }
-\fi
 
 %%%%%%%%%% contents %%%%%%%%%%
 % 目录
 
 \RequirePackage{titletoc}
-\ifbuaa@bachelor
-    \titlecontents{chapter}[0pt]{\heiti\zihao{-4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{$\cdot$}\contentspage}
-    \titlecontents{section}[2em]{\vspace{0.1\baselineskip}\songti\zihao{-4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{$\cdot$}\contentspage}
-    \titlecontents{subsection}[4em]{\vspace{0.1\baselineskip}\songti\zihao{-4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{$\cdot$}\contentspage}
-\else
     \titlecontents{chapter}[0pt]{\vspace{-0.25\baselineskip}\heiti\zihao{4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{$\cdot$}{\zihao{-4}\contentspage}}[\vspace{0.07\baselineskip}]
+        {\hspace{.5em}\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.07\baselineskip}]
     \titlecontents{section}[2em]{\songti\zihao{-4}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{$\cdot$}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
+        {\hspace{.5em}\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
     \titlecontents{subsection}[4em]{\vspace{-0.2\baselineskip}\songti\zihao{5}}{\thecontentslabel\ }{}
-        {\hspace{.5em}\titlerule*[4pt]{$\cdot$}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
-\fi
+        {\hspace{.5em}\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
 
 % 取消图片、表格目录中的章节空格
 \newcommand*{\noaddvspace}{\renewcommand*{\addvspace}[1]{}}

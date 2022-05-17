@@ -2,9 +2,17 @@
 
 % 中英文摘要
 \begin{cabstract}
-图像压缩仍然提醒流行。尽管目前有许多现有的方法正在使用，但最近在卷积神经网络的发展也大的计算能力增长鼓励作家开发新的更奇特的图像压缩方法。神经网络的能力从数据中学习可以应用在图像压缩任务中，这个用例可以被称为神经压缩。我们提出了一种新的神经图像压缩架构，这意味着现有的神经压缩方法和图像超分辨率领域的最新成就。 我们利用超分辨率来改进现有的图像压缩模型。
+    图像压缩仍然提醒流行。尽管目前有许多现有的方法正在使用，但最近在卷积神经网络的发展也大的计算能力增长鼓励作家开发新的更奇特的图像压缩方法。神经网络的能力从数据中学习可以应用在图像压缩任务中，这个用例可以被称为神经压缩。我们提出了一种新的神经图像压缩架构，这意味着现有的神经压缩方法和图像超分辨率领域的最新成就。 我们利用超分辨率来改进现有的图像压缩模型。
 \end{cabstract}
 
 \begin{eabstract}
-Image compression still reminds popular. Although there are many existing methods that are in use today, recent achievements in convolutional neural networks, and huge computational power growth motivates authors to develop new more exotic methods of image compression. The ability of neural networks to learn from data can be applied in image compression task, this use case can be called Neural Compression. We propose a new architecture of Neural Image Compression, that implies both existing methods of Neural Compression and recent achievements in image super resolution field. We make use of super resolution to improve existing image compression models.
+
+    Image compression still reminds popular. People use image compression on every day basis. With the development of The Internet and smartphones. People take a billions of pictures, store them and send them to each other. Social networks store a huge amount of such images and efficient compression is an important part of the infrastructure. Reducing compressed images size and increasing the quality of compression is an important problem in image processing field.
+
+    Although there are many existing methods that are in use today, recent achievements in convolutional neural networks, and huge computational power growth motivates authors to improve existing methods of image compression. Traditional image compression approaches are algorithms, which means that there is a fixed set of actions that is applied sequentially to compress and decompress images. This set of actions provides a fixed result with fixed compression power and information loss if we consider lossy compression. With the recent advances of Autoencoders it became popular to use them in image compression. Autoencoders have shown a high capability of dimensionality reduction by projecting data to smaller dimensional space. The idea is to learn an approximation function to further use it for reducing the dimensionality of the input. This new tensor with reduced dimensionality takes less disk space, which is one of the objectives of image compression.
+
+    The ability of neural networks to learn from data can be applied in image compression task, this use case is called Neural Compression. Neural networks can be used in image compression pipeline by replacing some parts of image compression pipeline or by completely changing the entire compression pipeline with neural network. Neural networks often produce an output that visually doesn't satisfy human eye. Image enhancement is one of the ways to improve a quality of given images, and recent years neural networks are also widely used in image enhancement.
+
+    We propose a new architecture of Neural Image Compression, that implies both existing methods of  Neural Compression and recent achievements in image enhancement field. We use image enhancement methods, such as image debluring and image denoising to improve existing image compression models.
+
 \end{eabstract}

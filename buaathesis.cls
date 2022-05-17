@@ -133,7 +133,7 @@ The LaTeX template for thesis of BUAA]
 % 标题
 
 % 汉化
-\renewcommand{\contentsname}{\heiti\zihao{-2}\bfseries Table of contents}
+\renewcommand{\contentsname}{\heiti\zihao{-2}\bfseries Contents}
 \renewcommand\listfigurename{\heiti\zihao{-2}\bfseries Figures}
 \renewcommand\listtablename{\heiti\zihao{-2}\bfseries Tables}
 \renewcommand\bibname{Bibliography}
@@ -143,7 +143,7 @@ The LaTeX template for thesis of BUAA]
 % 格式
 \ctexset{
     chapter={
-        format={\centering},
+        format={\fontsize{16pt}{\baselineskip}\centering\bfseries},
         nameformat={},
         aftername={\quad},
         titleformat={},
@@ -151,12 +151,14 @@ The LaTeX template for thesis of BUAA]
         afterskip={\baselineskip},
     },
     section={
+        format={\fontsize{14pt}{\baselineskip}\bfseries},
         aftername={\quad},
         beforeskip={.5\baselineskip},
         afterskip={.5\baselineskip},
     },
     subsection={
-        format={\zihao{-4}\heiti},
+        format={\fontsize{14pt}{\baselineskip}\bfseries},
+        %format={\zihao{-4}\heiti},
         aftername={\quad},
         beforeskip={.5\baselineskip},
         afterskip={.5\baselineskip},
@@ -166,10 +168,7 @@ The LaTeX template for thesis of BUAA]
 \ctexset{
     chapter={
         name={},
-        number={\arabic{chapter}},
-    },
-    section={
-        format={\zihao{4}\heiti},
+        number={\arabic{chapter}}
     },
 }
 
@@ -177,11 +176,11 @@ The LaTeX template for thesis of BUAA]
 % 目录
 
 \RequirePackage{titletoc}
-\titlecontents{chapter}[12pt]{\vspace{-0.25\baselineskip}\heiti\zihao{4}}{\thecontentslabel\ }{}
+\titlecontents{chapter}[0pt]{\bfseries \fontsize{12pt}{1.2em}\vspace{-0.25\baselineskip}\heiti\zihao{4}}{\thecontentslabel\ }{}
     {\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.07\baselineskip}]
-\titlecontents{section}[12pt]{\songti\zihao{-4}}{\thecontentslabel\ }{}
+\titlecontents{section}[14pt]{\fontsize{12pt}{1.2em}\songti\zihao{-4}}{\thecontentslabel\ }{}
     {\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
-\titlecontents{subsection}[12pt]{\vspace{-0.2\baselineskip}\songti\zihao{5}}{\thecontentslabel\ }{}
+\titlecontents{subsection}[28pt]{\fontsize{10.5pt}{1.2em}\vspace{-0.2\baselineskip}\songti\zihao{5}}{\thecontentslabel\ }{}
     {\titlerule*[4pt]{.}{\zihao{-4}\contentspage}}[\vspace{0.1\baselineskip}]
 
 % 取消图片、表格目录中的章节空格
@@ -215,7 +214,7 @@ The LaTeX template for thesis of BUAA]
 %%%%%%%%%% reference %%%%%%%%%%
 % 参考文献
 \RequirePackage[super,sort&compress]{natbib}
-%\bibpunct{[}{]}{,}{n}{}{}
+\bibpunct{[}{]}{,}{s}{}{}
 \setlength{\bibsep}{0pt}
 \newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
 
@@ -806,6 +805,9 @@ The LaTeX template for thesis of BUAA]
 \renewcommand{\maketitle}{%
     \titlech
     \titleeng                 %研究生英文封面
+    \timingye
+    \creationanduse
+    \clearemptydoublepage
     \zihao{-4}
 }
 

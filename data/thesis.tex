@@ -3,8 +3,6 @@
 
 Nowadays there are many existing image compression approaches. We can divide such algorithms in two groups: lossy (such as JPEG. Mainly such algorithms use Discrete Cosine Transform) and lossless (such as DEFLATE. Mainly such algorithms use similar to Huffman Encoding methods). Both have been developed for decades already. It is important to mention that image containers (such as JPEG, PNG, GIF etc.) are using information compression algorithms \textit{only as a part} of their architecture. Usually lossy and lossless compression methods are combined to achieve higher performance.
 
-
-
 \section{Niches}
 
 This work can improve existing image compression algorithms. The disk space required to store images compressed with the model should less than disk space required to store raw images or even images compressed with JPEG or JPEG2000. Such an algorithm can be used in different scenarios. Mainly we can use it in traditional use cases for lossy compression such as using it in image format as it is or in more advance sense, to extend existing formats. For example we can extend existing DCT (Discrete Cosine Transform) or DWT (Discrete Wavelet Transform). We selected two possible use cases to apply the compression algorithm we are developing:
@@ -243,6 +241,14 @@ Where the second term encapsulates distortion, the third and the fourth terms st
 
 In our work we compared several approaches to compress images. At first we tried to use a graph as a representation of an image. This approach is quite intuitive, since graph has a certain information about image structure. However, after series of experiments, we figure out that graph cannot represent image identity precisely. And most importantly, current state of the art methods are not capable of producing a good image from a scene graph, since scene graph to image architectures use scene graph to scene layout to image architecture, which makes scene graph a redundant information and only makes reconstructed images worse. We also found out that layout to image algorithms such as \cite{Zhao_Meng_Yin_Sigal_2019} use LSTM network architecture to fuse layout objects into singe representation, but LSTM is not designed to capture spatial relations and fuse objects into single one, since layout objects are unordered. In future this task can be potentially solved by using permutation invariant fusion module.
 
+We need to solve several major problems in this work. The first one is reconstruction quality. To achieve a better performance we plan to use an enhancement network on top of the baseline model.
+
+\begin{figure}[!ht]
+    \label{general-enhancement}
+    \includegraphics[width=\textwidth]{figure/general-enhance.png}
+    \caption{The proposed model with all modules included.}
+\end{figure}
+
 \section{JPEG compression}
 
 As we described in the Introduction, JPEG is one of the most popular image compression pipelines. It consists of several steps, whichcan be grouped into two main parts: compression and decompression.
@@ -349,7 +355,6 @@ Backwards:
 \end{equation}
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
-
 
 \section{Autoencoder}
 
@@ -506,21 +511,6 @@ Let us consider a pooling layer as an example to make our concern clear. Pooling
 
 This is the reason pooling layers are not used or seldom used in neural image compression and other neural compression models. As a fairly good alternative for traditional convolutional networks with pooling layers we use FCNs mentioned the the previous subsection.
 
-Our encoder has a common structure and has a relatively small size, which is shown in the table \ref{tab:encoder}.
-
-
-\begin{table}
-    \centering
-    \caption{Encoder}
-    \label{tab:encoder}
-    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
-        \hline
-        Total parameters & Parameters size (Mb) & Forward/backward pass size with input shape (3, 128, 128) (Mb) \\
-        \hline
-        7,419,700        & 28.30                & 237.36
-    \end{tabular}
-\end{table}
-
 \subsection{Decoder}
 
 After a motivation for using FCNs in our encoder, let us take a look on the decoder in the figure \ref{decoder}. And the logic here is absolutely same: To restore an image given hidden feature map we need to learn an inverse function, which can be only obtained by reverse of encoder. In practice it means that we need both encoder and decoder to be FCNs (figure \ref{autoencoder}). It will make the entire pipeline less lossy and make an intermediate features more interpretable, since using only convolutional layers helps to achieve a certain consistency in mapping features from input of one layer to its output.
@@ -541,17 +531,8 @@ We are also using normalization layers in encoder and decoder to make a network 
     \label{autoencoder}
 \end{figure}
 
-\begin{table}
-    \centering
-    \caption{Generator}
-    \label{tab:generator}
-    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
-        \hline
-        Total parameters & Parameters size (Mb) & Forward/backward pass size with input shape (3, 128, 128) (Mb) \\
-        \hline
-        123,554,523      & 471.32               & 87.04
-    \end{tabular}
-\end{table}
+
+
 
 \subsection{Autoencoder training}
 
@@ -1264,6 +1245,52 @@ As we clearly see, the performance of a model grows with more training. GAN make
 
 To fine tune enhancement models we first pretrain these models on dataset. Then we use our compression model as a source of input data e.g. we place enhancer on top of the model and fine tune the model like this.
 
+\section{Number of parameters}
+
+Since the residual layers of HiFiC \cite{mentzer_high_fidelity_2020} are quite heavy, we experimented with the number of these layers in the model. The original model contained $9$ residual layers in the generator. We managed to reduce the number of these layers, which lead to decreasing the number of parameters and therefore the generator module size by almost $43\%$.
+
+We show three generator settings. As we can see from the table \ref{tab:generator}, we managed to decrease the number of residual layers, which lead to reasonable memory usage reduction.
+
+\begin{table}
+    \centering
+    \caption{Generator with different number of the residual layers.}
+    \label{tab:generator}
+    \begin{tabular}{p{3cm}|p{2cm}|p{2cm}|p{4cm}}
+        \hline
+        \textbf{Number of residual layers} & \textbf{Total parameters} & \textbf{Parameters size (Mb)} & \textbf{Forward/backward pass size with input shape (3, 128, 128) (Mb)} \\
+        \hline
+        5 \textbf{(ours)}                  & 90,373,083                & 344.75                        & 79.43                                                                   \\
+        \hline
+        7                                  & 123,554,523               & 471.32                        & 87.04                                                                   \\
+        \hline
+        9 \textbf{(baseline)}              & 156,735,963               & 597.90                        & 94.66
+    \end{tabular}
+\end{table}
+
+And from the table \ref{tab:model} we can see that model size has decreased by almost $37\%$. This is significant.
+
+\begin{table}
+    \centering
+    \caption{Encoder}
+    \label{tab:model}
+    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
+        \hline
+        \textbf{Module} & \textbf{Total parameters} & \textbf{Parameters size (Mb)} \\
+        \hline
+        Encoder         & 7,419,700                 & 28.30                         \\
+        \hline
+        Decoder         & 90,373,083                & 344.75                        \\
+        \hline
+        Hyperprior      & 17,263,480                & 65.85                         \\
+        \hline
+        Whole model     & 115,056,263               & 438,9                         \\
+        \hline
+        Baseline model  & 181,419,143               & 692,05
+    \end{tabular}
+\end{table}
+
+Note that we do not include our enhancement layers, since they can be different. In this work we show two best enhancement models, but they can be replaced with further fine tuning by any available enhancement model dependent on the task.
+
 \section{Training settings}
 
 We set $\lambda$ to $1$ and $\beta$ to $0.15$ parameters from \ref{eq:loss-g}. We set a learning rate of $10^{-4}$ and train the network using Adam optimizer \cite{kingma_adam_2017}. We train the networks in 2 steps: first step is training compression and upscale networks in GAN manner (using generator and discriminator losses), the second step is to fine tune them together.
@@ -1367,11 +1394,11 @@ As we can see from the figures \ref{mssim} and \ref{psnr}, the actual mean bitra
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 
-In this thesis we successfully designed and trained a neural image compression model. We show that a right selection of image enhancement method can help to increase the accuracy of compression model. We outperform the baseline model and collect metrics that clearly shows our results. We reduced the size of compression model by optimizing the number of residual layers in it.
+In this thesis we successfully designed and trained a neural image compression model. We show that a right selection of image enhancement method can help to increase the accuracy of compression model. We outperform the baseline model and collect metrics that clearly shows our results. We reduced the size of compression model by $37\%$ by optimizing the number of residual layers in it.
 
 During this work we have gained a high skill of conducting research from selecting the right literature to practical skills such as designing a neural networks, training them, adjusting hyperparameters, collecting metrics and analyzing performance of deep learning models.
 
-Future work mainly incudes improvements of Generator network. It is still possible to reduce number of layers in generator. This will help to reduce a number of training and fine tuning iterations and help to reduce number of parameters, which will directly affect portability of the network to devices with small GPU. We also think that by improving a backbone it's possible to increase an accuracy of reconstructions and resolve a false textures issue.
+Future work mainly incudes improvements of encoder and hyperprior networks. It is still possible to reduce number of layers in encoder and hyperprior modules. This will help to reduce a number of training and fine tuning iterations and help to reduce number of parameters, which will directly affect portability of the network to devices with small GPU.
 
 Basically in this work we still haven't resolved all the artifacts removal issues. We still have such artifacts as bluriness in concrete regions of images, we also found out ringing artifacts in some of the images.
 
@@ -1383,17 +1410,17 @@ All the tasks, we've referred in the schedule from thesis proposal \ref{tab:sche
     \label{tab:schedule}
     \begin{tabular}{p{4cm}|p{8cm}|p{2cm}|p{2cm}}
         \hline
-        Task                    & Description                                                                                                                                & Deadline    & Status \\
+        \textbf{Task}           & \textbf{Description}                                                                                                                       & \textbf{Deadline} & \textbf{Status} \\
         \hline
-        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1 & Done   \\
+        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1       & Done            \\
         \hline
-        Improve model prototype & Adjust parameters, decide on additional convolutional features size                                                                        & December 1  & Done   \\
+        Improve model prototype & Adjust parameters, decide on additional convolutional features size                                                                        & December 1        & Done            \\
         \hline
-        Research proposal 1     & Reduce number of layers in generator                                                                                                       & February 1  & Done   \\
+        Research proposal 1     & Reduce number of layers in generator                                                                                                       & February 1        & Done            \\
         \hline
-        Research proposal 2     & Solve false textures issue                                                                                                                 & March 1     & Done   \\
+        Research proposal 2     & Solve image quality issue issue                                                                                                            & March 1           & Done            \\
         \hline
-        Write the final thesis  & Summarize research in the final thesis                                                                                                     & May 20      & Done   \\
+        Write the final thesis  & Summarize research in the final thesis                                                                                                     & May 20            & Done            \\
         \hline
     \end{tabular}
 \end{table}

@@ -2,12 +2,20 @@
 
 % 中英文摘要
 \begin{cabstract}
-    图像压缩仍然提醒流行。尽管目前有许多现有的方法正在使用，但最近在卷积神经网络的发展也大的计算能力增长鼓励作家开发新的更奇特的图像压缩方法。神经网络的能力从数据中学习可以应用在图像压缩任务中，这个用例可以被称为神经压缩。我们提出了一种新的神经图像压缩架构，这意味着现有的神经压缩方法和图像超分辨率领域的最新成就。 我们利用超分辨率来改进现有的图像压缩模型。
+
+    图像压缩方法现今运用在人们日常生活的方方面面，人们每天都在使用图像压缩方法。随着互联网和智能移动终端的发展，人们拍摄的数十亿张照片，互联网将它们存储起来并进行发送。因此对这些图片进行高效压缩是一个很重要的环节。减小压缩图像大小和提高压缩质量是图像处理中的一个重点和难点。
+
+    尽管今天有许多方法正在进行使用，但卷积神经网络的最新研究和巨大的计算能力可以帮助作者改进现有的图像压缩方法。传统的图像压缩方法有一组固定的动作顺序来压缩和解压缩图像。如果我们考虑有损压缩，这组动作提供了具有固定压缩功率和固定的信息丢失结果。随着自动编码器的最新成果的显现，在图像压缩中此方法的运用范围变得更广。自动编码器通过将数据投影到更小的维度空间，从而显示出强大的降维能力。这个想法是先学习一个近似函数，进而使用它来降低输入的维度。这种降维的新张量占用更少的磁盘空间，达到了图像压缩的目标之一。 神经网络从数据中学习的能力可以应用于图像压缩任务，这个用例被称为神经压缩。
+
+    神经网络可以通过替换图像压缩流水线的某些部分，或者用神经网络完全改变整个压缩流水线。神经网络通常会产生视觉上不满足人眼输出的结果，因此我们要应用图像增强算法，其应用是提高给定图像质量的方法之一。近年来神经网络也广泛用于图像增强。
+
+    本文提出了一种新的神经图像压缩架构，既包含了现有的神经压缩方法，也包含了图像增强领域的最新成果，并且使用图像去模糊和图像去噪等图像增强方法来改进现有的图像压缩模型。
+
 \end{cabstract}
 
 \begin{eabstract}
 
-    Image compression still reminds popular. People use image compression on every day basis. With the development of The Internet and smartphones. People take a billions of pictures, store them and send them to each other. Social networks store a huge amount of such images and efficient compression is an important part of the infrastructure. Reducing compressed images size and increasing the quality of compression is an important problem in image processing field.
+    Image compression still reminds popular. People use image compression on every day basis. With the development of The Internet and smartphones. People take a billions of pictures, store them and send them to each other. Social networks store a huge amount of such images and efficient compression is an important part of the infrastructure. Reducing compressed images size and increasing the quality of compression is an important problem in image processing.
 
     Although there are many existing methods that are in use today, recent achievements in convolutional neural networks, and huge computational power growth motivates authors to improve existing methods of image compression. Traditional image compression approaches are algorithms, which means that there is a fixed set of actions that is applied sequentially to compress and decompress images. This set of actions provides a fixed result with fixed compression power and information loss if we consider lossy compression. With the recent advances of Autoencoders it became popular to use them in image compression. Autoencoders have shown a high capability of dimensionality reduction by projecting data to smaller dimensional space. The idea is to learn an approximation function to further use it for reducing the dimensionality of the input. This new tensor with reduced dimensionality takes less disk space, which is one of the objectives of image compression.
 

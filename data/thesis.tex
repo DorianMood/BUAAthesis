@@ -62,11 +62,6 @@ Nowadays existing methods have a strong compression power. Existing models signi
 
 Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing $L1$ or $L2$ distance between given image and its reconstruction.
 
-\begin{equation}
-    \label{eq:1}
-    L1=\sum \hat{I}-I
-\end{equation}
-
 These intermediate convolutional features already take less disk space than raw initial image. However, we can compress these features using lossless coding algorithm. We are using arithmetic coding because of its huge capacity to compress sequences of numerical values.
 
 It is not difficult to train an autoencoder to compress some information and decompress it back. So, we are using the same design as \cite{balle_variational_2018} to compress hidden features and obtain hyperlatents. Then they can be encoded by lossless compression algorithm.
@@ -241,7 +236,7 @@ Where the second term encapsulates distortion, the third and the fourth terms st
 
 In our work we compared several approaches to compress images. At first we tried to use a graph as a representation of an image. This approach is quite intuitive, since graph has a certain information about image structure. However, after series of experiments, we figure out that graph cannot represent image identity precisely. And most importantly, current state of the art methods are not capable of producing a good image from a scene graph, since scene graph to image architectures use scene graph to scene layout to image architecture, which makes scene graph a redundant information and only makes reconstructed images worse. We also found out that layout to image algorithms such as \cite{Zhao_Meng_Yin_Sigal_2019} use LSTM network architecture to fuse layout objects into singe representation, but LSTM is not designed to capture spatial relations and fuse objects into single one, since layout objects are unordered. In future this task can be potentially solved by using permutation invariant fusion module.
 
-We need to solve several major problems in this work. The first one is reconstruction quality. To achieve a better performance we plan to use an enhancement network on top of the baseline model.
+We need to solve several major problems in this work. The first one is reconstruction quality. To achieve a better performance we plan to use an enhancement network on top of the baseline model. The second is the size of the model. To reduce a size of the model we plan to reduce the number of layers in the Generator of compression model.
 
 \begin{figure}[!ht]
     \label{general-enhancement}
@@ -531,9 +526,6 @@ We are also using normalization layers in encoder and decoder to make a network 
     \label{autoencoder}
 \end{figure}
 
-
-
-
 \subsection{Autoencoder training}
 
 We can train this autoencoder by minimizing L1 in the equation \ref{eq:1} and L2 in the equation \ref{eq:2} distance losses. This is a general pipeline for training autoencoder for image compression. Usually other terms are added to the final loss. But even using this simple pipelines we can still reach a reasonable results (on the figure \ref{autoencoder-result}).
@@ -550,6 +542,11 @@ L2 distance loss can be obtained using formula below \ref{eq:2}
 \begin{equation}
     \label{eq:2}
     L2=\sum (\hat{I}-I)^2
+\end{equation}
+
+\begin{equation}
+    \label{eq:1}
+    L1=\sum \hat{I}-I
 \end{equation}
 
 Having hidden features (or latents), we can then compress them using one of lossless algorithms such as arithmetic coding or even Huffman coding algorithms. Since we have numerical values here, arithmetic coding is more preferable.
@@ -783,7 +780,7 @@ The gradient descent method involves calculating the derivative of the loss func
     E=L(t,y)
 \end{equation}
 
-where
+Where:
 
 $L$ is the loss for the output $y$ and target value $t$,
 $t$ is the target output for a training sample
@@ -795,14 +792,14 @@ For each neuron $j$, its output $o_{j}$ is defined as
     o_{j}=\varphi ({\text{net}}_{j})=\varphi \left(\sum _{k=1}^{n}w_{kj}o_{k}\right)
 \end{equation}
 
-where the activation function $\varphi$  is non-linear and differentiable (even if the ReLU is not in one point). A historically used activation function is the logistic function:
+Where the activation function $\varphi$  is non-linear and differentiable (even if the ReLU is not in one point). A historically used activation function is the logistic function:
 
 \begin{equation}
     \label{eq:activation}
     \varphi (z)={\frac {1}{1+e^{-z}}}
 \end{equation}
 
-which has a convenient derivative of:
+Which has a convenient derivative of:
 
 \begin{equation}
     \label{eq:activation_derivative}
@@ -1025,7 +1022,6 @@ Adam — adaptive moment estimation, yet another optimization algorithm. It comb
 \end{equation}
 
 Unlike Nesterov we accumulate not $\Delta W$, but the values of the gradient though this is kind of a cosmetic change. Besides, we want to know how frequent does the gradient change. Authors of Adam purposed to measure mean variance:
-
 
 \begin{equation}
     v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2

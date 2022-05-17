@@ -1321,7 +1321,7 @@ In traditional image compression algorithms like JPEG we have a fixed compressio
 
 In our work we calculate an actual bitrate of all compressed images. This means that even though the model is targeted to compress the images with some fixed bitrate, we still get different bitrate for different images, and, in most of the cases this bitrate is even smaller than the model was trained for.
 
-\section{Evaluation and model analysis}
+\section{Evaluation and analysis}
 
 We evaluate our data on separate dataset. We use three available target compression rates and produce metric that we described in the previous section. On the first figure \ref{mssim} we can see MS-SSIM metric. The horizontal axis is bitrate. We plot two differently measured bitrate: actual mean BPP, which is, as we described in the previous section, a more adequate metrics to measure a real performance of the network; and the target BPP, which is the BPP the model is targeted to reach.
 
@@ -1341,7 +1341,7 @@ The second important metric is PSNR, also described in the previous section.
     \label{psnr}
 \end{figure}
 
-As we can see from the figures \ref{mssim} and \ref{psnr}, the actual mean bitrate is way smaller than the target model bitrate. Of course, for each image the actual bitrate is less than target model bitrate. This is the reason we are using an actual mean BPP to evaluate the performance of the model. We think that this approach is more accurate.
+As we can see from the figures \ref{mssim} and \ref{psnr}, the actual mean bitrate is way smaller than the target model bitrate. Of course, for each image the actual bitrate is less than target model bitrate. This is the reason we also use an actual mean BPP to evaluate the performance of the model. We think that this approach is more correct.
 
 \subsection{Subjective results and Ablation study}
 
@@ -1349,30 +1349,32 @@ The images compressed with the use of original HiFiC model are more noisy. This 
 
 We first take a look at whole images. There is a picture of a jungle, where we can see the borders of objects (leafs) are better on our proposed model generated images.
 
-\begin{figure}
-    \label{compressed-jungle}
+\begin{figure}[!ht]
+    \centering
     \begin{tabular}{cc}
         \includegraphics[width=0.4\textwidth]{figure/jungle-full.png} & \includegraphics[width=0.4\textwidth]{figure/jungle-denoise-full.png} \\
         a) Baseline compressed                                        & b) Proposed model compressed
     \end{tabular}
     \caption{Images compressed with baseline HiFiC model and proposed model.}
+    \label{compressed-jungle}
 \end{figure}
 
 On the picture of the sky we can clearly see that the low frequency areas of an images compressed with baseline model are also more noisy tan proposed model compressed images.
 
-\begin{figure}
-    \label{compressed-sky}
+\begin{figure}[!ht]
+    \centering
     \begin{tabular}{cc}
         \includegraphics[width=0.4\textwidth]{figure/sky-recon-full.png} & \includegraphics[width=0.4\textwidth]{figure/sky-recon-denoise-full.png} \\
         a) Baseline compressed                                           & b) Proposed model compressed
     \end{tabular}
     \caption{Images compressed with baseline HiFiC model and proposed model.}
+    \label{compressed-sky}
 \end{figure}
 
 From the previous figures it may be unclear without zoom, what is the difference. However, we can zoom in and compare patches from some areas of the images.
 
-\begin{figure}
-    \label{patches}
+\begin{figure}[!ht]
+    \centering
     \begin{tabular}{cc}
         \includegraphics[width=0.4\textwidth]{figure/jungle-recon.png} & \includegraphics[width=0.4\textwidth]{figure/jungle-recon-denoise.png} \\
         a) Baseline compressed                                         & b) Proposed model compressed                                           \\
@@ -1380,6 +1382,7 @@ From the previous figures it may be unclear without zoom, what is the difference
         c) Baseline compressed                                         & d) Proposed model compressed
     \end{tabular}
     \caption[Patches from images.]{These patches show how image enhancement network increases the quality of the images. (a) and (b) are the HiFiC compressed images, (c) and (d) are proposed model compressed images.}
+    \label{patches}
 \end{figure}
 
 From the figure \ref{patches} we can see that the images processed with our model have less noise and better object borders.

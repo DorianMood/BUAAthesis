@@ -52,24 +52,6 @@ Our motivation is that traditional image compression methods are simple and comp
 
 Nowadays existing methods have a strong compression power. Existing models significantly overcome traditional methods by many metrics. The most impressive though is a PSNR metrics, which measures an effectiveness of compression. From the figure we can see a comparison of JPEG and famous HiFiC \cite{mentzer_high_fidelity_2020}.
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png}
-    \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg}
-    \caption{Neural image compression (HiFiC) comparison with JPEG.}
-    \label{jpeg-hific-comparision}
-\end{figure}
-
-Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing $L1$ or $L2$ distance between given image and its reconstruction.
-
-These intermediate convolutional features already take less disk space than raw initial image. However, we can compress these features using lossless coding algorithm. We are using arithmetic coding because of its huge capacity to compress sequences of numerical values.
-
-It is not difficult to train an autoencoder to compress some information and decompress it back. So, we are using the same design as \cite{balle_variational_2018} to compress hidden features and obtain hyperlatents. Then they can be encoded by lossless compression algorithm.
-
-After compressing image we need to be able to decompress these hyperlatent features back. Say we used lossless coding algorithm to decode hyperlatents, passed them to Hyperprior decoder and get latents. Then we feed these latents to fully convolutional decoder and apply deconvolution operation several times together with upscaling layers to make resulting image bigger. Finally we pass it through several super resolution layers to obtain an image with reduced blur artifacts, more sharp structure and, if needed, higher spacial resolution.
-
-Such a system is complicated and since we need to train it efficiently, we consider using generative adversarial training pipeline to fit the model to data. Discriminator will be trained to till real and generated images apart, which will stabilize training.
-
 In this work our objective is to improve existing techniques in image compression domain: we build a model that is capable of compressing images in efficient way, the compressed images should take less disk space than existing models; our model need to outperform existing models in terms of reconstructed images quality; we also plan to reduce the size of the compression model to find an optimal number of parameters in generator.
 
 \section{Research content}
@@ -243,6 +225,26 @@ We need to solve several major problems in this work. The first one is reconstru
     \includegraphics[width=\textwidth]{figure/general-enhance.png}
     \caption{The proposed model with all modules included.}
 \end{figure}
+
+Our entire compression framework is based on HiFiC \cite{mentzer_high_fidelity_2020}: we use the same structure of encoder and discriminator and similar decoder modules. Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing $L1$ or $L2$ distance between given image and its reconstruction.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png}
+    a) Baseline model
+    \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg}
+    b) JPEG
+    \caption{Neural image compression (HiFiC) comparison with JPEG.}
+    \label{jpeg-hific-comparision}
+\end{figure}
+
+These intermediate convolutional features already take less disk space than raw initial image. However, we can compress these features using lossless coding algorithm. We are using arithmetic coding because of its huge capacity to compress sequences of numerical values.
+
+It is not difficult to train an autoencoder to compress some information and decompress it back. So, we are using the same design as \cite{balle_variational_2018} to compress hidden features and obtain hyperlatents. Then they can be encoded by lossless compression algorithm.
+
+After compressing image we need to be able to decompress these hyperlatent features back. Say we used lossless coding algorithm to decode hyperlatents, passed them to Hyperprior decoder and get latents. Then we feed these latents to fully convolutional decoder and apply deconvolution operation several times together with upscaling layers to make resulting image bigger. Finally we pass it through several super resolution layers to obtain an image with reduced blur artifacts, more sharp structure and, if needed, higher spacial resolution.
+
+Such a system is complicated and since we need to train it efficiently, we consider using generative adversarial training pipeline to fit the model to data. Discriminator will be trained to till real and generated images apart, which will stabilize training same as in HiFiC \cite{mentzer_high_fidelity_2020}.
 
 \section{JPEG compression}
 
@@ -1241,52 +1243,6 @@ As we clearly see, the performance of a model grows with more training. GAN make
 
 To fine tune enhancement models we first pretrain these models on dataset. Then we use our compression model as a source of input data e.g. we place enhancer on top of the model and fine tune the model like this.
 
-\section{Number of parameters}
-
-Since the residual layers of HiFiC \cite{mentzer_high_fidelity_2020} are quite heavy, we experimented with the number of these layers in the model. The original model contained $9$ residual layers in the generator. We managed to reduce the number of these layers, which lead to decreasing the number of parameters and therefore the generator module size by almost $43\%$.
-
-We show three generator settings. As we can see from the table \ref{tab:generator}, we managed to decrease the number of residual layers, which lead to reasonable memory usage reduction.
-
-\begin{table}
-    \centering
-    \caption{Generator with different number of the residual layers.}
-    \label{tab:generator}
-    \begin{tabular}{p{3cm}|p{2cm}|p{2cm}|p{4cm}}
-        \hline
-        \textbf{Number of residual layers} & \textbf{Total parameters} & \textbf{Parameters size (Mb)} & \textbf{Forward/backward pass size with input shape (3, 128, 128) (Mb)} \\
-        \hline
-        5 \textbf{(ours)}                  & 90,373,083                & 344.75                        & 79.43                                                                   \\
-        \hline
-        7                                  & 123,554,523               & 471.32                        & 87.04                                                                   \\
-        \hline
-        9 \textbf{(baseline)}              & 156,735,963               & 597.90                        & 94.66
-    \end{tabular}
-\end{table}
-
-And from the table \ref{tab:model} we can see that model size has decreased by almost $37\%$. This is significant.
-
-\begin{table}
-    \centering
-    \caption{Encoder}
-    \label{tab:model}
-    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
-        \hline
-        \textbf{Module} & \textbf{Total parameters} & \textbf{Parameters size (Mb)} \\
-        \hline
-        Encoder         & 7,419,700                 & 28.30                         \\
-        \hline
-        Decoder         & 90,373,083                & 344.75                        \\
-        \hline
-        Hyperprior      & 17,263,480                & 65.85                         \\
-        \hline
-        Whole model     & 115,056,263               & 438,9                         \\
-        \hline
-        Baseline model  & 181,419,143               & 692,05
-    \end{tabular}
-\end{table}
-
-Note that we do not include our enhancement layers, since they can be different. In this work we show two best enhancement models, but they can be replaced with further fine tuning by any available enhancement model dependent on the task.
-
 \section{Training settings}
 
 We set $\lambda$ to $1$ and $\beta$ to $0.15$ parameters from \ref{eq:loss-g}. We set a learning rate of $10^{-4}$ and train the network using Adam optimizer \cite{kingma_adam_2017}. We train the networks in 2 steps: first step is training compression and upscale networks in GAN manner (using generator and discriminator losses), the second step is to fine tune them together.
@@ -1365,7 +1321,7 @@ In traditional image compression algorithms like JPEG we have a fixed compressio
 
 In our work we calculate an actual bitrate of all compressed images. This means that even though the model is targeted to compress the images with some fixed bitrate, we still get different bitrate for different images, and, in most of the cases this bitrate is even smaller than the model was trained for.
 
-\section{Evaluation}
+\section{Evaluation and model analysis}
 
 We evaluate our data on separate dataset. We use three available target compression rates and produce metric that we described in the previous section. On the first figure \ref{mssim} we can see MS-SSIM metric. The horizontal axis is bitrate. We plot two differently measured bitrate: actual mean BPP, which is, as we described in the previous section, a more adequate metrics to measure a real performance of the network; and the target BPP, which is the BPP the model is targeted to reach.
 
@@ -1386,6 +1342,94 @@ The second important metric is PSNR, also described in the previous section.
 \end{figure}
 
 As we can see from the figures \ref{mssim} and \ref{psnr}, the actual mean bitrate is way smaller than the target model bitrate. Of course, for each image the actual bitrate is less than target model bitrate. This is the reason we are using an actual mean BPP to evaluate the performance of the model. We think that this approach is more accurate.
+
+\subsection{Subjective results and Ablation study}
+
+The images compressed with the use of original HiFiC model are more noisy. This is especially clear from the patches taken from low frequency areas. As we state in previous sections we resolve this issue by fine tuning the model with image enhancement models.
+
+We first take a look at whole images. There is a picture of a jungle, where we can see the borders of objects (leafs) are better on our proposed model generated images.
+
+\begin{figure}
+    \label{compressed-jungle}
+    \begin{tabular}{cc}
+        \includegraphics[width=0.4\textwidth]{figure/jungle-full.png} & \includegraphics[width=0.4\textwidth]{figure/jungle-denoise-full.png} \\
+        a) Baseline compressed                                        & b) Proposed model compressed
+    \end{tabular}
+    \caption{Images compressed with baseline HiFiC model and proposed model.}
+\end{figure}
+
+On the picture of the sky we can clearly see that the low frequency areas of an images compressed with baseline model are also more noisy tan proposed model compressed images.
+
+\begin{figure}
+    \label{compressed-sky}
+    \begin{tabular}{cc}
+        \includegraphics[width=0.4\textwidth]{figure/sky-recon-full.png} & \includegraphics[width=0.4\textwidth]{figure/sky-recon-denoise-full.png} \\
+        a) Baseline compressed                                           & b) Proposed model compressed
+    \end{tabular}
+    \caption{Images compressed with baseline HiFiC model and proposed model.}
+\end{figure}
+
+From the previous figures it may be unclear without zoom, what is the difference. However, we can zoom in and compare patches from some areas of the images.
+
+\begin{figure}
+    \label{patches}
+    \begin{tabular}{cc}
+        \includegraphics[width=0.4\textwidth]{figure/jungle-recon.png} & \includegraphics[width=0.4\textwidth]{figure/jungle-recon-denoise.png} \\
+        a) Baseline compressed                                         & b) Proposed model compressed                                           \\
+        \includegraphics[width=0.4\textwidth]{figure/sky-recon.png}    & \includegraphics[width=0.4\textwidth]{figure/sky-recon-denoise.png}    \\
+        c) Baseline compressed                                         & d) Proposed model compressed
+    \end{tabular}
+    \caption[Patches from images.]{These patches show how image enhancement network increases the quality of the images. (a) and (b) are the HiFiC compressed images, (c) and (d) are proposed model compressed images.}
+\end{figure}
+
+From the figure \ref{patches} we can see that the images processed with our model have less noise and better object borders.
+
+\subsection{Model size analysis}
+
+Since the residual layers of HiFiC \cite{mentzer_high_fidelity_2020} are quite heavy, we experimented with the number of these layers in the model. The original model contained $9$ residual layers in the generator. We managed to reduce the number of these layers, which lead to decreasing the number of parameters and therefore the generator module size by almost $43\%$.
+
+We show three generator settings. As we can see from the table \ref{tab:generator}, we managed to decrease the number of residual layers, which lead to reasonable memory usage reduction.
+
+\begin{table}
+    \centering
+    \caption{Generator with different number of the residual layers.}
+    \label{tab:generator}
+    \begin{tabular}{p{3cm}|p{2cm}|p{2cm}|p{4cm}}
+        \hline
+        \textbf{Number of residual layers} & \textbf{Total parameters} & \textbf{Parameters size (Mb)} & \textbf{Forward/backward pass size with input shape (3, 128, 128) (Mb)} \\
+        \hline
+        5 \textbf{(ours)}                  & 90,373,083                & 344.75                        & 79.43                                                                   \\
+        \hline
+        7                                  & 123,554,523               & 471.32                        & 87.04                                                                   \\
+        \hline
+        9 \textbf{(baseline)}              & 156,735,963               & 597.90                        & 94.66
+    \end{tabular}
+\end{table}
+
+And from the table \ref{tab:model} we can see that model size has decreased by almost $37\%$. This is significant.
+
+\begin{table}
+    \centering
+    \caption{Encoder}
+    \label{tab:model}
+    \begin{tabular}{p{4cm}|p{4cm}|p{4cm}}
+        \hline
+        \textbf{Module} & \textbf{Total parameters} & \textbf{Parameters size (Mb)} \\
+        \hline
+        Encoder         & 7,419,700                 & 28.30                         \\
+        \hline
+        Decoder         & 90,373,083                & 344.75                        \\
+        \hline
+        Hyperprior      & 17,263,480                & 65.85                         \\
+        \hline
+        Whole model     & 115,056,263               & 438,9                         \\
+        \hline
+        Baseline model  & 181,419,143               & 692,05
+    \end{tabular}
+\end{table}
+
+Note that we do not include our enhancement layers, since they can be different. In this work we show two best enhancement models, but they can be replaced with further fine tuning by any available enhancement model dependent on the task.
+
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}

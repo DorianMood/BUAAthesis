@@ -31,15 +31,8 @@ However, several issues are still remaining unsolved:
 \begin{enumerate}
     \item False textures.
     \item Limited compression power.
-    \item Fixed output size.
+    \item Large model size.
     \item Noise artifacts.
-\end{enumerate}
-
-We separate neural image compression to two main groups:
-
-\begin{enumerate}
-    \item Methods that follow traditional image compression pipeline, while changing some part of it.
-    \item Methods that create a new pipeline, while using some parts from traditional pipeline.
 \end{enumerate}
 
 For now a general approach is to encode an image to a compressed representation using convolutional neural network and take the convolutional features from one of the top layers of network. Then these features can be stored and later with the use of another convolutional neural network that employs deconvolution the initial image can be obtained.
@@ -230,10 +223,10 @@ Our entire compression framework is based on HiFiC \cite{mentzer_high_fidelity_2
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png}
-    a) Baseline model
-    \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg}
-    b) JPEG
+    \begin{tabular}{cc}
+        \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png} & \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg} \\
+        a) Baseline model                                                  & b) JPEG
+    \end{tabular}
     \caption{Neural image compression (HiFiC) comparison with JPEG.}
     \label{jpeg-hific-comparision}
 \end{figure}
@@ -248,7 +241,7 @@ Such a system is complicated and since we need to train it efficiently, we consi
 
 \section{JPEG compression}
 
-As we described in the Introduction, JPEG is one of the most popular image compression pipelines. It consists of several steps, whichcan be grouped into two main parts: compression and decompression.
+As we described in the Introduction, JPEG is one of the most popular image compression pipelines. It consists of several steps, which can be grouped into two main parts: compression and decompression.
 
 \subsection{Compression algorithm}
 
@@ -453,9 +446,11 @@ So, now equation \ref{eq:autoencoder-noise-density} will become:
 
 \begin{equation}
     \label{eq:autoencoder-}
-    p(x|z) \approx const\times exp( -\frac{((x-f(z^*))-\nabla f(z^*)(z-z^*))^T ((x-f(z^*))-\nabla f(z^*)(z-z^*))}{2\sigma^2} )=
-    const\times exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2})exp(-\frac{(\nabla f(z^*)(z-z^*))^T(\nabla f(z^*)(z-z^*))}{2\sigma^2}) \times
-    \times exp(-\frac{( \nabla f(z^*)^T(x-f(z^*))+(x-f(z^*))^T\nabla f(z^*))(z-z^*)}{2\sigma^2})
+    \begin{split}
+        p(x|z) \approx const\times exp( -\frac{((x-f(z^*))-\nabla f(z^*)(z-z^*))^T ((x-f(z^*))-\nabla f(z^*)(z-z^*))}{2\sigma^2} )=\\
+        const\times exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2})exp(-\frac{(\nabla f(z^*)(z-z^*))^T(\nabla f(z^*)(z-z^*))}{2\sigma^2}) \times \\
+        \times exp(-\frac{( \nabla f(z^*)^T(x-f(z^*))+(x-f(z^*))^T\nabla f(z^*))(z-z^*)}{2\sigma^2})
+    \end{split}
 \end{equation}
 
 Note that the last multiplier is equal to 1 due to expression \ref{eq:autoencoder-derivatives-1}. The first multiplier can be taken as the sign of the integral (it does not contain $z$) in equation \ref{eq:autoencoder-density}. And also assume that $p(z)$ is a fairly smooth function and does not change much in the neighborhood of $z^*$, i.e. replace $p(z)$ by $p(z^*)$.
@@ -464,7 +459,10 @@ After all assumptions, integral from the equation \ref{eq:autoencoder-density} h
 
 \begin{equation}
     \label{eq:autoencoder-probability-estimation}
-    p(x) = const\times p(z^*)exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2}) \int_{z}exp(-(z-z^*)^TW(x)^TW(x)(z-z^*)) dz, z^*=g(x)
+    \begin{split}
+        p(x) = const\times p(z^*)exp(-\frac{(x-f(z^*))^T(x-f(z^*))}{2\sigma^2}) \int_{z}exp(-(z-z^*)^TW(x)^TW(x)(z-z^*)) dz, z^*=\\
+        g(x)
+    \end{split}
 \end{equation}
 
 Where $W(x)=\frac{\nabla f(z^*)}{\sigma}, z^* = g(x)$
@@ -590,6 +588,7 @@ Let us consider some text that consists only of the characters "a", "b", "c", "d
 On the first state we have a set of leaf nodes with attached frequencies and characters they encode (figure \ref{huffman-0}).
 
 \begin{figure}[!ht]
+    \centering
     \includegraphics[width=0.7\textwidth]{figure/huffman-0.png}
     \caption{Huffman tree on the beginning of the algorithm}
     \label{huffman-0}
@@ -598,6 +597,7 @@ On the first state we have a set of leaf nodes with attached frequencies and cha
 We take two less frequent symbols from the queue and attach them to one newly created internal node and the frequency of this node is the sum of its' children frequencies (figure \ref{huffman-1}). The newly created node is added to priority queue.
 
 \begin{figure}[!ht]
+    \centering
     \includegraphics[width=0.7\textwidth]{figure/huffman-1.png}
     \caption{Huffman tree after the first step.}
     \label{huffman-1}
@@ -606,6 +606,7 @@ We take two less frequent symbols from the queue and attach them to one newly cr
 On the next step we take next two most frequent nodes from the queue and create a new node, obtain frequency by summing up its' children. The newly created node is added to priority queue.
 
 \begin{figure}[!ht]
+    \centering
     \includegraphics[width=0.7\textwidth]{figure/huffman-2.png}
     \caption{Huffman tree after the second step.}
     \label{huffman-2}
@@ -614,6 +615,7 @@ On the next step we take next two most frequent nodes from the queue and create 
 Continue by taking two less frequent nodes from the queue and attach them to newly created node, obtain frequency for it. The newly created node is added to priority queue.
 
 \begin{figure}[!ht]
+    \centering
     \includegraphics[width=0.7\textwidth]{figure/huffman-3.png}
     \caption{Huffman tree after the third step.}
     \label{huffman-3}
@@ -622,6 +624,7 @@ Continue by taking two less frequent nodes from the queue and attach them to new
 The last node is taken from the queue and attached to newly created tree, the root node frequency is sum of all the frequencies of its' children.
 
 \begin{figure}[!ht]
+    \centering
     \includegraphics[width=0.7\textwidth]{figure/huffman-4.png}
     \caption{Huffman tree after the fourth step.}
     \label{huffman-4}
@@ -630,6 +633,7 @@ The last node is taken from the queue and attached to newly created tree, the ro
 Priority queue is empty now an it means that the tree building is completed. every left edge is labeled as $0$ and every right edge is labeled as $1$. Each symbols' code is obtained by traversing this tree from root to the symbol. The path is determined by labels of the edge we pas through. For example, the code for symbol "b" is $100$.
 
 \begin{figure}[!ht]
+    \centering
     \includegraphics[width=0.7\textwidth]{figure/huffman-5.png}
     \caption{Huffman tree after the fifth step.}
     \label{huffman-5}
@@ -1444,26 +1448,3 @@ During this work we have gained a high skill of conducting research from selecti
 Future work mainly incudes improvements of encoder and hyperprior networks. It is still possible to reduce number of layers in encoder and hyperprior modules. This will help to reduce a number of training and fine tuning iterations and help to reduce number of parameters, which will directly affect portability of the network to devices with small GPU.
 
 Basically in this work we still haven't resolved all the artifacts removal issues. We still have such artifacts as bluriness in concrete regions of images, we also found out ringing artifacts in some of the images.
-
-All the tasks, we've referred in the schedule from thesis proposal \ref{tab:schedule} have been completed.
-
-\begin{table}
-    \centering
-    \caption{Schedule}
-    \label{tab:schedule}
-    \begin{tabular}{p{4cm}|p{8cm}|p{2cm}|p{2cm}}
-        \hline
-        \textbf{Task}           & \textbf{Description}                                                                                                                       & \textbf{Deadline} & \textbf{Status} \\
-        \hline
-        Build a model prototype & Build a first version of a model that is capable to compress and restore images, it will include building and training encoder and decoder & September 1       & Done            \\
-        \hline
-        Improve model prototype & Adjust parameters, decide on additional convolutional features size                                                                        & December 1        & Done            \\
-        \hline
-        Research proposal 1     & Reduce number of layers in generator                                                                                                       & February 1        & Done            \\
-        \hline
-        Research proposal 2     & Solve image quality issue issue                                                                                                            & March 1           & Done            \\
-        \hline
-        Write the final thesis  & Summarize research in the final thesis                                                                                                     & May 20            & Done            \\
-        \hline
-    \end{tabular}
-\end{table}

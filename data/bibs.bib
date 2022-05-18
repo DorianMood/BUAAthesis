@@ -3,138 +3,78 @@
 // ==========       BEGIN       ==========
 
 @article{agustsson_generative_2019,
-  title    = {Generative {Adversarial} {Networks} for {Extreme} {Learned} {Image} {Compression}},
-  abstract = {We present a learned image compression system based on GANs, operating at extremely low bitrates. Our proposed framework combines an encoder, decoder/generator and a multi-scale discriminator, which we train jointly for a generative learned compression objective. The model synthesizes details it cannot afford to store, obtaining visually pleasing results at bitrates where previous methods fail and show strong artifacts. Furthermore, if a semantic label map of the original image is available, our method can fully synthesize unimportant regions in the decoded image such as streets and trees from the label map, proportionally reducing the storage cost. A user study confirms that for low bitrates, our approach is preferred to state-of-the-art methods, even when they use more than double the bits.},
-  author   = {Agustsson, Eirikur and Tschannen, Michael and Mentzer, Fabian and Timofte, Radu and Van Gool, Luc},
-  month    = aug,
-  year     = {2019},
-  keywords = {compression, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
-  annote   = {Comment: E. Agustsson, M. Tschannen, and F. Mentzer contributed equally to this work. ICCV 2019 camera ready version},
-  file     = {Agustsson et al_2019_Generative Adversarial Networks for Extreme Learned Image Compression.pdf:C\:\\Users\\nadol\\Zotero\\storage\\2CXCBXFG\\Agustsson et al_2019_Generative Adversarial Networks for Extreme Learned Image Compression.pdf:application/pdf;arXiv.org Snapshot:C\:\\Users\\nadol\\Zotero\\storage\\E7E3SI5K\\1804.html:text/html}
+  title  = {Generative {Adversarial} {Networks} for {Extreme} {Learned} {Image} {Compression}},
+  author = {Agustsson, Eirikur and Tschannen, Michael and Mentzer, Fabian and Timofte, Radu and Van Gool, Luc},
+  year   = {2019}
 }
 @article{ronneberger_u-net_2015,
   address   = {Cham},
   title     = {U-{Net}: {Convolutional} {Networks} for {Biomedical} {Image} {Segmentation}},
-  isbn      = {978-3-319-24574-4},
-  abstract  = {There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net.},
   booktitle = {Medical {Image} {Computing} and {Computer}-{Assisted} {Intervention} – {MICCAI} 2015},
-  publisher = {Springer International Publishing},
   author    = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
-  editor    = {Navab, Nassir and Hornegger, Joachim and Wells, William M. and Frangi, Alejandro F.},
-  year      = {2015},
-  pages     = {234--241}
+  year      = {2015}
 }
 @article{dumoulin_adversarially_2017,
-  title    = {Adversarially {Learned} {Inference}},
-  abstract = {We introduce the adversarially learned inference (ALI) model, which jointly learns a generation network and an inference network using an adversarial process. The generation network maps samples from stochastic latent variables to the data space while the inference network maps training examples in data space to the space of latent variables. An adversarial game is cast between these two networks and a discriminative network is trained to distinguish between joint latent/data-space samples from the generative network and joint samples from the inference network. We illustrate the ability of the model to learn mutually coherent inference and generation networks through the inspections of model samples and reconstructions and confirm the usefulness of the learned representations by obtaining a performance competitive with state-of-the-art on the semi-supervised SVHN and CIFAR10 tasks.},
-  author   = {Dumoulin, Vincent and Belghazi, Ishmael and Poole, Ben and Mastropietro, Olivier and Lamb, Alex and Arjovsky, Martin and Courville, Aaron},
-  month    = feb,
-  year     = {2017},
-  keywords = {Computer Science - Machine Learning, Statistics - Machine Learning}
+  title  = {Adversarially {Learned} {Inference}},
+  author = {Dumoulin, Vincent and Belghazi, Ishmael and Poole, Ben and Mastropietro, Olivier and Lamb, Alex and Arjovsky, Martin and Courville, Aaron},
+  year   = {2017}
 }
 @article{donahue_adversarial_2017,
   title    = {Adversarial {Feature} {Learning}},
   abstract = {The ability of the Generative Adversarial Networks (GANs) framework to learn generative models mapping from simple latent distributions to arbitrarily complex data distributions has been demonstrated empirically, with compelling results showing that the latent space of such generators captures semantic variation in the data distribution. Intuitively, models trained to predict these semantic latent representations given data may serve as useful feature representations for auxiliary problems where semantics are relevant. However, in their existing form, GANs have no means of learning the inverse mapping -- projecting data back into the latent space. We propose Bidirectional Generative Adversarial Networks (BiGANs) as a means of learning this inverse mapping, and demonstrate that the resulting learned feature representation is useful for auxiliary supervised discrimination tasks, competitive with contemporary approaches to unsupervised and self-supervised feature learning.},
   author   = {Donahue, Jeff and Krähenbühl, Philipp and Darrell, Trevor},
-  month    = apr,
-  year     = {2017},
-  keywords = {Computer Science - Artificial Intelligence, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning, Computer Science - Neural and Evolutionary Computing, Statistics - Machine Learning},
-  annote   = {Comment: Published as a conference paper at ICLR 2017. Changelog: (v7) Table 2 results improved 1-2\% due to averaging predictions over 10 crops at test time, as done in Noroozi \& Favaro; Table 3 VOC classification results slightly improved due to minor bugfix. (See v6 changelog for previous versions.)}
+  year     = {2017}
 }
 @article{salimans_improved_2016,
   title     = {Improved {Techniques} for {Training} {GANs}},
-  volume    = {29},
-  url       = {https://proceedings.neurips.cc/paper/2016/file/8a3363abe792db2d8761d6403605aeb7-Paper.pdf},
   booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
-  publisher = {Curran Associates, Inc.},
   author    = {Salimans, Tim and Goodfellow, Ian and Zaremba, Wojciech and Cheung, Vicki and Radford, Alec and Chen, Xi and Chen, Xi},
-  editor    = {Lee, D. and Sugiyama, M. and Luxburg, U. and Guyon, I. and Garnett, R.},
   year      = {2016}
 }
 @article{radford_unsupervised_2016,
   author = {Radford, Alec and Metz, Luke and Chintala, Soumith},
   year   = {2015},
-  month  = {11},
-  pages  = {},
   title  = {Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks}
 }
 @article{odena_deconvolution_2016,
-  title    = {Deconvolution and {Checkerboard} {Artifacts}},
-  volume   = {1},
-  issn     = {2476-0757},
-  url      = {http://distill.pub/2016/deconv-checkerboard},
-  doi      = {10.23915/distill.00003},
-  abstract = {When we look very closely at images generated by neural networks, we often see a strange checkerboard pattern of artifacts.},
-  language = {en},
-  number   = {10},
-  journal  = {Distill},
-  author   = {Odena, Augustus and Dumoulin, Vincent and Olah, Chris},
-  month    = oct,
-  year     = {2016},
-  keywords = {enhance},
-  pages    = {e3}
+  title   = {Deconvolution and {Checkerboard} {Artifacts}},
+  journal = {Distill},
+  author  = {Odena, Augustus and Dumoulin, Vincent and Olah, Chris},
+  year    = {2016}
 }
 @article{shi_real-time_2016,
   author = {Shi, Wenzhe and Caballero, Jose and Huszár, Ferenc and Totz, Johannes and Aitken, Andrew and Bishop, Rob and Rueckert, Daniel and Wang, Zehan},
   year   = {2016},
-  month  = {06},
-  pages  = {},
-  title  = {Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network},
-  doi    = {10.1109/CVPR.2016.207}
+  title  = {Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network}
 }
 @article{theis_lossy_2017,
   title    = {Lossy {Image} {Compression} with {Compressive} {Autoencoders}},
   abstract = {We propose a new approach to the problem of optimizing autoencoders for lossy image compression. New media formats, changing hardware technology, as well as diverse requirements and content types create a need for compression algorithms which are more flexible than existing codecs. Autoencoders have the potential to address this need, but are difficult to optimize directly due to the inherent non-differentiabilty of the compression loss. We here show that minimal changes to the loss are sufficient to train deep autoencoders competitive with JPEG 2000 and outperforming recently proposed approaches based on RNNs. Our network is furthermore computationally efficient thanks to a sub-pixel architecture, which makes it suitable for high-resolution images. This is in contrast to previous work on autoencoders for compression using coarser approximations, shallower architectures, computationally expensive methods, or focusing on small images.},
   author   = {Theis, Lucas and Shi, Wenzhe and Cunningham, Andrew and Huszár, Ferenc},
-  month    = mar,
-  year     = {2017},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition, Statistics - Machine Learning}
+  year     = {2017}
 }
 @article{li_learning_2020,
-  title    = {Learning a {Single} {Model} with a {Wide} {Range} of {Quality} {Factors} for {JPEG} {Image} {Artifacts} {Removal}},
-  volume   = {29},
-  issn     = {1057-7149, 1941-0042},
-  doi      = {10.1109/TIP.2020.3020389},
-  abstract = {Lossy compression brings artifacts into the compressed image and degrades the visual quality. In recent years, many compression artifacts removal methods based on convolutional neural network (CNN) have been developed with great success. However, these methods usually train a model based on one specific value or a small range of quality factors. Obviously, if the test image's quality factor does not match to the assumed value range, then degraded performance will be resulted. With this motivation and further consideration of practical usage, a highly robust compression artifacts removal network is proposed in this paper. Our proposed network is a single model approach that can be trained for handling a wide range of quality factors while consistently delivering superior or comparable image artifacts removal performance. To demonstrate, we focus on the JPEG compression with quality factors, ranging from 1 to 60. Note that a turnkey success of our proposed network lies in the novel utilization of the quantization tables as part of the training data. Furthermore, it has two branches in parallel---i.e., the restoration branch and the global branch. The former effectively removes the local artifacts, such as ringing artifacts removal. On the other hand, the latter extracts the global features of the entire image that provides highly instrumental image quality improvement, especially effective on dealing with the global artifacts, such as blocking, color shifting. Extensive experimental results performed on color and grayscale images have clearly demonstrated the effectiveness and efficacy of our proposed single-model approach on the removal of compression artifacts from the decoded image.},
-  urldate  = {2022-04-05},
-  journal  = {IEEE Transactions on Image Processing},
-  author   = {Li, Jianwei and Wang, Yongtao and Xie, Haihua and Ma, Kai-Kuang},
-  year     = {2020},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing, enhance},
-  pages    = {8842--8854},
-  annote   = {Comment: Accepted for publication in the IEEE Transactions on Image Processing}
+  title   = {Learning a {Single} {Model} with a {Wide} {Range} of {Quality} {Factors} for {JPEG} {Image} {Artifacts} {Removal}},
+  journal = {IEEE Transactions on Image Processing},
+  author  = {Li, Jianwei and Wang, Yongtao and Xie, Haihua and Ma, Kai-Kuang},
+  year    = {2020}
 }
 @article{wallace_jpeg_1992,
-  title    = {The {JPEG} still picture compression standard},
-  volume   = {38},
-  issn     = {1558-4127},
-  doi      = {10.1109/30.125072},
-  abstract = {A joint ISO/CCITT committee known as JPEG (Joint Photographic Experts Group) has been working to establish the first international compression standard for continuous-tone still images, both grayscale and color. JPEG's proposed standard aims to be generic, to support a wide variety of applications for continuous-tone images. To meet the differing needs of many applications, the JPEG standard includes two basic compression methods, each with various modes of operation. A DCT (discrete cosine transform)-based method is specified for 'lossy' compression, and a predictive method for 'lossless' compression. JPEG features a simple lossy technique known as the Baseline method, a subset of the other DCT-based modes of operation. The Baseline method has been by far the most widely implemented JPEG method to date, and is sufficient in its own right for a large number of applications. The author provides an overview of the JPEG standard, and focuses in detail on the Baseline method.{\textless}{\textgreater}},
-  number   = {1},
-  journal  = {IEEE Transactions on Consumer Electronics},
-  author   = {Wallace, G.K.},
-  year     = {1992},
-  note     = {Conference Name: IEEE Transactions on Consumer Electronics},
-  keywords = {Costs, Digital images, Displays, Facsimile, Gray-scale, Image coding, Image storage, ISO standards, Standards development, Transform coding, compression},
-  pages    = {xviii--xxxiv}
+  title   = {The {JPEG} still picture compression standard},
+  journal = {IEEE Transactions on Consumer Electronics},
+  author  = {Wallace, G.K.},
+  year    = {1992}
 }
 @article{ehrlich_quantization_2020,
-  address   = {Cham},
   title     = {Quantization {Guided} {JPEG} {Artifact} {Correction}},
-  isbn      = {978-3-030-58598-3},
-  abstract  = {The JPEG image compression algorithm is the most popular method of image compression because of it's ability for large compression ratios. However, to achieve such high compression, information is lost. For aggressive quantization settings, this leads to a noticeable reduction in image quality. Artifact correction has been studied in the context of deep neural networks for some time, but the current methods delivering state-of-the-art results require a different model to be trained for each quality setting, greatly limiting their practical application. We solve this problem by creating a novel architecture which is parameterized by the JPEG file's quantization matrix. This allows our single model to achieve state-of-the-art performance over models trained for specific quality settings. ...},
   booktitle = {Computer {Vision} – {ECCV} 2020},
-  publisher = {Springer International Publishing},
   author    = {Ehrlich, Max and Davis, Larry and Lim, Ser-Nam and Shrivastava, Abhinav},
-  editor    = {Vedaldi, Andrea and Bischof, Horst and Brox, Thomas and Frahm, Jan-Michael},
-  year      = {2020},
-  pages     = {293--309}
+  year      = {2020}
 }
 @article{jiang_towards_2021,
   title     = {Towards Flexible Blind JPEG Artifacts Removal},
   author    = {Jiang, Jiaxi and Zhang, Kai and Timofte, Radu},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
-  pages     = {4997--5006},
   year      = {2021}
 }
 @misc{noauthor_clic_nodate,
@@ -146,10 +86,7 @@
   author    = {Diederik P. Kingma and Jimmy Ba},
   title     = {Adam: A Method for Stochastic Optimization},
   year      = {2015},
-  cdate     = {1420070400000},
-  url       = {http://arxiv.org/abs/1412.6980},
-  booktitle = {ICLR (Poster)},
-  crossref  = {conf/iclr/2015}
+  booktitle = {ICLR (Poster)}
 }
 
 // ========== Image compression ==========
@@ -158,29 +95,19 @@
 @inproceedings{yang_graph_2018,
   address   = {Cham},
   title     = {Graph {R}-{CNN} for {Scene} {Graph} {Generation}},
-  isbn      = {978-3-030-01246-5},
-  abstract  = {We propose a novel scene graph generation model called Graph R-CNN, that is both effective and efficient at detecting objects and their relations in images. Our model contains a Relation Proposal Network (RePN) that efficiently deals with the quadratic number of potential relations between objects in an image. We also propose an attentional Graph Convolutional Network (aGCN) that effectively captures contextual information between objects and relations. Finally, we introduce a new evaluation metric that is more holistic and realistic than existing metrics. We report state-of-the-art performance on scene graph generation as evaluated using both existing and our proposed metrics.},
   booktitle = {Computer {Vision} – {ECCV} 2018},
-  publisher = {Springer International Publishing},
   author    = {Yang, Jianwei and Lu, Jiasen and Lee, Stefan and Batra, Dhruv and Parikh, Devi},
-  editor    = {Ferrari, Vittorio and Hebert, Martial and Sminchisescu, Cristian and Weiss, Yair},
-  year      = {2018},
-  pages     = {690--706}
+  year      = {2018}
 }
 @article{toderici_full_2017,
-  title    = {Full {Resolution} {Image} {Compression} with {Recurrent} {Neural} {Networks}},
-  abstract = {This paper presents a set of full-resolution lossy image compression methods based on neural networks. Each of the architectures we describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. All of our architectures consist of a recurrent neural network (RNN)-based encoder and decoder, a binarizer, and a neural network for entropy coding. We compare RNN types (LSTM, associative LSTM) and introduce a new hybrid of GRU and ResNet. We also study "one-shot" versus additive reconstruction architectures and introduce a new scaled-additive framework. We compare to previous work, showing improvements of 4.3\%-8.8\% AUC (area under the rate-distortion curve), depending on the perceptual metric used. As far as we know, this is the first neural network architecture that is able to outperform JPEG at image compression across most bitrates on the rate-distortion curve on the Kodak dataset images, with and without the aid of entropy coding.},
-  author   = {Toderici, George and Vincent, Damien and Johnston, Nick and Hwang, Sung Jin and Minnen, David and Shor, Joel and Covell, Michele},
-  month    = jul,
-  year     = {2017},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition},
-  annote   = {Comment: Updated with content for CVPR and removed supplemental material to an external link for size limitations}
+  title  = {Full {Resolution} {Image} {Compression} with {Recurrent} {Neural} {Networks}},
+  author = {Toderici, George and Vincent, Damien and Johnston, Nick and Hwang, Sung Jin and Minnen, David and Shor, Joel and Covell, Michele},
+  year   = {2017}
 }
 @inproceedings{zhang2017learning,
   title     = {Learning Deep CNN Denoiser Prior for Image Restoration},
   author    = {Zhang, Kai and Zuo, Wangmeng and Gu, Shuhang and Zhang, Lei},
   booktitle = {IEEE Conference on Computer Vision and Pattern Recognition},
-  pages     = {3929--3938},
   year      = {2017}
 }
 @article{zhang2020plug,
@@ -190,107 +117,62 @@
 }
 @article{Autoencoder_2006,
   author  = {Geoffrey Hinton and Ruslan Salakhutdinov},
-  title   = {Reducing the Dimensionality of Data with Neural 
-             Networks},
+  title   = {Reducing the Dimensionality of Data with Neural Networks},
   journal = {Science},
-  volume  = {313},
-  number  = {5786},
-  pages   = {504 - 507},
   year    = {2006}
 }
 @misc{autoencoder_papers,
   title    = {Papers with {Code} - {AutoEncoder} {Explained}},
   url      = {https://paperswithcode.com/method/autoencoder},
-  abstract = {An Autoencoder is a bottleneck architecture that turns a high-dimensional input into a latent low-dimensional code (encoder), and then performs a reconstruction of the input with this latent code (the decoder). Image: Michael Massi},
-  language = {en}
+  abstract = {An Autoencoder is a bottleneck architecture that turns a high-dimensional input into a latent low-dimensional code (encoder), and then performs a reconstruction of the input with this latent code (the decoder). Image: Michael Massi}
 }
 @article{mentzer_high_fidelity_2020,
   title     = {High-{Fidelity} {Generative} {Image} {Compression}},
-  volume    = {33},
-  url       = {https://proceedings.neurips.cc/paper/2020/file/8a50bae297807da9e97722a0b3fd8f27-Paper.pdf},
   booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
-  publisher = {Curran Associates, Inc.},
   author    = {Mentzer, Fabian and Toderici, George D and Tschannen, Michael and Agustsson, Eirikur},
-  editor    = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M. F. and Lin, H.},
-  year      = {2020},
-  pages     = {11913--11924}
+  year      = {2020}
 }
 @article{JPEG-1992,
   title   = {The JPEG still picture compression standard},
-  volume  = {38},
-  number  = {1},
   journal = {IEEE Transactions on Consumer Electronics},
   author  = {Wallace, G.K.},
-  year    = {1992},
-  note    = {Conference Name: IEEE Transactions on Consumer Electronics},
-  pages   = {xviii--xxxiv}
+  year    = {1992}
 }
 @article{Huffman-Coding,
   author  = {Huffman, David A.},
   journal = {Proceedings of the IRE},
   title   = {A Method for the Construction of Minimum-Redundancy Codes},
-  year    = {1952},
-  volume  = {40},
-  number  = {9},
-  pages   = {1098-1101},
-  doi     = {10.1109/JRPROC.1952.273898}
+  year    = {1952}
 }
 @article{Arithmetic-Coding,
-  author     = {Witten, Ian H. and Neal, Radford M. and Cleary, John G.},
-  title      = {Arithmetic Coding for Data Compression},
-  year       = {1987},
-  issue_date = {June 1987},
-  publisher  = {Association for Computing Machinery},
-  address    = {New York, NY, USA},
-  volume     = {30},
-  number     = {6},
-  issn       = {0001-0782},
-  url        = {https://doi.org/10.1145/214762.214771},
-  doi        = {10.1145/214762.214771},
-  abstract   = {The state of the art in data compression is arithmetic coding, not the better-known Huffman method. Arithmetic coding gives greater compression, is faster for adaptive models, and clearly separates the model from the channel encoding.},
-  journal    = {Commun. ACM},
-  month      = {jun},
-  pages      = {520–540},
-  numpages   = {21}
+  author  = {Witten, Ian H. and Neal, Radford M. and Cleary, John G.},
+  title   = {Arithmetic Coding for Data Compression},
+  year    = {1987},
+  journal = {Commun. ACM}
 }
 @article{pca,
-  author    = { Karl   Pearson   F.R.S. },
-  title     = {LIII. On lines and planes of closest fit to systems of points in space},
-  journal   = {The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science},
-  volume    = {2},
-  number    = {11},
-  pages     = {559-572},
-  year      = {1901},
-  publisher = {Taylor & Francis},
-  doi       = {10.1080/14786440109462720}
+  author  = { Karl   Pearson   F.R.S. },
+  title   = {LIII. On lines and planes of closest fit to systems of points in space},
+  journal = {The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science},
+  year    = {1901}
 }
 @article{balle_variational_2018,
   title     = {Variational image compression with a scale hyperprior},
   author    = {Johannes Ballé and David Minnen and Saurabh Singh and Sung Jin Hwang and Nick Johnston},
   booktitle = {International Conference on Learning Representations},
-  year      = {2018},
-  url       = {https://openreview.net/forum?id=rkcQFMZRb}
+  year      = {2018}
 }
 @article{krishna_visual_2017,
-  title    = {Visual {Genome}: {Connecting} {Language} and {Vision} {Using} {Crowdsourced} {Dense} {Image} {Annotations}},
-  volume   = {123},
-  issn     = {1573-1405},
-  url      = {https://doi.org/10.1007/s11263-016-0981-7},
-  doi      = {10.1007/s11263-016-0981-7},
-  abstract = {Despite progress in perceptual tasks such as image classification, computers still perform poorly on cognitive tasks such as image description and question answering. Cognition is core to tasks that involve not just recognizing, but reasoning about our visual world. However, models used to tackle the rich content in images for cognitive tasks are still being trained using the same datasets designed for perceptual tasks. To achieve success at cognitive tasks, models need to understand the interactions and relationships between objects in an image. When asked “What vehicle is the person riding?”, computers will need to identify the objects in an image as well as the relationships riding(man, carriage) and pulling(horse, carriage) to answer correctly that “the person is riding a horse-drawn carriage.” In this paper, we present the Visual Genome dataset to enable the modeling of such relationships. We collect dense annotations of objects, attributes, and relationships within each image to learn these models. Specifically, our dataset contains over 108K images where each image has an average of \$\$35\$\$objects, \$\$26\$\$attributes, and \$\$21\$\$pairwise relationships between objects. We canonicalize the objects, attributes, relationships, and noun phrases in region descriptions and questions answer pairs to WordNet synsets. Together, these annotations represent the densest and largest dataset of image descriptions, objects, attributes, relationships, and question answer pairs.},
-  number   = {1},
-  journal  = {International Journal of Computer Vision},
-  author   = {Krishna, Ranjay and Zhu, Yuke and Groth, Oliver and Johnson, Justin and Hata, Kenji and Kravitz, Joshua and Chen, Stephanie and Kalantidis, Yannis and Li, Li-Jia and Shamma, David A. and Bernstein, Michael S. and Fei-Fei, Li},
-  month    = may,
-  year     = {2017},
-  pages    = {32--73}
+  title   = {Visual {Genome}: {Connecting} {Language} and {Vision} {Using} {Crowdsourced} {Dense} {Image} {Annotations}},
+  journal = {International Journal of Computer Vision},
+  author  = {Krishna, Ranjay and Zhu, Yuke and Groth, Oliver and Johnson, Justin and Hata, Kenji and Kravitz, Joshua and Chen, Stephanie and Kalantidis, Yannis and Li, Li-Jia and Shamma, David A. and Bernstein, Michael S. and Fei-Fei, Li},
+  year    = {2017},
+  pages   = {32-73}
 }
 @article{Zhao_Meng_Yin_Sigal_2019,
-  title        = {Image Generation from Layout},
-  abstractnote = {Despite significant recent progress on generative models, controlled generation of images depicting multiple and complex object layouts is still a difficult problem. Among the core challenges are the diversity of appearance a given object may possess and, as a result, exponential set of images consistent with a specified layout. To address these challenges, we propose a novel approach for layout-based image generation; we call it Layout2Im. Given the coarse spatial layout (bounding boxes + object categories), our model can generate a set of realistic images which have the correct objects in the desired locations. The representation of each object is disentangled into a specified/certain part (category) and an unspecified/uncertain part (appearance). The category is encoded using a word embedding and the appearance is distilled into a low-dimensional vector sampled from a normal distribution. Individual object representations are composed together using convolutional LSTM, to obtain an encoding of the complete layout, and then decoded to an image. Several loss terms are introduced to encourage accurate and diverse generation. The proposed Layout2Im model significantly outperforms the previous state of the art, boosting the best reported inception score by 24.66% and 28.57% on the very challenging COCO-Stuff and Visual Genome datasets, respectively. Extensive experiments also demonstrate our method’s ability to generate complex and diverse images with multiple objects.},
-  author       = {Zhao, Bo and Meng, Lili and Yin, Weidong and Sigal, Leonid},
-  year         = {2019},
-  month        = {Oct}
+  title  = {Image Generation from Layout},
+  author = {Zhao, Bo and Meng, Lili and Yin, Weidong and Sigal, Leonid},
+  year   = {2019}
 }
 @article{Balle_Laparra_Simoncelli_2017,
   author  = {Cai, Chunlei and Chen, Li and Zhang, Xiaoyun and Gao, Zhiyong},
@@ -298,31 +180,24 @@
   title   = {End-to-End Optimized ROI Image Compression},
   year    = {2020},
   volume  = {29},
-  number  = {},
-  pages   = {3442-3457},
-  doi     = {10.1109/TIP.2019.2960869}
+  pages   = {3442-3457}
 }
 @article{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017,
   author    = {Toderici, George and Vincent, Damien and Johnston, Nick and Hwang, Sung Jin and Minnen, David and Shor, Joel and Covell, Michele},
   booktitle = {2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   title     = {Full Resolution Image Compression with Recurrent Neural Networks},
   year      = {2017},
-  volume    = {},
-  number    = {},
-  pages     = {5435-5443},
-  doi       = {10.1109/CVPR.2017.577}
+  pages     = {5435-5443}
 }
 @article{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014,
   title        = {Generative Adversarial Networks},
   abstractnote = {We propose a new framework for estimating generative models via an adversarial process, in which we simultaneously train two models: a generative model G that captures the data distribution, and a discriminative model D that estimates the probability that a sample came from the training data rather than G. The training procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D, a unique solution exists, with G recovering the training data distribution and D equal to 1/2 everywhere. In the case where G and D are defined by multilayer perceptrons, the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference networks during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples.},
   author       = {Goodfellow, Ian J. and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
-  year         = {2014},
-  month        = {Jun}
+  year         = {2014}
 }
 @misc{kodak,
   title = {True {Color} {Kodak} {Images}},
-  fil   = {http://r0k.us/graphics/kodak/},
-  urle  = {True Color Kodak Images:C\:\\Users\\nadol\\Zotero\\storage\\SQ4V2P25\\kodak.html:text/html}
+  fil   = {http://r0k.us/graphics/kodak/}
 }
 @article{OpenImages2,
   title   = {OpenImages: A public dataset for large-scale multi-label and multi-class image classification.},
@@ -331,99 +206,108 @@
   year    = {2017}
 }
 @inbook{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019,
-  place        = {Cham},
-  series       = {Lecture Notes in Computer Science},
-  title        = {ESRGAN: Enhanced Super-Resolution Generative Adversarial Networks},
-  volume       = {11133},
-  isbn         = {978-3-030-11020-8},
-  url          = {http://link.springer.com/10.1007/978-3-030-11021-5_5},
-  doi          = {10.1007/978-3-030-11021-5_5},
-  abstractnote = {The Super-Resolution Generative Adversarial Network (SRGAN) is a seminal work that is capable of generating realistic textures during single image super-resolution. However, the hallucinated details are often accompanied with unpleasant artifacts. To further enhance the visual quality, we thoroughly study three key components of SRGAN – network architecture, adversarial loss and perceptual loss, and improve each of them to derive an Enhanced SRGAN (ESRGAN). In particular, we introduce the Residual-in-Residual Dense Block (RRDB) without batch normalization as the basic network building unit. Moreover, we borrow the idea from relativistic GAN to let the discriminator predict relative realness instead of the absolute value. Finally, we improve the perceptual loss by using the features before activation, which could provide stronger supervision for brightness consistency and texture recovery. Beneﬁting from these improvements, the proposed ESRGAN achieves consistently better visual quality with more realistic and natural textures than SRGAN and won the ﬁrst place in the PIRM2018-SR Challenge (region 3) with the best perceptual index. The code is available at https://github.com/xinntao/ESRGAN.},
-  booktitle    = {Computer Vision – ECCV 2018 Workshops},
-  publisher    = {Springer International Publishing},
-  author       = {Wang, Xintao and Yu, Ke and Wu, Shixiang and Gu, Jinjin and Liu, Yihao and Dong, Chao and Qiao, Yu and Loy, Chen Change},
-  editor       = {Leal-Taixé, Laura and Roth, Stefan},
-  year         = {2019},
-  pages        = {63–79},
-  collection   = {Lecture Notes in Computer Science}
+  series     = {Lecture Notes in Computer Science},
+  title      = {ESRGAN: Enhanced Super-Resolution Generative Adversarial Networks},
+  booktitle  = {Computer Vision – ECCV 2018 Workshops},
+  publisher  = {Springer International Publishing},
+  author     = {Wang, Xintao and Yu, Ke and Wu, Shixiang and Gu, Jinjin and Liu, Yihao and Dong, Chao and Qiao, Yu and Loy, Chen Change},
+  year       = {2019},
+  pages      = {63–79},
+  collection = {Lecture Notes in Computer Science}
 }
 @article{schonfeld_u-net_2021,
   author    = {Schönfeld, Edgar and Schiele, Bernt and Khoreva, Anna},
   booktitle = {2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   title     = {A U-Net Based Discriminator for Generative Adversarial Networks},
   year      = {2020},
-  volume    = {},
-  number    = {},
-  pages     = {8204-8213},
-  doi       = {10.1109/CVPR42600.2020.00823}
+  pages     = {8204-8213}
 }
- @article{Wang_Xie_Dong_Shan_2021,
+@article{Wang_Xie_Dong_Shan_2021,
   author    = {Wang, Xintao and Xie, Liangbin and Dong, Chao and Shan, Ying},
   booktitle = {2021 IEEE/CVF International Conference on Computer Vision Workshops (ICCVW)},
   title     = {Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data},
   year      = {2021},
-  volume    = {},
-  number    = {},
-  pages     = {1905-1914},
-  doi       = {10.1109/ICCVW54120.2021.00217}
+  pages     = {1905-1914}
 }
- @article{Ledig_Theis_Huszar_Caballero_Cunningham_Acosta_Aitken_Tejani_Totz_Wang_et_al_2017,
+@article{Ledig_Theis_Huszar_Caballero_Cunningham_Acosta_Aitken_Tejani_Totz_Wang_et_al_2017,
   author    = {Ledig, Christian and Theis, Lucas and Huszár, Ferenc and Caballero, Jose and Cunningham, Andrew and Acosta, Alejandro and Aitken, Andrew and Tejani, Alykhan and Totz, Johannes and Wang, Zehan and Shi, Wenzhe},
   booktitle = {2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   title     = {Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network},
   year      = {2017},
-  volume    = {},
-  number    = {},
-  pages     = {105-114},
-  doi       = {10.1109/CVPR.2017.19}
+  pages     = {105-114}
 }
 @article{fcn,
   author    = {Long, Jonathan and Shelhamer, Evan and Darrell, Trevor},
   booktitle = {2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   title     = {Fully convolutional networks for semantic segmentation},
   year      = {2015},
-  volume    = {},
-  number    = {},
-  pages     = {3431-3440},
-  doi       = {10.1109/CVPR.2015.7298965}
+  pages     = {3431-3440}
 }
 @article{simonyan_very_2015,
   author    = {Liu, Shuying and Deng, Weihong},
   booktitle = {2015 3rd IAPR Asian Conference on Pattern Recognition (ACPR)},
   title     = {Very deep convolutional neural network based image classification using small training sample size},
   year      = {2015},
-  volume    = {},
-  number    = {},
-  pages     = {730-734},
-  doi       = {10.1109/ACPR.2015.7486599}
+  pages     = {730-734}
 }
 @article{alexnet,
-  author     = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E.},
-  title      = {ImageNet Classification with Deep Convolutional Neural Networks},
-  year       = {2017},
-  issue_date = {June 2017},
-  publisher  = {Association for Computing Machinery},
-  address    = {New York, NY, USA},
-  volume     = {60},
-  number     = {6},
-  issn       = {0001-0782},
-  url        = {https://doi.org/10.1145/3065386},
-  doi        = {10.1145/3065386},
-  abstract   = {We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 different classes. On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, consists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax. To make training faster, we used non-saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed regularization method called "dropout" that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the second-best entry.},
-  journal    = {Commun. ACM},
-  month      = {may},
-  pages      = {84–90},
-  numpages   = {7}
+  author    = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E.},
+  title     = {ImageNet Classification with Deep Convolutional Neural Networks},
+  year      = {2017},
+  publisher = {Association for Computing Machinery},
+  volume    = {60},
+  number    = {6},
+  journal   = {Commun. ACM},
+  pages     = {84–90}
 }
 @inproceedings{yang_graph_2018,
   address   = {Cham},
   title     = {Graph {R}-{CNN} for {Scene} {Graph} {Generation}},
-  isbn      = {978-3-030-01246-5},
-  abstract  = {We propose a novel scene graph generation model called Graph R-CNN, that is both effective and efficient at detecting objects and their relations in images. Our model contains a Relation Proposal Network (RePN) that efficiently deals with the quadratic number of potential relations between objects in an image. We also propose an attentional Graph Convolutional Network (aGCN) that effectively captures contextual information between objects and relations. Finally, we introduce a new evaluation metric that is more holistic and realistic than existing metrics. We report state-of-the-art performance on scene graph generation as evaluated using both existing and our proposed metrics.},
   booktitle = {Computer {Vision} – {ECCV} 2018},
   publisher = {Springer International Publishing},
   author    = {Yang, Jianwei and Lu, Jiasen and Lee, Stefan and Batra, Dhruv and Parikh, Devi},
-  editor    = {Ferrari, Vittorio and Hebert, Martial and Sminchisescu, Cristian and Weiss, Yair},
   year      = {2018},
-  pages     = {690--706}
+  pages     = {690-706}
+}
+@article{adgrad,
+  author  = {John Duchi and Elad Hazan and Yoram Singer},
+  title   = {Adaptive Subgradient Methods for Online Learning and Stochastic Optimization},
+  journal = {Journal of Machine Learning Research},
+  year    = {2011},
+  volume  = {12},
+  number  = {61},
+  pages   = {2121-2159}
+}
+@article{adadelta,
+  author  = {Zeiler, Matthew D.},
+  journal = {CoRR},
+  title   = {ADADELTA: An Adaptive Learning Rate Method},
+  year    = 2012
+}
+@article{conditional_gans,
+  author    = {Wang, Ting-Chun and Liu, Ming-Yu and Zhu, Jun-Yan and Tao, Andrew and Kautz, Jan and Catanzaro, Bryan},
+  booktitle = {2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  title     = {High-Resolution Image Synthesis and Semantic Manipulation with Conditional GANs},
+  year      = {2018},
+  pages     = {8798-8807}
+}
+@article{batch_norm,
+  author  = {Sergey Ioffe and Christian Szegedy},
+  title   = {Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift},
+  journal = {CoRR},
+  year    = {2015}
+}
+@article{layer_norm,
+  author   = {Ba, Jimmy Lei and Kiros, Jamie Ryan and Hinton, Geoffrey E.},
+  keywords = {Machine Learning (stat.ML), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title    = {Layer Normalization},
+  journal  = {arXiv},
+  year     = {2016}
+}
+@article{instance_norm,
+  author  = {Dmitry Ulyanov and Andrea Vedaldi and Victor S. Lempitsky},
+  title   = {Instance Normalization: The Missing Ingredient for Fast Stylization},
+  journal = {CoRR},
+  volume  = {abs/1607.08022},
+  year    = {2016}
 }

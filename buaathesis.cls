@@ -781,7 +781,7 @@ The LaTeX template for thesis of BUAA]
 
 \newenvironment{denotation}
     {
-        \chapter*{主要符号对照表\markboth{主要符号对照表}{}} % no tocline
+        \chapter*{Denotation\markboth{Denotation}{}} % no tocline
         \begin{list}{}%
         {
             \zihao{-4}

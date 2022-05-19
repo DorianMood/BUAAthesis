@@ -55,9 +55,9 @@ We show the result of proposed architecture and list the modules that were used 
 
 \section{Organization of the thesis}
 
-In this work we are going to give a deep review of existing methods of image compression including modern and traditional approaches. In the chapter \nameref{chapter:literature} we review the existing approaches in neural image processing in general and neural image compression in particular.
+In this work we are going to give a deep review of existing methods of image compression including modern and traditional approaches. In the chapter \nameref{chapter:literature} we introduce all the backgrounds needed to conduct this research as well as review the existing approaches in neural image processing in general and neural image compression in particular.
 
-In the chapter \nameref{chapter:methodology} we in deep describe the architecture of our model. We provide the necessary formulations of the modules we use in our work, such as Autoencoder model, GAN model and algorithms such as Huffman coding and arithmetic coding. I this chapter we also describe the training pipeline including two parts: compression autoencoder model training, GAN training and fine tuning with the image enhancement models.
+In the chapter \nameref{chapter:methodology} we in deep describe the architecture of our model. We provide the necessary formulations of the modules we use in our work, such as Autoencoder model, GAN model and algorithms such as Huffman coding and arithmetic coding. In this chapter we also describe the training pipeline including two parts: compression autoencoder model training, GAN training and fine tuning with the image enhancement models.
 
 In our \nameref{chapter:experiments} chapter we describe our experiments. We start this chapter with the introduction of datasets we use in the experiments. Next we describe the way we train our model including the algorithms, hyperparameter settings, we show the behaviors of the loss functions during the training. Next we introduce the evaluation process and show the result images. In evaluation section we describe the metrics we are using and show that our model outperforms the baseline model. We select the best image enhancer and show that it improves the images quality.
 
@@ -180,39 +180,6 @@ Backwards:
 \end{equation}
 
 All these steps are reversible, which makes this algorithm stable and convenient to use in image compression. However, it has a couple of problems. One of these problems is an effective size of compressed image, as well as quality and consistency of compressed image. JPEG compression was introduced long time ago when computational power was not enough to perform calculations with high computational costs. At that time lightweight and rapid algorithm was needed to satisfy industry need. Now it is not necessary true. Modern compression approaches of course include a computationally expensive compression algorithms, such as neural compression.
-
-\section{Neural image processing}
-
-Neural image compression usually follows an autoencoder pipeline. In neural image processing, especially in the fields where the looses of information are critical and we need to keep as much information during the processing as we can, fully convolutional networks are used.
-
-\subsection{Fully convolutional neural networks in image processing}
-
-Fully convolutional neural network is a type of neural network without an aggregate layer. Usually such an aggregation operation is a pooling. Pooling layer mechanics is simple: we need some functions that is a permutation invariant, so, it can make a generalization. This function for example can be a $min$, $max$, $sum$ or $mean$. These functions are irreversible, so we can not find a reverse function. Since conceptually decoder of an autoencoder is basically a reverse function for an encoder, we need something like this. The compression process must be reversible, otherwise we can not decompress an original image.
-
-Fully convolutional neural networks are well-described \cite{fcn}. Authors use fully convolutional network for semantic segmentation. Semantic segmentation is a special task in computer vision, where the final proposal is to label each pixel of image according to the object it belongs to. Traditionally this task is solved with clustering algorithms. The FCN (fully convolutional network) authors use is a network with only convolutional elements, this network only has a convolutional layers. Since convolutional layer architecture doesn't require a fixed-size input, it is extremely convenient to use these network with non-fixed size input data.
-
-Each input for convolutional layer is a tensor of size $H \times W \times D$, where $H$ and $W$ are spatial dimensions and $D$ is depth dimension. Each next layer is connected to certain area in the previous layers and the more deep we go through the network the bigger is this area. This area is called a \textit{receptive field}. Convolutional neural networks are translation invariant. Components FCNs are build up with are pooling layers, convolutional layers and activation functions operate on local receptive fields, some regions of input data. Formula can be seen in equation \ref{eq:fcn-1}
-
-\begin{equation}
-    \label{eq:fcn-1}
-    y_{ij} = f_{ks}(\{ x_{si + \delta i, sj + \delta j} \}_{0 \le \delta i, \delta j \le k})
-\end{equation}
-
-Where $k$ is a kernel size, $s$ is stride and $f$ is layer type.
-
-A real-valued loss function defines a task. As well as in many other machine learning models, we use loss function as a start for backpropagation process. So, next we can use any of existing optimizers to converge network to its' local minima.
-
-\subsection{Neural image enhancement}
-
-Neural image enhancement is yet another application of autoencoders in neural image processing. Neural image enhancement models are designed to enhance images quality. Enhancer networks are used in image and video debluring, upscaling, denoising. The core of these methods is autoencoder architecture and ideas from here are widely used in neural image compression methods, that will be mentioned in the next section.
-
-One of the most popular model for image enhancement is U-Net \cite{ronneberger_u-net_2015}. U-net is a convolutional autoencoder with encoder and decoder models, but it also has skip connections: some outputs of encoder are connected with skip-connections to corresponding decoder outputs. This type of model is highly capable of enhancing images while keeping its' main features and structure.
-
-In \cite{odena_deconvolution_2016} authors claim checkerboard artifacts to be a significant drawback while processing a bright images. \textit{Checkerboard artifacts} are a special artifacts that appear on synthetically generated images, received from neural network. These artifacts are due to deconvolution nature: while performing a deconvolution the output of each patch in deconvolution layer ha an overlap with other patches outputs, tis leads to highly contrast artifacts similar to white-black checkerboard structure. Authors claim that this situation happens in many researches \cite{dumoulin_adversarially_2017,donahue_adversarial_2017,salimans_improved_2016,radford_unsupervised_2016}. They propose several approaches to overcome this issue: one approach is to make sure that kernel size is divided by the stride is used, another approach is to separate out an upsampling from lower to higher resolution and convolution (for example we can first use interpolation to roughly upscale an image and then apply a convolution). Conceptually they state that deconvolution operation can be separated into two operations mentioned above and this can help to reduce checkerboard artifacts.
-
-In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement based on quantization table and YCbCr channels neural processing. JPEG \cite{JPEG-1992} luminance channel is twice bigger than Cb and Cr channels. Authors first enhance luminance channel and only then enhance Cb and Cr channels. They do it this way because luminance channel can be used in Cb and Cr channels, since their structure is similar within one image. So, the pipeline they propose has several steps.Firstly they take quantization matrix, which the image was compressed with. This matrix is stored inside JPEG container, so we can have it as an input without any additional actions. Then the luminance channel and quantization matrix are being fed to neural network, that enhances luminance channel based on its' structure and quantization matrix. Having luminance channel enhanced they use it as an input to color channel correlation network, which is another enhancer for Cb and Cr - color channels.
-
-In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
 
 \section{Autoencoder}
 
@@ -383,6 +350,39 @@ Authors use elements from \cite{shi_real-time_2016}, basically employing such op
 
 In \cite{jiang_towards_2021} authors propose FBCNN for JPEG artifacts removal. FBCNN is also based on U-Net \cite{ronneberger_u-net_2015} and consists of four parts: encoder, quality factor predictor, flexible controller, and decoder. The encoder extracts the deep features from the input corrupted JPEG image and then splits them into image features and QF features which are subsequently fed into the decoder and predictor, respectively. The controller gets the estimated QF from the predictor and then generates QF embeddings. The QF attention block enables the controller to make the decoder produce different results according to different QF embeddings. The predicted quality factor can be changed with interactive selections to have a balance between artifacts removal and details preservation.
 
+\section{Neural image processing}
+
+Neural image compression usually follows an autoencoder pipeline. In neural image processing, especially in the fields where the looses of information are critical and we need to keep as much information during the processing as we can, fully convolutional networks are used.
+
+\subsection{Fully convolutional neural networks in image processing}
+
+Fully convolutional neural network is a type of neural network without an aggregate layer. Usually such an aggregation operation is a pooling. Pooling layer mechanics is simple: we need some functions that is a permutation invariant, so, it can make a generalization. This function for example can be a $min$, $max$, $sum$ or $mean$. These functions are irreversible, so we can not find a reverse function. Since conceptually decoder of an autoencoder is basically a reverse function for an encoder, we need something like this. The compression process must be reversible, otherwise we can not decompress an original image.
+
+Fully convolutional neural networks are well-described \cite{fcn}. Authors use fully convolutional network for semantic segmentation. Semantic segmentation is a special task in computer vision, where the final proposal is to label each pixel of image according to the object it belongs to. Traditionally this task is solved with clustering algorithms. The FCN (fully convolutional network) authors use is a network with only convolutional elements, this network only has a convolutional layers. Since convolutional layer architecture doesn't require a fixed-size input, it is extremely convenient to use these network with non-fixed size input data.
+
+Each input for convolutional layer is a tensor of size $H \times W \times D$, where $H$ and $W$ are spatial dimensions and $D$ is depth dimension. Each next layer is connected to certain area in the previous layers and the more deep we go through the network the bigger is this area. This area is called a \textit{receptive field}. Convolutional neural networks are translation invariant. Components FCNs are build up with are pooling layers, convolutional layers and activation functions operate on local receptive fields, some regions of input data. Formula can be seen in equation \ref{eq:fcn-1}
+
+\begin{equation}
+    \label{eq:fcn-1}
+    y_{ij} = f_{ks}(\{ x_{si + \delta i, sj + \delta j} \}_{0 \le \delta i, \delta j \le k})
+\end{equation}
+
+Where $k$ is a kernel size, $s$ is stride and $f$ is layer type.
+
+A real-valued loss function defines a task. As well as in many other machine learning models, we use loss function as a start for backpropagation process. So, next we can use any of existing optimizers to converge network to its' local minima.
+
+\subsection{Neural image enhancement}
+
+Neural image enhancement is yet another application of autoencoders in neural image processing. Neural image enhancement models are designed to enhance images quality. Enhancer networks are used in image and video debluring, upscaling \cite{Ledig_Theis_Huszar_Caballero_Cunningham_Acosta_Aitken_Tejani_Totz_Wang_et_al_2017, Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019, Wang_Xie_Dong_Shan_2021}, denoising. The core of these methods is autoencoder architecture and ideas from here are widely used in neural image compression methods, that will be mentioned in the next section.
+
+One of the most popular model for image enhancement is U-Net \cite{ronneberger_u-net_2015}. U-net is a convolutional autoencoder with encoder and decoder models, but it also has skip connections: some outputs of encoder are connected with skip-connections to corresponding decoder outputs. This type of model is highly capable of enhancing images while keeping its' main features and structure.
+
+In \cite{odena_deconvolution_2016} authors claim checkerboard artifacts to be a significant drawback while processing a bright images. \textit{Checkerboard artifacts} are a special artifacts that appear on synthetically generated images, received from neural network. These artifacts are due to deconvolution nature: while performing a deconvolution the output of each patch in deconvolution layer ha an overlap with other patches outputs, tis leads to highly contrast artifacts similar to white-black checkerboard structure. Authors claim that this situation happens in many researches \cite{dumoulin_adversarially_2017,donahue_adversarial_2017,salimans_improved_2016,radford_unsupervised_2016}. They propose several approaches to overcome this issue: one approach is to make sure that kernel size is divided by the stride is used, another approach is to separate out an upsampling from lower to higher resolution and convolution (for example we can first use interpolation to roughly upscale an image and then apply a convolution). Conceptually they state that deconvolution operation can be separated into two operations mentioned above and this can help to reduce checkerboard artifacts.
+
+In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement based on quantization table and YCbCr channels neural processing. JPEG \cite{JPEG-1992} luminance channel is twice bigger than Cb and Cr channels. Authors first enhance luminance channel and only then enhance Cb and Cr channels. They do it this way because luminance channel can be used in Cb and Cr channels, since their structure is similar within one image. So, the pipeline they propose has several steps.Firstly they take quantization matrix, which the image was compressed with. This matrix is stored inside JPEG container, so we can have it as an input without any additional actions. Then the luminance channel and quantization matrix are being fed to neural network, that enhances luminance channel based on its' structure and quantization matrix. Having luminance channel enhanced they use it as an input to color channel correlation network, which is another enhancer for Cb and Cr - color channels.
+
+In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
+
 \subsection{Generative adversarial networks in image processing}
 
 Generative adversarial networks (GANs) are neural networks, that are deigned to be trained in a special manner. Almost every existing network can be trained in adversarial manner, since the structure of the network itself doesn't change. Adversarial training uses same approaches as regular training, but with some modification: for adversarial training we need to construct a neural network that is capable of distinguishing between \textit{real} images (input images from dataset) and \textit{fake} ones (those, generated by the network). To train this model, we separate each iteration of training on two steps: firstly we pass input through general pipeline (without discriminator) and calculate loss, then we pass input through general pipeline and then feed this output to discriminator network. Then we can calculate discriminator loss and backpropagate.
@@ -393,6 +393,71 @@ GANs were first time introduced by \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde
     \label{eq:gan}
     min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
 \end{equation}
+
+Let us explain GAN architecture. To begin with, we will introduce the necessary terminology. By $X$ we denote a certain space of objects. For example, images of $64*64*3$ pixel. On some probabilistic image space $\Omega$ a vector random variable $x:\Omega \rightarrow X$ is given with a probability distribution with density $p(x)$ such that a subset of the space $X$ on which $p(x)$ takes non—zero values is, for example, photographs of human faces. We are given a random sample of photos for $\{x_i, i \in [1, N], x_i \sim p(x)\}$. Additionally, we define the auxiliary space $Z=R^n$ and the random variable $z:\Phi \rightarrow Z$ with a probability distribution having the density $q(z)$. $D:X \rightarrow (0, 1)$ is a discriminator function. This function takes an image object as input (in our example, an image of the appropriate size) and returns the probability that the input image is a photograph of a human face. $G:Z \rightarrow X$ — generator function. It takes the value $z \in Z$ and outputs an object of the space $X$, that is, in our case, a picture.
+
+Suppose we already have an ideal discriminator $D$. For any $x$ sample, it outputs the true probability that this example belongs to a given subset of $X$ from which ${x_i}$ sample was obtained. Reformulating the task of deceiving the discriminator in probabilistic language, we get that it is necessary to maximize the probability given by the ideal discriminator on the generated examples. Thus, the optimal generator is such that:
+
+\begin{equation}
+    \label{eq:gan-00}
+    G^* = argmax_G E_{z\sim q(x)}D_k(G(z))
+\end{equation}
+
+Since $log(x)$ is a monotonically increasing function and does not change the position of the extremums of the argument, this formula can be rewritten in the form of equation \ref{eq:gan-0}.
+
+\begin{equation}
+    \label{eq:gan-0}
+    G^* = argmax_G E_{z\sim q(x)} log D_k(G(z))
+\end{equation}
+
+In reality, there is usually no ideal discriminator and it must be found. Since the task of the discriminator is to provide a signal for training the generator, instead of an ideal discriminator, it is enough to take a discriminator that ideally separates the real examples from those generated by the current generator, i.e. ideal only on a subset of $X$ from which the examples are generated by the current generator. This task can be reformulated as a search for such a function $D$ that maximizes the probability of correctly classifying examples as real or generated. This is called a binary classification problem, and in this case we have an infinite training sample: a finite number of real examples and a potentially infinite number of generated examples. Each example has a label: it is real or generated. The first article described the solution of the classification problem using the maximum likelihood method.
+
+So, our set $S=\{(x, 1), x\sim p(x)\} \cup \{G(z), 0\, z \sim q(z)\}$. Let's determine the density of distribution $f(\xi|\nu=1) = D(\xi), f(\xi|\nu=0)=1-D(\xi)$, then $f(\xi|\nu)$ is a reformulation of $D$, which gives out the probability of the class $1$ (this example) in the form of a distribution on the classes $\{0, 1\}$. Since $D(\xi) \in (0, 1)$, this definition sets the correct probability density. Then the optimal discriminator can be found as:
+
+\begin{equation}
+    \label{eq:gan-1}
+    D^* = f^*(\xi|\nu) = argmax_f f(\xi_1, \dots | \nu_1, \dots) = argmax_f \prod_i f(\xi_i|\nu_i)
+\end{equation}
+
+Group the multipliers for $\nu_i=0$ and $\nu_i=1$:
+
+\begin{equation}
+    \label{eq:gan-2}
+    \begin{split}
+        D^* = argmax_f \prod_{i, \nu=1} f(\xi_i|\nu_i=1) \prod_{i, \nu=0} f(\xi_i|\nu_i=0) = \\
+        = argmax_D \prod_{x_i\sim p(x)} D(x_i) \prod_{z_i\sim q(z)} (1 - D(G(z_i))) = \\
+        = argmax_D \sum_{x_i\sim p(x)} log D(x_i) + \sum_{z_i\sim q(z)} log (1 - D(G(z_i)))
+    \end{split}
+\end{equation}
+
+And when the sample number tends to infinity, we get:
+
+\begin{equation}
+    \label{eq:gan-3}
+    D^* = argmax_D E_{x_i\sim p(x)} log D(x_i) + E_{z_i\sim q(z)} log (q - D(G(z_i)))
+\end{equation}
+
+In total, we get the following iterative process:
+
+\begin{enumerate}
+    \item Setting an arbitrary initial $G_0(z)$.
+    \item The $k$ iteration begins, $k=1 \dots K$.
+    \item We are looking for an optimal discriminator for the current generator: \\
+          $D_k = argmax_D E_{x_i\sim p(x)} log D(x_i) + E_{z_i\sim q(z)} log(1 - D(G_{k-1}(z_i)))$
+    \item Improving the generator using the optimal discriminator:
+
+    \item $G_k = argmax_G E_{z\sim q(x)} log(D_k(G(z)))$. It is important to be in the vicinity of the current generator. If we move away from the current generator, the discriminator will cease to be optimal and the algorithm will cease to be correct.
+    \item The task of training the generator is considered solved when $D_k(x) = 1/2$ for any $x$. If the process does not converge, then go to the next iteration in the (2).
+\end{enumerate}
+
+In the original article, this algorithm is summarized into a single formula that defines, in a sense, a minimax game between the discriminator and the generator:
+
+\begin{equation}
+    \label{eq:gan-4}
+    \min_{G}\max_{D} L(D, G) = E_{x\sim p(x)} log D(x) + E_{z\sim q(z)} log(1-D(G(z)))
+\end{equation}
+
+Both $D, G$ functions can be represented as neural networks: $D(x) = D(x, \Phi_1), G(z) = G(z, \Phi_2)$, after which the task of finding optimal functions is reduced to the task of optimization by parameters and it can be solved using traditional methods: backpropagation and SGD or more advanced like Adam or RMSProp. Additionally, since the neural network is a universal function approximation, $G(z, \Phi_2)$ can approximate an arbitrary probability distribution, which removes the question of choosing $q(z)$ distribution. This can be any continuous distribution within some reasonable limits. For example, $U(-1, 1)$ or $N(0, 1)$. The correctness of this algorithm and the convergence of $G(z)$ to $p(x)$ under fairly general assumptions is proved in the original article \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}.
 
 ESRGAN \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019} and RealESRGAN \cite{Wang_Xie_Dong_Shan_2021} are two similar papers where authors try to resolve the issue of image quality enhancement. More concrete, in those papers authors propose a model to perform a super-resolution.They use a common pipeline which has already widely spread among image super-resolution models. They use a convolution to map original image to lower spatial dimensional space, but higher channel dimensional space. Then they follow convolution by applying several residual blocks. This residual network doesn't change the data dimensionality and the number of residual blocks can vary over different variants of network. Then they upscale image with interpolation (different ones were used: bicubic, bilinear, Nearest-neighbor interpolation) followed by convolutions to reduce number of channels and increase spatial dimensions back to the initial state of 3. This model is trained in GAN manner, so Discriminator is used.
 
@@ -842,11 +907,13 @@ After a motivation for using FCNs in our encoder, let us take a look on the deco
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{figure/generator.png}
-    \caption{Upconvolutional block (top) and residual block (bottom) of the decoder. We use a combination of these two blocks: We stack 8 residual blocks with 6 upconvolutional blocks on top.}
+    \caption{Residual block of the decoder. We stack 5 residual blocks (unlike baseline model, where they use 9 such blocks).}
     \label{decoder}
 \end{figure}
 
 We are also using normalization layers in encoder and decoder to make a network more stable. And each convolutional and normalization layer has a residual connection.
+
+Unlike baseline model \cite{mentzer_high_fidelity_2020}, we decided to use $5$ residual blocks. We trained the model and found out that the performance of the networks stays same. We cover this in our \nameref{chapter:experiments} section.
 
 \subsection{Autoencoder training}
 
@@ -980,11 +1047,7 @@ Compressed sequence is stored as a single number. It's also required to remember
 
 \section{Generative adversarial network}
 
-Generative modeling involves the approximation of non-computable a posteriori distributions. Because of this, most effective methods developed for training discriminative models do not work with generative models. The methods existing in the past to solve this problem are computationally difficult and are mainly based on the use of the Markov Chain Monte Carlo, which is poorly scalable. Therefore, to train generative models, a method based on scalable techniques such as Stochastic Gradient Descent (SGD) and backpropagation was needed. One of these methods is Generative Adversarial Networks (GAN). GANs were first proposed in 2014. At a high level, this model can be described as two submodels that compete with each other, and one of these models (the generator) is trying to learn to deceive the second one (the discriminator) in some sense. To do this, the generator generates random objects, and the discriminator tries to distinguish these generated objects from real objects from the training sample. During the learning process, the generator generates objects that are more and more similar to the sample, and it becomes increasingly difficult for the discriminator to distinguish them from the real ones. Thus, the generator turns into a generative model that generates objects from a certain complex distribution, for example, from the distribution of photographs of human faces.
-
 Generative adversarial networks (GANs) show a great performance in training generative models. For GANs training pipeline is slightly different from traditional deep learning pipeline. In \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014} they introduced a neural network training pipeline with two networks: generator and discriminator. Generators objective is to produce a good enough synthetic data. Discriminators objective is to find out, whether given sample synthetic or real. So, trained generator network can be used then to solve a problem.
-
-\subsection{Basics}
 
 Usually when we deal with some operation that modifies an original image, but that also must keep a consistency from image to image and keep some features that are significant for the model performance, it is reasonable to use GAN pipeline for training. Such features can be style features for example. In case of image compression it's more simple: the discriminator network is penalized to till apart images that are original and images that were passed through the model (compressed and decompressed).
 
@@ -999,72 +1062,9 @@ GAN objective is formulated in \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Far
 
 During training GAN learns a generator distribution $p_g$ over data $x$, $p_z(z)$ is a prior on input noise variables. $G(z, \Theta_g)$ is a mapping to data space, where $G$ is a differentiable function (neural network with parameters $\Theta_g$). There also is a second network $D(x, \Theta_d)$ that outputs a single scalar. $D(x)$ represents the probability that input $x$ came from the data rather than $p_g$. $D$ is trained to maximize the probability of assigning the correct label to both training examples and samples from $G$. $G$ simultaneously trained to minimize $log(1 − D(G(z)))$. The objective is to maximize discriminator loss and minimize generator loss.
 
-\subsection{Model}
+Autoencoder compression model in our setting plays as a generator. The discriminator has a simple structure. For the discriminator we use the same architecture as in HiFiC \cite{mentzer_high_fidelity_2020}.
 
-To begin with, we will introduce the necessary terminology. By $X$ we denote a certain space of objects. For example, images of $64*64*3$ pixel. On some probabilistic image space $\Omega$ a vector random variable $x:\Omega \rightarrow X$ is given with a probability distribution with density $p(x)$ such that a subset of the space $X$ on which $p(x)$ takes non—zero values is, for example, photographs of human faces. We are given a random sample of photos for $\{x_i, i \in [1, N], x_i \sim p(x)\}$. Additionally, we define the auxiliary space $Z=R^n$ and the random variable $z:\Phi \rightarrow Z$ with a probability distribution having the density $q(z)$. $D:X \rightarrow (0, 1)$ is a discriminator function. This function takes an image object as input (in our example, an image of the appropriate size) and returns the probability that the input image is a photograph of a human face. $G:Z \rightarrow X$ — generator function. It takes the value $z \in Z$ and outputs an object of the space $X$, that is, in our case, a picture.
-
-Suppose we already have an ideal discriminator $D$. For any $x$ sample, it outputs the true probability that this example belongs to a given subset of $X$ from which ${x_i}$ sample was obtained. Reformulating the task of deceiving the discriminator in probabilistic language, we get that it is necessary to maximize the probability given by the ideal discriminator on the generated examples. Thus, the optimal generator is such that:
-
-\begin{equation}
-    \label{eq:gan-00}
-    G^* = argmax_G E_{z\sim q(x)}D_k(G(z))
-\end{equation}
-
-Since $log(x)$ is a monotonically increasing function and does not change the position of the extremums of the argument, this formula can be rewritten in the form of equation \ref{eq:gan-0}.
-
-\begin{equation}
-    \label{eq:gan-0}
-    G^* = argmax_G E_{z\sim q(x)} log D_k(G(z))
-\end{equation}
-
-In reality, there is usually no ideal discriminator and it must be found. Since the task of the discriminator is to provide a signal for training the generator, instead of an ideal discriminator, it is enough to take a discriminator that ideally separates the real examples from those generated by the current generator, i.e. ideal only on a subset of $X$ from which the examples are generated by the current generator. This task can be reformulated as a search for such a function $D$ that maximizes the probability of correctly classifying examples as real or generated. This is called a binary classification problem, and in this case we have an infinite training sample: a finite number of real examples and a potentially infinite number of generated examples. Each example has a label: it is real or generated. The first article described the solution of the classification problem using the maximum likelihood method.
-
-So, our set $S=\{(x, 1), x\sim p(x)\} \cup \{G(z), 0\, z \sim q(z)\}$. Let's determine the density of distribution $f(\xi|\nu=1) = D(\xi), f(\xi|\nu=0)=1-D(\xi)$, then $f(\xi|\nu)$ is a reformulation of $D$, which gives out the probability of the class $1$ (this example) in the form of a distribution on the classes $\{0, 1\}$. Since $D(\xi) \in (0, 1)$, this definition sets the correct probability density. Then the optimal discriminator can be found as:
-
-\begin{equation}
-    \label{eq:gan-1}
-    D^* = f^*(\xi|\nu) = argmax_f f(\xi_1, \dots | \nu_1, \dots) = argmax_f \prod_i f(\xi_i|\nu_i)
-\end{equation}
-
-Group the multipliers for $\nu_i=0$ and $\nu_i=1$:
-
-\begin{equation}
-    \label{eq:gan-2}
-    \begin{split}
-        D^* = argmax_f \prod_{i, \nu=1} f(\xi_i|\nu_i=1) \prod_{i, \nu=0} f(\xi_i|\nu_i=0) = \\
-        = argmax_D \prod_{x_i\sim p(x)} D(x_i) \prod_{z_i\sim q(z)} (1 - D(G(z_i))) = \\
-        = argmax_D \sum_{x_i\sim p(x)} log D(x_i) + \sum_{z_i\sim q(z)} log (1 - D(G(z_i)))
-    \end{split}
-\end{equation}
-
-And when the sample number tends to infinity, we get:
-
-\begin{equation}
-    \label{eq:gan-3}
-    D^* = argmax_D E_{x_i\sim p(x)} log D(x_i) + E_{z_i\sim q(z)} log (q - D(G(z_i)))
-\end{equation}
-
-In total, we get the following iterative process:
-
-\begin{enumerate}
-    \item Setting an arbitrary initial $G_0(z)$.
-    \item The $k$ iteration begins, $k=1 \dots K$.
-    \item We are looking for an optimal discriminator for the current generator: \\
-          $D_k = argmax_D E_{x_i\sim p(x)} log D(x_i) + E_{z_i\sim q(z)} log(1 - D(G_{k-1}(z_i)))$
-    \item Improving the generator using the optimal discriminator:
-
-    \item $G_k = argmax_G E_{z\sim q(x)} log(D_k(G(z)))$. It is important to be in the vicinity of the current generator. If we move away from the current generator, the discriminator will cease to be optimal and the algorithm will cease to be correct.
-    \item The task of training the generator is considered solved when $D_k(x) = 1/2$ for any $x$. If the process does not converge, then go to the next iteration in the (2).
-\end{enumerate}
-
-In the original article, this algorithm is summarized into a single formula that defines, in a sense, a minimax game between the discriminator and the generator:
-
-\begin{equation}
-    \label{eq:gan-4}
-    \min_{G}\max_{D} L(D, G) = E_{x\sim p(x)} log D(x) + E_{z\sim q(z)} log(1-D(G(z)))
-\end{equation}
-
-Both $D, G$ functions can be represented as neural networks: $D(x) = D(x, \Phi_1), G(z) = G(z, \Phi_2)$, after which the task of finding optimal functions is reduced to the task of optimization by parameters and it can be solved using traditional methods: backpropagation and SGD or more advanced like Adam or RMSProp. Additionally, since the neural network is a universal function approximation, $G(z, \Phi_2)$ can approximate an arbitrary probability distribution, which removes the question of choosing $q(z)$ distribution. This can be any continuous distribution within some reasonable limits. For example, $U(-1, 1)$ or $N(0, 1)$. The correctness of this algorithm and the convergence of $G(z)$ to $p(x)$ under fairly general assumptions is proved in the original article \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}.
+During our experiments and as we described in the \nameref{chapter:experiments} chapter, we managed to significantly reduce the size of the generator. We achieved this result after testing different configuration of the generator network, reducing the number of heavy residual layers in it.
 
 \subsection{Model training}
 
@@ -1120,30 +1120,19 @@ Images have following drawbacks:
     \item noisy
 \end{enumerate}
 
-To overcome this issue we propose a novel approach: we include several super resolution layers in our generator. These layers remove blurry artifacts and make resulting images more sharp.
+To overcome this issue we propose a novel approach: we append an enhancer network after our generator. Enhancer removes blurry and noisy artifacts and make resulting images more sharp.
 
-Image super resolution proposal can be formulated as a learning complex degradations from data. It is clear that the first step here is to produce a dataset from that a model then can be learned. Common choice here is to apply degradations on images before passing them into training pipeline.
-
-We consider following degradations: blur, noise, downsampling, JPEG compression. Blur makes image less sharp and here traditional choice is gaussian blur kernel. Noise increases variance of image pixels, common choice is gaussian noise, which is sampled from gaussian distribution. Downsampling operation makes an mage smaller. There are several approaches to resize images: bilinear, bicubic and nearest neighbor interpolation.
-
-For super resolution we use a common architecture, which has been used in \cite{Ledig_Theis_Huszar_Caballero_Cunningham_Acosta_Aitken_Tejani_Totz_Wang_et_al_2017}, \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019}, \cite{Wang_Xie_Dong_Shan_2021}. This architecture also is a fully convolutional net. Here we use a deep convolutional network body to extract meaningful features from an image (this network is 23 layers deep currently). We use residual connections for each layer of the network body. Each residual block performs four convolution operations, having features concatenated with all previous outputs channel-wise as it is shown on figure \ref{upscale}.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=\textwidth]{figure/upscale.png}
-    \caption{For upscale we use a combination of convolution layers with residual connection (left). For visualization we also include channel dimensionality dynamics along the propagation through the convolutional layers (right).}
-    \label{upscale}
-\end{figure}
-
-Having convolutional features propagated through the network body we apply two simple upsampling layers, that use a non-learnable interpolation operation and convolution layer followed by ReLU activation function.
-
-We imply $L1$ loss \ref{eq:1}, $L2$ loss \ref{eq:2} and GAN losses from equations \ref{eq:loss-d} and \ref{eq:loss-g} to pretrain super resolution module. Afterwards we fine tune an entire framework. Using same loss functions mentioned above.
-
-The last part of the framework is artifacts removal network. This network is a small enhancer placed on top of the described framework to further improve the quality of compressed and decompressed images. We tested several popular models and collected data from them. We show that this step may increase the restored image quality. We place enhancer module on top of the network and fine tune the entire model on our dataset.
+So, the last part of the framework is artifacts removal network. This network is a small enhancer placed on top of the described framework to further improve the quality of compressed and decompressed images. We tested several popular models and collected data from them. We show that this step may increase the restored image quality. We place enhancer module on top of the network and fine tune the entire model on our dataset.
 
 For debluring and denoising we use a common architectures. We compare enhancement models \cite{zhang2017learning, zhang2020plug, jiang_towards_2021} in combination with our compression model to further improve image compression results.
 
 The first model \cite{zhang2017learning} proposes a denoiser model that is capable of removing a noise artifacts from images. The second model \cite{zhang2020plug} is an improved version of the first one, which is also denoiser. The third model \cite{jiang_towards_2021} is a general artifact removing model. It is especially useful since it can work in blind manner, which means that no prior knowledge such as quantization table is required to perform a reconstruction and artifact removal.
+
+Image enhancement proposal can be formulated as a learning complex degradations from data. It is clear that the first step here is to produce a dataset from that a model then can be learned. Common choice here is to apply degradations on images before passing them into training pipeline.
+
+We consider following degradations: blur, noise, downsampling, JPEG compression. Blur makes image less sharp and here traditional choice is gaussian blur kernel. Noise increases variance of image pixels, common choice is gaussian noise, which is sampled from gaussian distribution. Downsampling operation makes an mage smaller. There are several approaches to resize images: bilinear, bicubic and nearest neighbor interpolation.
+
+We imply $L1$ loss \ref{eq:1}, $L2$ loss \ref{eq:2} and GAN losses from equations \ref{eq:loss-d} and \ref{eq:loss-g} to pretrain enhancement module. Afterwards we fine tune an entire framework. Using same loss functions mentioned above.
 
 \subsection{Training implementation}
 
@@ -1382,7 +1371,7 @@ We first take a look at whole images. There is a picture of a jungle, where we c
 \begin{figure}[!ht]
     \centering
     \begin{tabular}{cc}
-        \includegraphics[width=0.4\textwidth]{figure/jungle-full.png} & \includegraphics[width=0.4\textwidth]{figure/jungle-denoise-full.png} \\
+        \includegraphics[width=0.3\textwidth]{figure/jungle-full.png} & \includegraphics[width=0.3\textwidth]{figure/jungle-denoise-full.png} \\
         a) Baseline compressed                                        & b) Proposed model compressed
     \end{tabular}
     \caption{Images compressed with baseline HiFiC model and proposed model.}
@@ -1394,7 +1383,7 @@ On the picture of the sky we can clearly see that the low frequency areas of an 
 \begin{figure}[!ht]
     \centering
     \begin{tabular}{cc}
-        \includegraphics[width=0.4\textwidth]{figure/sky-recon-full.png} & \includegraphics[width=0.4\textwidth]{figure/sky-recon-denoise-full.png} \\
+        \includegraphics[width=0.3\textwidth]{figure/sky-recon-full.png} & \includegraphics[width=0.3\textwidth]{figure/sky-recon-denoise-full.png} \\
         a) Baseline compressed                                           & b) Proposed model compressed
     \end{tabular}
     \caption{Images compressed with baseline HiFiC model and proposed model.}
@@ -1406,9 +1395,9 @@ From the previous figures it may be unclear without zoom, what is the difference
 \begin{figure}[!ht]
     \centering
     \begin{tabular}{cc}
-        \includegraphics[width=0.4\textwidth]{figure/jungle-recon.png} & \includegraphics[width=0.4\textwidth]{figure/jungle-recon-denoise.png} \\
+        \includegraphics[width=0.3\textwidth]{figure/jungle-recon.png} & \includegraphics[width=0.3\textwidth]{figure/jungle-recon-denoise.png} \\
         a) Baseline compressed                                         & b) Proposed model compressed                                           \\
-        \includegraphics[width=0.4\textwidth]{figure/sky-recon.png}    & \includegraphics[width=0.4\textwidth]{figure/sky-recon-denoise.png}    \\
+        \includegraphics[width=0.3\textwidth]{figure/sky-recon.png}    & \includegraphics[width=0.3\textwidth]{figure/sky-recon-denoise.png}    \\
         c) Baseline compressed                                         & d) Proposed model compressed
     \end{tabular}
     \caption[Patches from images.]{These patches show how image enhancement network increases the quality of the images. (a) and (b) are the HiFiC compressed images, (c) and (d) are proposed model compressed images.}

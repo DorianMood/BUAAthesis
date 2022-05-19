@@ -1145,6 +1145,14 @@ The second model \cite{zhang2020plug} is an improved version of the first one, w
 
 The third model \cite{jiang_towards_2021} is a general artifact removing model. It is especially useful since it can work in blind manner, which means that no prior knowledge such as quantization table is required to perform a reconstruction and artifact removal.
 
+\subsection{Training implementation}
+
+To implement training pipeline we mentioned above, we use a famous PyTorch framework. Having our model we implement training of entire model using traditional GAN pipeline: we iterate over the data batches and each even batch we optimize a compression loss, each odd batch we optimize a GAN loss.
+
+We use $3$ separate optimizers: one for Hyperprior probability model, another for compression model and the last one for GAN model. We use Adam optimizer as it is mentioned in the next section. First two optimizers are responsible for training the compression model. The last one is responsible for training the GAN model, which improves the performance of the reconstruction. And separately we also use the fourth optimizer to fine tune entire model with enhancement module. Enhancement modules are trained using their own pipelines and we do not describe it in this work.
+
+Each compression training step we optimize compression loss from the formula \ref{eq:loss-eg}, and each GAN training step we optimize GAN loss from the formula $-log(D(x',y)$. This  statement ie essential for understanding of training our entire framework.
+
 \chapter{Experiments}
 \label{chapter:experiments}
 

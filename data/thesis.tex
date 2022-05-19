@@ -51,7 +51,7 @@ To conduct this research we started from studies in the field of image compressi
 
 This work is based on two components: autoencoder and GAN. In following sections we show in details our model architecture and describe its' joint training pipeline from the beginning up to the end.
 
-We show the result of proposed architecture and list the modules that were used as a base for our model. Analysis of the results confirms that our method performs better on used metrics.
+We show the result of proposed architecture and list the modules that were used as a base for our model. Analysis of the results confirms that our method performs better on used metrics and reduces baseline model size.
 
 \section{Organization of the thesis}
 
@@ -61,321 +61,20 @@ In the chapter \nameref{chapter:methodology} we in deep describe the architectur
 
 In our \nameref{chapter:experiments} chapter we describe our experiments. We start this chapter with the introduction of datasets we use in the experiments. Next we describe the way we train our model including the algorithms, hyperparameter settings, we show the behaviors of the loss functions during the training. Next we introduce the evaluation process and show the result images. In evaluation section we describe the metrics we are using and show that our model outperforms the baseline model. We select the best image enhancer and show that it improves the images quality.
 
-\chapter{Literature review}
+\chapter{Backgrounds and literature review}
 \label{chapter:literature}
 
 Convolutional neural networks have shown a high performance in a variety of tasks during recent decade. Power of convolutional neural networks (CNNs) is mainly due to their ability to aggregate and generalize local features. It turns out that CNN architecture is extremely good and effective when we deal with \textit{structured data}. In early beginning of CNNs milestone works were VGG-19 \cite{simonyan_very_2015} and AlexNet \cite{alexnet}, where authors proved that convolutional architectures can be way more computationally effective than we thought before. It has also been shown that learned convolutional filters can reflect a local structure of sample.
 
 Nowadays CNNs are used in a variety of tasks such as classification,  image generation, clustering, dimensionality reduction etc. One of possible applications of CNN is neural image compression. In neural image compression we use a compression power of convolutional neural network, which is a stack of convolutional layers, such as \cite{alexnet}.
 
-\section{Preliminary and background}
+Image compression has a several conventional steps, which are usually employed in neural image compression too. These steps are well described in JPEG original paper \cite{JPEG-1992}. JPEG standard was introduced in 1992 and adopted as an image compression standard by Joint Photography Expert Group. JPEG has a module structure, so these modules implementation can be changed drastically, while having same interaction with other modules. This helps to replace an old modules by more advanced and modern ones. For example, Huffman Coding \cite{Huffman-Coding} in Coding stage of JPEG algorithm can be replaced by Arithmetic coding \cite{Arithmetic-Coding}. Many papers employ this module structure, so authors can use already existing ones and only work on one part of the whole compression algorithm to further improve exactly the part they are interested in.
 
-Image compression has a several conventional steps, which are usually employed in neural image compression too. These steps are well described in \cite{JPEG-1992}. JPEG standard was introduced in 1992 and adopted as an image compression standard by Joint Photography Expert Group. JPEG has a module structure, so these modules implementation can be changed drastically, while having same interaction with other modules. This helps to replace an old modules by more advanced and modern ones. For example, Huffman Coding \cite{Huffman-Coding} in Coding stage of JPEG algorithm can be replaced by Arithmetic coding \cite{Arithmetic-Coding}. Many papers employ this module structure, so authors can use already existing ones and only work on one part of the whole compression algorithm to further improve exactly the part they are interested in.
+To understand main neural image compression approaches, we need to get familiar with autoencoder architecture first. First time introduced in 2006 \cite{Autoencoder_2006}. In this paper authors propose an unusual method to reduce a dimensionality of data: use neural network build up from two components, encoder and decoder. They significantly overcome efficiency of Principal component analysis \cite{pca} in dimensionality reduction. Dimensionality reduction later has become a closely related to neural image compression. Autoencoder consists of two very specific for its' architecture parts: Encoder and Decoder. In the original paper they have (2-4) hidden layers in the encoder and decoder, but now modern approaches can be much more deep. A main principle of autoencoder is that we use encoder to reduce dimensionality (this results to some kind of data compression, and in other words with the help of encoder we compress data to some compact representation). Afterwards we use Decoder to reconstruct data from intermediate representation to it's original shape. Both encoder and decoder are multilayer neural networks, which makes it extremely flexible and open to all the machine learning progress we have and potentially will have in the future. To train such a model we need to initialize these two networks and propagate the information through encoder and decoder sequentially. Then we need to calculate an error. Decoder output has the same shape as the original sample and usually we define loss as a distance from input sample to the decoder output (such as $L1$ or $L2$ distances). Later we use any of existing optimizers perform a backpropagation this loss value and adjust weights.
 
-To understand main neural image compression approaches, we need to get familiar with autoencoder architecture first. First time introduced in 2006 \cite{Autoencoder_2006}. In this paper authors propose an unusual method to reduce a dimensionality of data: use neural network build up from two components, encoder and decoder. They significantly overcome efficiency of Principal component analysis \cite{pca} in dimensionality reduction. Dimensionality reduction late has become a closely related to neural image compression. Autoencoder consists of two very specific for its' architecture parts: Encoder and Decoder. In the original paper they have (2-4) hidden layers in the encoder and decoder, but now modern approaches can be much more deep. A main principle of autoencoder is that we use encoder to reduce dimensionality (this results to some kind of data compression, and in other words with the help of encoder we compress data to some compact representation). Afterwards we use Decoder to reconstruct data from intermediate representation to it's original shape. Both encoder and decoder are multilayer neural networks, which makes it extremely flexible and open to all the machine learning progress we have and potentially will have in the future. To train such a model we need to initialize these two networks and propagate the information through encoder and decoder sequentially. Then we need to calculate an error. Decoder output has the same shape as the original sample and usually we define loss as a distance from input sample to the decoder output (such as L1 or L2 distances). Later we use any of existing optimizers perform a backpropagation this loss value and adjust weights.
+\section{Traditional image compression}
 
-\section{Methods for training neural networks}
-
-Training of neural network is a process of iterative adjusting parameters of this network, which aims to minimize the loss function. Understanding training of neural networks is essential for successful training of the network. In this work we use Adam \cite{kingma_adam_2017} algorithm, but for clear understanding of Adam optimizer and right selection of its parameters we need to understand the algorithms Adam is based on. In the following subsections we cover these algorithms.
-
-\subsection{Nesterov Accelerated Gradient}
-
-The idea of momentum accumulation methods is obviously simple. If we are moving in a certain direction for some time, then we should probably move there for some time in the future. To do this, we need to have an access to the recent history of changes of each parameter. We can store the last $n$ instances of $\Delta W$ and calculate the average at each step, but this approach takes up too much memory for large $n$. Fortunately, we do not need an exact average, but only an estimate, so we can use an exponential moving average.
-
-\begin{equation}
-    \label{eq:derivative-momentum-1}
-    v_t = \gamma v_{t-1} + (1-\gamma) x
-\end{equation}
-
-To accumulate we are going to multiply already accumulated value by the factor $0 < \gamma < 1$ and add another value multiplied by $1-\gamma$. The closer $\gamma$ is to $1$, the larger the accumulation window and the stronger the smoothing — the history of $x$ influences more strongly than each successive $x$. If $x=0$ from some point, $v_t$ fade exponentially. We apply an exponential running average to accumulate the gradient of the objective function of a network:
-
-\begin{equation}
-    v_t = \gamma v_{t-1} + \eta \nabla_W J(W)
-\end{equation}
-
-And update weights:
-
-\begin{equation}
-    W = W - v_t
-\end{equation}
-
-Where $\gamma$ is usually of the order $0.9$. Note that $1-\gamma$ is not missing, but included in $\eta$. The smaller the $\gamma$, the more the algorithm behaves like a regular SGD. To get a popular physical interpretation of the equations, we can imagine a ball rolling on a hilly surface. If at the moment $t$ there was a non-zero slope under the ball ($\nabla_W J(W)$), and when it hit a plateau, it will still continue rolling along this plateau. Moreover, the ball will continue to move a couple of updates in the same direction, even if the slope has changed to the opposite. Nevertheless every second it loses $1-\gamma$ of its speed.
-
-Note that accumulated value $v_t$ may very much exceed the value of each $\eta\nabla_W J(W)$. A simple accumulation of momentum already gives a good result, but Nesterov goes further and applies a well-known idea from calculus: looking ahead along the update vector. Since we are going to shift to $\gamma v_{t-1}$ anyway, let's calculate the gradient of the loss function not at the point $W$, but at $W - \gamma v_{t-1}$.
-
-\begin{equation}
-    v_t = \gamma v_{t-1} + \eta \nabla_W J( W - \gamma v_{t-1} )
-\end{equation}
-
-\begin{equation}
-    W = W - v_t
-\end{equation}
-
-Such a change fores loss to decay faster, if in the direction we are moving derivative is increasing, and slower, if opposite.
-
-\subsection{Adagrad}
-
-Some features can be very informative. It could happen that we have a pattern that only after few convolutional layers becomes a significant feature.. It would be great being able to update parameter with regard to its' feature change. It's not a difficult one, we just should store for a parameter a sum of squares of its' updates. It will stand for similarity: if the parameter belongs to a chain of frequently activated neurons, the sum is accumulating fast.
-
-\begin{equation}
-    G_{t} = G_{t} + g_{t}^2
-\end{equation}
-
-\begin{equation}
-    W_{t+1} = W_{t} - \frac{\eta}{\sqrt{G_{t} + \epsilon}} g_{t}
-\end{equation}
-
-Where $G_{t}$ is a sum of squares, аn $\epsilon$ is a smoothing parameter required to avoid division by $0$. If parameter updates frequently then $G_t$ is high and divisor is also big. $\epsilon$ is usually of order $10^{-6}$ or $10^{-8}$ for really aggressive updates, but it only plays a role in the beginning, near the middle $g_t$ starts to overcome $G_t$:
-
-Main idea of Adgrad \cite{adgrad} is to use a mechanism to update frequently updated parameters less. Also, this formula is not the only one. Actually Adgrad is a family of algorithms, for example we can remove square root or store abs values of updates. Basically using Adgrad we automatically get so called learning rate decay.
-
-\subsection{RMSProp и Adadelta}
-
-Disadvantage of Adagrad is that $G_{t}$ could increase without any limit, and some time later it can stagnate. RMSProp and Adadelta \cite{adadelta} are to overcome this disadvantage. To acheave this we still update parameters based on theirs update history. But instead of full sum of updates we can use an averaged square of gradient.
-
-\begin{equation}
-    E[g^2]_t = \gamma E[g^2]_{t-1} + (1 - \gamma) g^2_t
-\end{equation}
-
-Then we get
-
-\begin{equation}
-    W_{t+1} = W_{t} - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_{t}
-\end{equation}
-
-Divisor is a square root from gradient squares mean, thus RMSProp — root mean square propagation
-
-\begin{equation}
-    RMS[g]_t = \sqrt {E[g^2]_t + \epsilon }
-\end{equation}
-
-Adadelta differs from RMSProp by numerator, which uses $RMS$ from $\Delta W_t$. On step $t$ we do not know $RMS[\Delta W]_{t}$.
-
-\begin{equation}
-    \Delta W = -\frac{RMS[\Delta W]_{t-1}}{RMS[g]_{t}}g_{t}
-\end{equation}
-
-\begin{equation}
-    W_{t+1} = W_{t} - \frac{RMS[\Delta W]_{t-1}}{RMS[g]_{t}}g_{t}
-\end{equation}
-
-\begin{equation}
-    E[\Delta W^2]_t = \gamma E[\Delta W^2]_{t-1} + (1 - \gamma) \Delta W^2_t
-\end{equation}
-
-\begin{equation}
-    RMS[\Delta W]_{t} = \sqrt{E[\Delta W^2]_t + \epsilon}
-\end{equation}
-
-Note that we need $RMS[\Delta W]_{-1}$ to be $0$ for the first step, all the following $\Delta W$ and $RMS[\Delta W]_{t}$ are going to be $0$. that's why we need $RMS \epsilon$. For RMSProp and Adadelta and Adagrad we don't have to set parameters precisely. Usually it's good to start $\eta$ with $0.1 - 1$, and $\gamma$ with $0.9$.
-
-\subsection{Adam}
-
-Adam \cite{kingma_adam_2017} — adaptive moment estimation, yet another optimization algorithm. It combines an idea of value accumulation and an idea of Adgrad and RMSProp.
-
-\begin{equation}
-    m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t
-\end{equation}
-
-Unlike Nesterov we accumulate not $\Delta W$, but the values of the gradient though this is kind of a cosmetic change. Besides, we want to know how frequent does the gradient change. Authors of Adam purposed to measure mean variance:
-
-\begin{equation}
-    v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
-\end{equation}
-
-It's easy to find that $E[g^2]_t$ is the same in RMSProp.
-
-An important difference from RMSProp is in initial adjusting of $m_t$ and $v_t$: they suffer from the same problem as $E[g^2]_t$ from RMSProp: in case of starting value is $0$ it will take many iterations to calibrate especially with a big window of accumulation ($0 \ll \beta_1 < 1, 0 \ll \beta_2 < 1$). This can be solved by introducing two new hyperparameters, but there is another way: artificially increase $m_t$ and $v_t$ on the first steps ($0 < t < 10$ for $m_t$ and $0 < t < 1000$ for $v_t$)
-
-\begin{equation}
-    \hat{m}_t = \frac{m_t}{1 - \beta^t_1}, \;
-    \hat{v}_t = \frac{v_t}{1 - \beta^t_2}
-\end{equation}
-
-Finally rule of update:
-
-\begin{equation}
-    W_{t+1} = W_{t} - \dfrac{\eta}{\sqrt{\hat{v}_t + \epsilon}} \hat{m}_t
-\end{equation}
-
-Adam authors suggest to use following default values: $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\epsilon = 10^{-8}$ and claim that the algorithm performs better or at least not worse than previous algorithms of optimization.
-
-\section{Neural image processing}
-
-Neural image compression usually follows an autoencoder pipeline.
-
-\subsection{Fully convolutional neural networks in image processing}
-
-Fully convolutional neural network is a type of neural network without an aggregate layer. Usually such an aggregation operation is a pooling. Pooling layer mechanics is simple: we need some functions that is a permutation invariant, so, it can make a generalization. This function for example can be a min, max, sum or average. These functions are irreversible, so we can not find a reverse function. Since conceptually decoder of an autoencoder is basically a reverse function for an encoder, we need something like this. The compression process must be reversible, otherwise we can not decompress an original image.
-
-Fully convolutional neural networks is well-described in \cite{fcn}. Authors use fully convolutional network for semantic segmentation. Semantic segmentation is a special task in computer vision, where the final proposal is to label each pixel of image according to the object it belongs to. Traditionally this task is solved with clustering algorithms. The FCN (fully convolutional network) authors use is a network with only convolutional elements, this network only has a convolutional layers. Since convolutional layer architecture doesn't require a fixed-size input, it is extremely convenient to use these network with non-fixed size input data.
-
-Each input for convolutional layer is a tensor of size $H \times W \times D$, where $H$ and $W$ are spatial dimensions and $D$ is depth dimension. Each next layer is connected to certain area in the previous layers and the more deep we go through the network the bigger is this area. This area is called a \textit{receptive field}. Convolutional neural networks are translation invariant. Components FCNs are build up with are pooling layers, convolutional layers and activation functions operate on local receptive fields, some regions of input data. Formula can be seen in equation \ref{eq:fcn-1}
-
-\begin{equation}
-    \label{eq:fcn-1}
-    y_{ij} = f_{ks}(\{ x_{si + \delta i, sj + \delta j} \}_{0 \le \delta i, \delta j \le k})
-\end{equation}
-
-Where $k$ is a kernel size, $s$ is stride and $f$ is layer type.
-
-A real-valued loss function defines a task. As well as in many other machine learning models, we use loss function as a start for backpropagation process. So, next we can use any of existing optimizers to converge network to its' local minima.
-
-\subsection{Neural image enhancement}
-
-Neural image enhancement is yet another application of autoencoders in neural image processing. Neural image enhancement models are designed to enhance images quality. Enhancer networks are used in image and video debluring, upscaling, denoising. The core of these methods is autoencoder architecture and ideas from here are widely used in neural image compression methods, that will be mentioned in the next section.
-
-One of the most popular model for image enhancement is U-Net \cite{ronneberger_u-net_2015}. U-net is a convolutional autoencoder with encoder and decoder models, but it also has skip connections: some outputs of encoder are connected with skip-connections to corresponding decoder outputs. This type of model is highly capable of enhancing images while keeping its' main features and structure.
-
-In \cite{odena_deconvolution_2016} authors claim checkerboard artifacts to be a significant drawback while processing a bright images. \textit{Checkerboard artifacts} are a special artifacts that appear on synthetically generated images, received from neural network. These artifacts are due to deconvolution nature: while performing a deconvolution the output of each patch in deconvolution layer ha an overlap with other patches outputs, tis leads to highly contrast artifacts similar to white-black checkerboard structure. Authors claim that this situation happens in many researches \cite{dumoulin_adversarially_2017,donahue_adversarial_2017,salimans_improved_2016,radford_unsupervised_2016}. They propose several approaches to overcome this issue: one approach is to make sure that kernel size is divided by the stride is used, another approach is to separate out an upsampling from lower to higher resolution and convolution (for example we can first use interpolation to roughly upscale an image and then apply a convolution). Conceptually they state that deconvolution operation can be separated into two operations mentioned above and this can help to reduce checkerboard artifacts.
-
-In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement based on quantization table and YCbCr channels neural processing. JPEG \cite{JPEG-1992} luminance channel is twice bigger than Cb and Cr channels. Authors first enhance luminance channel and only then enhance Cb and Cr channels. They do it this way because luminance channel can be used in Cb and Cr channels, since their structure is similar within one image. So, the pipeline they propose has several steps.Firstly they take quantization matrix, which the image was compressed with. This matrix is stored inside JPEG container, so we can have it as an input without any additional actions. Then the luminance channel and quantization matrix are being fed to neural network, that enhances luminance channel based on its' structure and quantization matrix. Having luminance channel enhanced they use it as an input to color channel correlation network, which is another enhancer for Cb and Cr - color channels.
-
-In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
-
-\subsection{Autoencoder applications in image processing}
-
-First time introduced in \cite{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017}, convolutional neural compression employs an autoencoder architecture and some steps from traditional image compression pipeline. They optimize a tradeoff between a number of bits used to store data (based on symbol frequencies and called an \textit{entropy coding}) and distortion from equation \ref{eq:rate-distortion}.
-
-\begin{equation}
-    \label{eq:rate-distortion}
-    − log_2 Q ([f (x)]) + \beta · d (x, g([f (x)]))
-\end{equation}
-
-Where $\beta$ is a hyperparameter that controls a rate-distortion tradeoff, $Q$ is compression rate and $d$ is distortion rate.
-
-The first problem we encounter going through this problem is that quantization operation is not differentiable. Since quantization employs rounding, it is zero everywhere except integers, where it is undefined. Authors propose to use a smooth approximation for quantization during backward pass.
-
-\begin{equation}
-    \label{eq:quantization}
-    \frac{d}{dy}[y]:=\frac{d}{dy}r(y)
-\end{equation}
-
-Where $r$ is an approximation function. For simplicity authors used $r(y)=y$, this makes the operation much more easy to implement. Gradients simply pass from the decoder to encoder.
-
-Authors use elements from \cite{shi_real-time_2016}, basically employing such operations as convolution, residual blocks in the middle and sub-pixel convolutions in the decoder network.
-
-In \cite{jiang_towards_2021} authors propose FBCNN for JPEG artifacts removal. FBCNN is also based on U-Net \cite{ronneberger_u-net_2015} and consists of four parts: encoder, quality factor predictor, flexible controller, and decoder. The encoder extracts the deep features from the input corrupted JPEG image and then splits them into image features and QF features which are subsequently fed into the decoder and predictor, respectively. The controller gets the estimated QF from the predictor and then generates QF embeddings. The QF attention block enables the controller to make the decoder produce different results according to different QF embeddings. The predicted quality factor can be changed with interactive selections to have a balance between artifacts removal and details preservation.
-
-\subsection{Generative adversarial networks in image processing}
-
-Generative adversarial networks (GANs) are neural networks, that are deigned to be trained in a special manner. Almost every existing network can be trained in adversarial manner, since the structure of the network itself doesn't change. Adversarial training uses same approaches as regular training, but with some modification: for adversarial training we need to construct a neural network that is capable of distinguishing between \textit{real} images (input images from dataset) and \textit{fake} ones (those, generated by the network). To train this model, we separate each iteration of training on two steps: firstly we pass input through general pipeline (without discriminator) and calculate loss, then we pass input through general pipeline and then feed this output to discriminator network. Then we can calculate discriminator loss and backpropagate.
-
-GANs were first time introduced by \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}. They learn generator distribution $p_g$ over data $x$, they define a prior on input noise variables $p_z(z)$, then represent a mapping to data space as $G(z, \Theta_g)$, where $G$ is a differentiable function (neural network with parameters $\Theta_g$) They also define a second network $D(x, \Theta_d)$ that outputs a single scalar. $D(x)$ represents the probability that input $x$ came from the data rather than $p_g$. They train $D$ to maximize the probability of assigning the correct label to both training examples and samples from $G$. They simultaneously train $G$ to minimize $log(1 − D(G(z)))$ in equation \ref{eq:gan}:
-
-\begin{equation}
-    \label{eq:gan}
-    min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
-\end{equation}
-
-ESRGAN \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019} and RealESRGAN \cite{Wang_Xie_Dong_Shan_2021} are two similar papers where authors try to resolve the issue of image quality enhancement. More concrete, in those papers authors propose a model to perform a super-resolution.They use a common pipeline which has already widely spread among image super-resolution models. They use a convolution to map original image to lower spatial dimensional space, but higher channel dimensional space. Then they follow convolution by applying several residual blocks. This residual network doesn't change the data dimensionality and the number of residual blocks can vary over different variants of network. Then they upscale image with interpolation (different ones were used: bicubic, bilinear, Nearest-neighbor interpolation) followed by convolutions to reduce number of channels and increase spatial dimensions back to the initial state of 3. This model is trained in GAN manner, so Discriminator is used.
-
-Recently a U-Net based discriminator was proposed in \cite{schonfeld_u-net_2021}. This U-Net discriminator classifies the input images on a global and local per-pixel level. Due to the skip-connections between the encoder and the decoder, the channels in the output layer contain both high-level and low-level information. Brighter colors in the decoder output correspond to the discriminator confidence of pixel being real (and darker of being fake). So the discriminator has a confidence map with size of the image. The discriminator consists of the original downsampling network and an upsampling network. The two modules are connected via a bottleneck, as well as skip-connections that copy and concatenate feature maps from the encoder and the decoder modules. Discriminator loss is described in equation \ref{eq:u-net-discriminator}.
-
-\begin{equation}
-    \label{eq:u-net-discriminator}
-    \begin{split}
-        L_D = -E_z[log D_{enc}^U(G(z)) + \sum_{i,j}{log [D_{dec}^U(G(z))]_{i,j}}]
-    \end{split}
-\end{equation}
-
-Where $D_{enc}^U$ is an encoder part of the discriminator, $D_{dec}^U$ is a decoder part of the discriminator. The first term of this formula stands for distinguishing the whole picture to be fake or real and the second term stands for every pixel of an image to be fake or real. The second term generalize each pixel data of the generated fake/real confidence map by summing them up. In this formula $[D_{dec}^U(G(z))]_{i,j}$ refer to the discriminator decision at pixel $(i,j)$.
-
-\section{Neural image compression}
-
-In this section we will show that neural networks can also be used in image compression. As it was mentioned in the paper \cite{Autoencoder_2006}, autoencoders are a very powerful tool for reducing a dimensionality of data, which makes them a suitable choice for image compression. The task of image compression is to reduce the size of given image while keeping it's visual features. In other words the objective in image compression is to maximize the quality of compressed and decompressed image and minimize the number of bytes required to store the image.
-
-One of the first approaches here has been described in \cite{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017}. It was the first paper that has successfully outperformed JPEG. Each of the architectures they describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. The framework consists of three modules: encoder, binarizer and decoder. The structure of the framework is similar to \cite{Autoencoder_2006}: uncompressed image goes through encoder; then features with reduced dimensionality go to the binarizer and being compressed into binary codes, that can be stored on drive; those codes can also be transmitted to decoder, which creates an estimate of the original image based on the binary code.
-
-A single iteration of their network can be represented using following formula \ref{eq:rnn-compression-1}:
-
-\begin{equation}
-    \label{eq:rnn-compression-1}
-    \begin{split}
-        b_t = B(E_t(r_{t-1})), \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1} \\
-        r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0
-    \end{split}
-\end{equation}
-
-Where $D_t$ and $E_t$ represent the decoder and the encoder with their states at iteration $t$ respectively, $b_t$ is the binary representation, $\hat{x}_t$ is the reconstruction of the original image $x$ and $r_t$ is the residual between $x$ and the reconstruction $\hat{x}_t$. While $\gamma$ is a parameter that controls the mode of the network: "one-shot" reconstruction or additive reconstruction.
-
-They use recurrent units in both encoder and decoder and control the affect of these recurrent units by hyperparameter. For example in case of using LSTM as a recurrent unit, they use rules from the equation \ref{eq:rnn-compression-2}:
-
-\begin{equation}
-    \label{eq:rnn-compression-2}
-    \begin{split}
-        [f, i, o, j]^T = [\sigma, \sigma, \sigma, tanh]^T((W x_t + U h_{t-1}) + b) \\
-        c_t = f \odot c_{t-1} + i \odot j
-        h_t = o \odot tanh(c_t)
-    \end{split}
-\end{equation}
-
-Where $x_t$ denotes input, $c_t$ denotes cell state, $h_t$ denotes hidden state on the step $t$, $\odot$ is an element-wise multiplication, $b$ is bias, $\sigma$ is sigmoid activation function. The output of the LSTM network on the $t$ step is $h_t$.
-
-With the rise of the GANs \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}, many application were proposed especially in neural image processing. Neural image compression is not an exception: GANs significantly outperform previous approaches. In \cite{agustsson_generative_2019} authors propose a technique for image compression that uses GAN training pipeline: encoder for dimensionality reduction is followed by quantizer that quantizes the intermediate representation and performs a compression for further storing the data on disk, then data flows into decoder, which reconstructs the image and ont top of this they put a discriminator for adversarial training. The objective is described by formula \ref{eq:gan-compression}.
-
-\begin{equation}
-    \label{eq:gan-compression}
-    \min_{E,G} L_{GAN} + \lambda E[d(x, G(z))] + \beta H(\hat{w}).
-\end{equation}
-
-Where $L_{GAN}$ is GAN discriminator loss, $E[d(x, G(z))]$ is distortion loss, and $H(\hat{w})$ is a compression loss. $\lambda$ and $\beta$ are hyperparameters tht balance compression rate and distortion tradeoff.
-
-In \cite{balle_variational_2018, mentzer_high_fidelity_2020} they use a Hyperprior module for compression. As well as other models they first reduce dimensionality of an image using convolutional encoder. Also, similarly to what we've converted above, they use convolutional decoder. Hyperprior module is another autoencoder with the loss from equation \ref{eq:hyperprior}
-
-\begin{equation}
-    \label{eq:hyperprior}
-    E_{x~p_x} D_{KL}[q || p_{\tilde{y},\tilde{z}|x}] = E_{x~p_x} E_{\tilde{y}, \tilde{z}~q} [log q(\tilde{y}, \tilde{z} | x) − log p_{x|\tilde{y}}(x | \tilde{y}) − log p_{\tilde{y}| \tilde{z}}(\tilde{y}|\tilde{z}) − log p_{\tilde{z}}(\tilde{z}) ] + const
-\end{equation}
-
-Where the second term encapsulates distortion, the third and the fourth terms stand for the cross-entropies encoding respectively. We can clearly see from this formula that two layers of autoencoder are being applied. This is why the model is effective and this is why it is called a \textit{hyperprior}.
-
-Worth to mention that recently there was a bunch of publications that are also modify an existing traditional autoencoder model in one or another way \cite{Zhou_2019_CVPR_Workshops, wang_substitutional_2021, lu_progressive_2021, liu_view_2021, liu_unified_2020, mentzer_practical_2020}.
-
-\subsection{Baseline model}
-
-We have choose the HiFiC \cite{mentzer_high_fidelity_2020} model to be our baseline model. This model shows a great results and uses simple structure of model. HiFiC model is based on previous achievement in neural image compression which we've described in above. In the paper they use Encoder \cite{conditional_gans} to perform initial compression of input images, the result of this operation is called latents. Then they use Hyperprior \cite{balle_variational_2018} as a probability model for further better compression and from this module they obtain hyperlatents. For reconstruction they use Generator \cite{conditional_gans}. Basically, they were first to combine GAN training \cite{agustsson_generative_2019} and Hyperprior probability model.
-
-For during training they also show a new normalization which they call a Channel Normalization. To perform this normalization they normalize data not along spatial dimensions like in before \cite{batch_norm, layer_norm,instance_norm} but along channel dimension. They claim that the dependency on height and width causes the generalization problems.
-
-Since our model is strongly based on the models from mentioned papers \cite{mentzer_high_fidelity_2020,balle_variational_2018,agustsson_generative_2019}, we in depth describe the model in our Methodology chapter.
-
-\chapter{Methodology}
-\label{chapter:methodology}
-
-In our work we compared several approaches to compress images. At first we tried to use a graph as a representation of an image. This approach is quite intuitive, since graph has a certain information about image structure. However, after series of experiments, we figure out that graph cannot represent image identity precisely. And most importantly, current state of the art methods are not capable of producing a good image from a scene graph, since scene graph to image architectures use scene graph to scene layout to image architecture, which makes scene graph a redundant information and only makes reconstructed images worse. We also found out that layout to image algorithms such as \cite{Zhao_Meng_Yin_Sigal_2019} use LSTM network architecture to fuse layout objects into singe representation, but LSTM is not designed to capture spatial relations and fuse objects into single one, since layout objects are unordered. In future this task can be potentially solved by using permutation invariant fusion module.
-
-We need to solve several major problems in this work. The first one is reconstruction quality. To achieve a better performance we plan to use an enhancement network on top of the baseline model. The second is the size of the model. To reduce a size of the model we plan to reduce the number of layers in the Generator of compression model.
-
-\begin{figure}[!ht]
-    \label{general-enhancement}
-    \includegraphics[width=\textwidth]{figure/general-enhance.png}
-    \caption{The proposed model with all modules included.}
-\end{figure}
-
-Our entire compression framework is based on HiFiC \cite{mentzer_high_fidelity_2020}: we use the same structure of encoder and discriminator and similar decoder modules. Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing $L1$ or $L2$ distance between given image and its reconstruction.
-
-\begin{figure}[!ht]
-    \centering
-    \begin{tabular}{cc}
-        \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png} & \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg} \\
-        a) Baseline model                                                  & b) JPEG
-    \end{tabular}
-    \caption{Neural image compression (HiFiC) comparison with JPEG (figure adapted from HiFiC results \cite{mentzer_high_fidelity_2020}).}
-    \label{jpeg-hific-comparision}
-\end{figure}
-
-These intermediate convolutional features already take less disk space than raw initial image. However, we can compress these features using lossless coding algorithm. We are using arithmetic coding because of its huge capacity to compress sequences of numerical values.
-
-It is not difficult to train an autoencoder to compress some information and decompress it back. So, we are using the same design as \cite{balle_variational_2018} to compress hidden features and obtain hyperlatents. Then they can be encoded by lossless compression algorithm.
-
-After compressing image we need to be able to decompress these hyperlatent features back. Say we used lossless coding algorithm to decode hyperlatents, passed them to Hyperprior decoder and get latents. Then we feed these latents to fully convolutional decoder and apply deconvolution operation several times together with upscaling layers to make resulting image bigger. Finally we pass it through several super resolution layers to obtain an image with reduced blur artifacts, more sharp structure and, if needed, higher spacial resolution.
-
-Such a system is complicated and since we need to train it efficiently, we consider using generative adversarial training pipeline to fit the model to data. Discriminator will be trained to till real and generated images apart, which will stabilize training same as in HiFiC \cite{mentzer_high_fidelity_2020}.
-
-\section{JPEG compression}
-
-As we described in the Introduction, JPEG is one of the most popular image compression pipelines. Understanding of this algorithm is essential for understanding a general image compression pipeline and the right place for each component in other algorithms. JPEG algorithm consists of several steps, which can be grouped into two main parts: compression and decompression.
+As we described in the Introduction, JPEG \cite{JPEG-1992} is one of the most popular image compression pipelines. Understanding of this algorithm is essential for understanding a general image compression pipeline and the right place for each component in other algorithms. JPEG algorithm consists of several steps, which can be grouped into two main parts: compression and decompression.
 
 \subsection{Compression algorithm}
 
@@ -790,6 +489,307 @@ The first step of arithmetic coding is building of probability information from 
 
 Compressed sequence is stored as a single number. It's also required to remember probabilities since they are used in decompression process.
 
+\section{Methods for training neural networks}
+
+Training of neural network is a process of iterative adjusting parameters of this network, which aims to minimize the loss function. Understanding training of neural networks is essential for successful training of the network. In this work we use Adam \cite{kingma_adam_2017} algorithm, but for clear understanding of Adam optimizer and right selection of its parameters we need to understand the algorithms Adam is based on. In the following subsections we cover these algorithms.
+
+\subsection{Nesterov Accelerated Gradient}
+
+The idea of momentum accumulation methods is obviously simple. If we are moving in a certain direction for some time, then we should probably move there for some time in the future. To do this, we need to have an access to the recent history of changes of each parameter. We can store the last $n$ instances of $\Delta W$ and calculate the average at each step, but this approach takes up too much memory for large $n$. Fortunately, we do not need an exact average, but only an estimate, so we can use an exponential moving average.
+
+\begin{equation}
+    \label{eq:derivative-momentum-1}
+    v_t = \gamma v_{t-1} + (1-\gamma) x
+\end{equation}
+
+To accumulate we are going to multiply already accumulated value by the factor $0 < \gamma < 1$ and add another value multiplied by $1-\gamma$. The closer $\gamma$ is to $1$, the larger the accumulation window and the stronger the smoothing — the history of $x$ influences more strongly than each successive $x$. If $x=0$ from some point, $v_t$ fade exponentially. We apply an exponential running average to accumulate the gradient of the objective function of a network:
+
+\begin{equation}
+    v_t = \gamma v_{t-1} + \eta \nabla_W J(W)
+\end{equation}
+
+And update weights:
+
+\begin{equation}
+    W = W - v_t
+\end{equation}
+
+Where $\gamma$ is usually of the order $0.9$. Note that $1-\gamma$ is not missing, but included in $\eta$. The smaller the $\gamma$, the more the algorithm behaves like a regular SGD. To get a popular physical interpretation of the equations, we can imagine a ball rolling on a hilly surface. If at the moment $t$ there was a non-zero slope under the ball ($\nabla_W J(W)$), and when it hit a plateau, it will still continue rolling along this plateau. Moreover, the ball will continue to move a couple of updates in the same direction, even if the slope has changed to the opposite. Nevertheless every second it loses $1-\gamma$ of its speed.
+
+Note that accumulated value $v_t$ may very much exceed the value of each $\eta\nabla_W J(W)$. A simple accumulation of momentum already gives a good result, but Nesterov goes further and applies a well-known idea from calculus: looking ahead along the update vector. Since we are going to shift to $\gamma v_{t-1}$ anyway, let's calculate the gradient of the loss function not at the point $W$, but at $W - \gamma v_{t-1}$.
+
+\begin{equation}
+    v_t = \gamma v_{t-1} + \eta \nabla_W J( W - \gamma v_{t-1} )
+\end{equation}
+
+\begin{equation}
+    W = W - v_t
+\end{equation}
+
+Such a change fores loss to decay faster, if in the direction we are moving derivative is increasing, and slower, if opposite.
+
+\subsection{Adagrad}
+
+Some features can be very informative. It could happen that we have a pattern that only after few convolutional layers becomes a significant feature. It would be great being able to update parameter with regard to its' feature change. It's not a difficult one, we just should store for a parameter a sum of squares of its' updates. It will stand for similarity: if the parameter belongs to a chain of frequently activated neurons, the sum is accumulating fast.
+
+\begin{equation}
+    G_{t} = G_{t} + g_{t}^2
+\end{equation}
+
+\begin{equation}
+    W_{t+1} = W_{t} - \frac{\eta}{\sqrt{G_{t} + \epsilon}} g_{t}
+\end{equation}
+
+Where $G_{t}$ is a sum of squares, аn $\epsilon$ is a smoothing parameter required to avoid division by $0$. If parameter updates frequently then $G_t$ is high and divisor is also big. $\epsilon$ is usually of order $10^{-6}$ or $10^{-8}$ for really aggressive updates, but it only plays a role in the beginning, near the middle $g_t$ starts to overcome $G_t$:
+
+Main idea of Adgrad \cite{adgrad} is to use a mechanism to update frequently updated parameters less. Also, this formula is not the only one. Actually Adgrad is a family of algorithms, for example we can remove square root or store abs values of updates. Basically using Adgrad we automatically get so called learning rate decay.
+
+\subsection{RMSProp и Adadelta}
+
+Disadvantage of Adagrad is that $G_{t}$ could increase without any limit, and some time later it can stagnate. RMSProp and Adadelta \cite{adadelta} are to overcome this disadvantage. To acheave this we still update parameters based on theirs update history. But instead of full sum of updates we can use an averaged square of gradient.
+
+\begin{equation}
+    E[g^2]_t = \gamma E[g^2]_{t-1} + (1 - \gamma) g^2_t
+\end{equation}
+
+Then we get
+
+\begin{equation}
+    W_{t+1} = W_{t} - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_{t}
+\end{equation}
+
+Divisor is a square root from gradient squares mean, thus RMSProp — root mean square propagation
+
+\begin{equation}
+    RMS[g]_t = \sqrt {E[g^2]_t + \epsilon }
+\end{equation}
+
+Adadelta differs from RMSProp by numerator, which uses $RMS$ from $\Delta W_t$. On step $t$ we do not know $RMS[\Delta W]_{t}$.
+
+\begin{equation}
+    \Delta W = -\frac{RMS[\Delta W]_{t-1}}{RMS[g]_{t}}g_{t}
+\end{equation}
+
+\begin{equation}
+    W_{t+1} = W_{t} - \frac{RMS[\Delta W]_{t-1}}{RMS[g]_{t}}g_{t}
+\end{equation}
+
+\begin{equation}
+    E[\Delta W^2]_t = \gamma E[\Delta W^2]_{t-1} + (1 - \gamma) \Delta W^2_t
+\end{equation}
+
+\begin{equation}
+    RMS[\Delta W]_{t} = \sqrt{E[\Delta W^2]_t + \epsilon}
+\end{equation}
+
+Note that we need $RMS[\Delta W]_{-1}$ to be $0$ for the first step, all the following $\Delta W$ and $RMS[\Delta W]_{t}$ are going to be $0$. that's why we need $RMS \epsilon$. For RMSProp and Adadelta and Adagrad we don't have to set parameters precisely. Usually it's good to start $\eta$ with $0.1 - 1$, and $\gamma$ with $0.9$.
+
+\subsection{Adam}
+
+Adam \cite{kingma_adam_2017} — adaptive moment estimation, yet another optimization algorithm. It combines an idea of value accumulation and an idea of Adgrad and RMSProp.
+
+\begin{equation}
+    m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t
+\end{equation}
+
+Unlike Nesterov we accumulate not $\Delta W$, but the values of the gradient though this is kind of a cosmetic change. Besides, we want to know how frequent does the gradient change. Authors of Adam purposed to measure mean variance:
+
+\begin{equation}
+    v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
+\end{equation}
+
+It's easy to find that $E[g^2]_t$ is the same in RMSProp.
+
+An important difference from RMSProp is in initial adjusting of $m_t$ and $v_t$: they suffer from the same problem as $E[g^2]_t$ from RMSProp: in case of starting value is $0$ it will take many iterations to calibrate especially with a big window of accumulation ($0 \ll \beta_1 < 1, 0 \ll \beta_2 < 1$). This can be solved by introducing two new hyperparameters, but there is another way: artificially increase $m_t$ and $v_t$ on the first steps ($0 < t < 10$ for $m_t$ and $0 < t < 1000$ for $v_t$)
+
+\begin{equation}
+    \hat{m}_t = \frac{m_t}{1 - \beta^t_1}, \;
+    \hat{v}_t = \frac{v_t}{1 - \beta^t_2}
+\end{equation}
+
+Finally rule of update:
+
+\begin{equation}
+    W_{t+1} = W_{t} - \dfrac{\eta}{\sqrt{\hat{v}_t + \epsilon}} \hat{m}_t
+\end{equation}
+
+Adam authors suggest to use following default values: $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\epsilon = 10^{-8}$ and claim that the algorithm performs better or at least not worse than previous algorithms of optimization.
+
+\section{Neural image processing}
+
+Neural image compression usually follows an autoencoder pipeline. In neural image processing, especially in the fields where the looses of information are critical and we need to keep as much information during the processing as we can, fully convolutional networks are used.
+
+\subsection{Fully convolutional neural networks in image processing}
+
+Fully convolutional neural network is a type of neural network without an aggregate layer. Usually such an aggregation operation is a pooling. Pooling layer mechanics is simple: we need some functions that is a permutation invariant, so, it can make a generalization. This function for example can be a $min$, $max$, $sum$ or $mean$. These functions are irreversible, so we can not find a reverse function. Since conceptually decoder of an autoencoder is basically a reverse function for an encoder, we need something like this. The compression process must be reversible, otherwise we can not decompress an original image.
+
+Fully convolutional neural networks are well-described \cite{fcn}. Authors use fully convolutional network for semantic segmentation. Semantic segmentation is a special task in computer vision, where the final proposal is to label each pixel of image according to the object it belongs to. Traditionally this task is solved with clustering algorithms. The FCN (fully convolutional network) authors use is a network with only convolutional elements, this network only has a convolutional layers. Since convolutional layer architecture doesn't require a fixed-size input, it is extremely convenient to use these network with non-fixed size input data.
+
+Each input for convolutional layer is a tensor of size $H \times W \times D$, where $H$ and $W$ are spatial dimensions and $D$ is depth dimension. Each next layer is connected to certain area in the previous layers and the more deep we go through the network the bigger is this area. This area is called a \textit{receptive field}. Convolutional neural networks are translation invariant. Components FCNs are build up with are pooling layers, convolutional layers and activation functions operate on local receptive fields, some regions of input data. Formula can be seen in equation \ref{eq:fcn-1}
+
+\begin{equation}
+    \label{eq:fcn-1}
+    y_{ij} = f_{ks}(\{ x_{si + \delta i, sj + \delta j} \}_{0 \le \delta i, \delta j \le k})
+\end{equation}
+
+Where $k$ is a kernel size, $s$ is stride and $f$ is layer type.
+
+A real-valued loss function defines a task. As well as in many other machine learning models, we use loss function as a start for backpropagation process. So, next we can use any of existing optimizers to converge network to its' local minima.
+
+\subsection{Neural image enhancement}
+
+Neural image enhancement is yet another application of autoencoders in neural image processing. Neural image enhancement models are designed to enhance images quality. Enhancer networks are used in image and video debluring, upscaling, denoising. The core of these methods is autoencoder architecture and ideas from here are widely used in neural image compression methods, that will be mentioned in the next section.
+
+One of the most popular model for image enhancement is U-Net \cite{ronneberger_u-net_2015}. U-net is a convolutional autoencoder with encoder and decoder models, but it also has skip connections: some outputs of encoder are connected with skip-connections to corresponding decoder outputs. This type of model is highly capable of enhancing images while keeping its' main features and structure.
+
+In \cite{odena_deconvolution_2016} authors claim checkerboard artifacts to be a significant drawback while processing a bright images. \textit{Checkerboard artifacts} are a special artifacts that appear on synthetically generated images, received from neural network. These artifacts are due to deconvolution nature: while performing a deconvolution the output of each patch in deconvolution layer ha an overlap with other patches outputs, tis leads to highly contrast artifacts similar to white-black checkerboard structure. Authors claim that this situation happens in many researches \cite{dumoulin_adversarially_2017,donahue_adversarial_2017,salimans_improved_2016,radford_unsupervised_2016}. They propose several approaches to overcome this issue: one approach is to make sure that kernel size is divided by the stride is used, another approach is to separate out an upsampling from lower to higher resolution and convolution (for example we can first use interpolation to roughly upscale an image and then apply a convolution). Conceptually they state that deconvolution operation can be separated into two operations mentioned above and this can help to reduce checkerboard artifacts.
+
+In \cite{ehrlich_quantization_2020} they propose a mechanism of enhancement based on quantization table and YCbCr channels neural processing. JPEG \cite{JPEG-1992} luminance channel is twice bigger than Cb and Cr channels. Authors first enhance luminance channel and only then enhance Cb and Cr channels. They do it this way because luminance channel can be used in Cb and Cr channels, since their structure is similar within one image. So, the pipeline they propose has several steps.Firstly they take quantization matrix, which the image was compressed with. This matrix is stored inside JPEG container, so we can have it as an input without any additional actions. Then the luminance channel and quantization matrix are being fed to neural network, that enhances luminance channel based on its' structure and quantization matrix. Having luminance channel enhanced they use it as an input to color channel correlation network, which is another enhancer for Cb and Cr - color channels.
+
+In another paper \cite{li_learning_2020} authors use similar approach. The network architecture of the proposed method contains the restoration branch and the global branch. The restoration branch extracts local features and restores the compressed image. The global branch learns global features to improve the artifacts removal results. The global and local features are merged in the middle of the restoration branch and then follow up by several residual blocks.
+
+\subsection{Autoencoder applications in image processing}
+
+First time introduced in \cite{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017}, convolutional neural compression employs an autoencoder architecture and some steps from traditional image compression pipeline. They optimize a tradeoff between a number of bits used to store data (based on symbol frequencies and called an \textit{entropy coding}) and distortion from equation \ref{eq:rate-distortion}.
+
+\begin{equation}
+    \label{eq:rate-distortion}
+    − log_2 Q ([f (x)]) + \beta · d (x, g([f (x)]))
+\end{equation}
+
+Where $\beta$ is a hyperparameter that controls a rate-distortion tradeoff, $Q$ is compression rate and $d$ is distortion rate.
+
+The first problem we encounter going through this problem is that quantization operation is not differentiable. Since quantization employs rounding, it is zero everywhere except integers, where it is undefined. Authors propose to use a smooth approximation for quantization during backward pass.
+
+\begin{equation}
+    \label{eq:quantization}
+    \frac{d}{dy}[y]:=\frac{d}{dy}r(y)
+\end{equation}
+
+Where $r$ is an approximation function. For simplicity authors used $r(y)=y$, this makes the operation much more easy to implement. Gradients simply pass from the decoder to encoder.
+
+Authors use elements from \cite{shi_real-time_2016}, basically employing such operations as convolution, residual blocks in the middle and sub-pixel convolutions in the decoder network.
+
+In \cite{jiang_towards_2021} authors propose FBCNN for JPEG artifacts removal. FBCNN is also based on U-Net \cite{ronneberger_u-net_2015} and consists of four parts: encoder, quality factor predictor, flexible controller, and decoder. The encoder extracts the deep features from the input corrupted JPEG image and then splits them into image features and QF features which are subsequently fed into the decoder and predictor, respectively. The controller gets the estimated QF from the predictor and then generates QF embeddings. The QF attention block enables the controller to make the decoder produce different results according to different QF embeddings. The predicted quality factor can be changed with interactive selections to have a balance between artifacts removal and details preservation.
+
+\subsection{Generative adversarial networks in image processing}
+
+Generative adversarial networks (GANs) are neural networks, that are deigned to be trained in a special manner. Almost every existing network can be trained in adversarial manner, since the structure of the network itself doesn't change. Adversarial training uses same approaches as regular training, but with some modification: for adversarial training we need to construct a neural network that is capable of distinguishing between \textit{real} images (input images from dataset) and \textit{fake} ones (those, generated by the network). To train this model, we separate each iteration of training on two steps: firstly we pass input through general pipeline (without discriminator) and calculate loss, then we pass input through general pipeline and then feed this output to discriminator network. Then we can calculate discriminator loss and backpropagate.
+
+GANs were first time introduced by \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}. They learn generator distribution $p_g$ over data $x$, they define a prior on input noise variables $p_z(z)$, then represent a mapping to data space as $G(z, \Theta_g)$, where $G$ is a differentiable function (neural network with parameters $\Theta_g$) They also define a second network $D(x, \Theta_d)$ that outputs a single scalar. $D(x)$ represents the probability that input $x$ came from the data rather than $p_g$. They train $D$ to maximize the probability of assigning the correct label to both training examples and samples from $G$. They simultaneously train $G$ to minimize $log(1 − D(G(z)))$ in equation \ref{eq:gan}:
+
+\begin{equation}
+    \label{eq:gan}
+    min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
+\end{equation}
+
+ESRGAN \cite{Wang_Yu_Wu_Gu_Liu_Dong_Qiao_Loy_2019} and RealESRGAN \cite{Wang_Xie_Dong_Shan_2021} are two similar papers where authors try to resolve the issue of image quality enhancement. More concrete, in those papers authors propose a model to perform a super-resolution.They use a common pipeline which has already widely spread among image super-resolution models. They use a convolution to map original image to lower spatial dimensional space, but higher channel dimensional space. Then they follow convolution by applying several residual blocks. This residual network doesn't change the data dimensionality and the number of residual blocks can vary over different variants of network. Then they upscale image with interpolation (different ones were used: bicubic, bilinear, Nearest-neighbor interpolation) followed by convolutions to reduce number of channels and increase spatial dimensions back to the initial state of 3. This model is trained in GAN manner, so Discriminator is used.
+
+Recently a U-Net based discriminator was proposed in \cite{schonfeld_u-net_2021}. This U-Net discriminator classifies the input images on a global and local per-pixel level. Due to the skip-connections between the encoder and the decoder, the channels in the output layer contain both high-level and low-level information. Brighter colors in the decoder output correspond to the discriminator confidence of pixel being real (and darker of being fake). So the discriminator has a confidence map with size of the image. The discriminator consists of the original downsampling network and an upsampling network. The two modules are connected via a bottleneck, as well as skip-connections that copy and concatenate feature maps from the encoder and the decoder modules. Discriminator loss is described in equation \ref{eq:u-net-discriminator}.
+
+\begin{equation}
+    \label{eq:u-net-discriminator}
+    \begin{split}
+        L_D = -E_z[log D_{enc}^U(G(z)) + \sum_{i,j}{log [D_{dec}^U(G(z))]_{i,j}}]
+    \end{split}
+\end{equation}
+
+Where $D_{enc}^U$ is an encoder part of the discriminator, $D_{dec}^U$ is a decoder part of the discriminator. The first term of this formula stands for distinguishing the whole picture to be fake or real and the second term stands for every pixel of an image to be fake or real. The second term generalize each pixel data of the generated fake/real confidence map by summing them up. In this formula $[D_{dec}^U(G(z))]_{i,j}$ refer to the discriminator decision at pixel $(i,j)$.
+
+\section{Neural image compression}
+
+In this section we will show that neural networks can also be used in image compression. As it was mentioned in the paper \cite{Autoencoder_2006}, autoencoders are a very powerful tool for reducing a dimensionality of data, which makes them a suitable choice for image compression. The task of image compression is to reduce the size of given image while keeping it's visual features. In other words the objective in image compression is to maximize the quality of compressed and decompressed image and minimize the number of bytes required to store the image.
+
+One of the first approaches here has been described in \cite{Toderici_Vincent_Johnston_Hwang_Minnen_Shor_Covell_2017}. It was the first paper that has successfully outperformed JPEG. Each of the architectures they describe can provide variable compression rates during deployment without requiring retraining of the network: each network need only be trained once. The framework consists of three modules: encoder, binarizer and decoder. The structure of the framework is similar to \cite{Autoencoder_2006}: uncompressed image goes through encoder; then features with reduced dimensionality go to the binarizer and being compressed into binary codes, that can be stored on drive; those codes can also be transmitted to decoder, which creates an estimate of the original image based on the binary code.
+
+A single iteration of their network can be represented using following formula \ref{eq:rnn-compression-1}:
+
+\begin{equation}
+    \label{eq:rnn-compression-1}
+    \begin{split}
+        b_t = B(E_t(r_{t-1})), \hat{x}_t = D_t(b_t) + \gamma \hat{x}_{t-1} \\
+        r_t = x - \hat{x}_t, r_0 = x, \hat{x}_0 = 0
+    \end{split}
+\end{equation}
+
+Where $D_t$ and $E_t$ represent the decoder and the encoder with their states at iteration $t$ respectively, $b_t$ is the binary representation, $\hat{x}_t$ is the reconstruction of the original image $x$ and $r_t$ is the residual between $x$ and the reconstruction $\hat{x}_t$. While $\gamma$ is a parameter that controls the mode of the network: "one-shot" reconstruction or additive reconstruction.
+
+They use recurrent units in both encoder and decoder and control the affect of these recurrent units by hyperparameter. For example in case of using LSTM as a recurrent unit, they use rules from the equation \ref{eq:rnn-compression-2}:
+
+\begin{equation}
+    \label{eq:rnn-compression-2}
+    \begin{split}
+        [f, i, o, j]^T = [\sigma, \sigma, \sigma, tanh]^T((W x_t + U h_{t-1}) + b) \\
+        c_t = f \odot c_{t-1} + i \odot j
+        h_t = o \odot tanh(c_t)
+    \end{split}
+\end{equation}
+
+Where $x_t$ denotes input, $c_t$ denotes cell state, $h_t$ denotes hidden state on the step $t$, $\odot$ is an element-wise multiplication, $b$ is bias, $\sigma$ is sigmoid activation function. The output of the LSTM network on the $t$ step is $h_t$.
+
+With the rise of the GANs \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}, many application were proposed especially in neural image processing. Neural image compression is not an exception: GANs significantly outperform previous approaches. In \cite{agustsson_generative_2019} authors propose a technique for image compression that uses GAN training pipeline: encoder for dimensionality reduction is followed by quantizer that quantizes the intermediate representation and performs a compression for further storing the data on disk, then data flows into decoder, which reconstructs the image and ont top of this they put a discriminator for adversarial training. The objective is described by formula \ref{eq:gan-compression}.
+
+\begin{equation}
+    \label{eq:gan-compression}
+    \min_{E,G} L_{GAN} + \lambda E[d(x, G(z))] + \beta H(\hat{w}).
+\end{equation}
+
+Where $L_{GAN}$ is GAN discriminator loss, $E[d(x, G(z))]$ is distortion loss, and $H(\hat{w})$ is a compression loss. $\lambda$ and $\beta$ are hyperparameters tht balance compression rate and distortion tradeoff.
+
+In \cite{balle_variational_2018, mentzer_high_fidelity_2020} they use a Hyperprior module for compression. As well as other models they first reduce dimensionality of an image using convolutional encoder. Also, similarly to what we've converted above, they use convolutional decoder. Hyperprior module is another autoencoder with the loss from equation \ref{eq:hyperprior}. We omit the derivation of the formula from original paper and put the final loss function.
+
+\begin{equation}
+    \label{eq:hyperprior}
+    \begin{split}
+        E_{x\sim p_x} D_{KL}[q \| p_{\tilde{y},\tilde{z}|x}] = E_{x\sim p_x} E_{\tilde{y}, \tilde{z}\sim q} \left[ log q(\tilde{y}, \tilde{z} | x) - log p_{x|\tilde{y}}(x | \tilde{y}) - log p_{\tilde{y}| \tilde{z}}(\tilde{y}|\tilde{z}) - log p_{\tilde{z}}(\tilde{z}) \right] + const
+    \end{split}
+\end{equation}
+
+Where the second term encapsulates distortion, the third and the fourth terms stand for the cross-entropies encoding respectively. We can clearly see from this formula that two layers of autoencoder are being applied. This is why the model is effective and this is why it is called a \textit{hyperprior}.
+
+Worth to mention that recently there was a bunch of publications that are also modify an existing traditional autoencoder model in one or another way \cite{Zhou_2019_CVPR_Workshops, wang_substitutional_2021, lu_progressive_2021, liu_view_2021, liu_unified_2020, mentzer_practical_2020}.
+
+\subsection{Baseline model}
+
+We have choose the HiFiC \cite{mentzer_high_fidelity_2020} model to be our baseline model. This model shows a great results and uses simple structure of model. HiFiC model is based on previous achievement in neural image compression which we've described in above. In the paper they use Encoder \cite{conditional_gans} to perform initial compression of input images, the result of this operation is called latents. Then they use Hyperprior \cite{balle_variational_2018} as a probability model for further better compression and from this module they obtain hyperlatents. For reconstruction they use Generator \cite{conditional_gans}. Basically, they were first to combine GAN training \cite{agustsson_generative_2019} and Hyperprior probability model \cite{balle_variational_2018}.
+
+For training they also show a new normalization which they call a Channel Normalization. To perform this normalization they normalize data not along spatial dimensions like in before \cite{batch_norm, layer_norm,instance_norm} but along channel dimension. They claim that the dependency on height and width causes the generalization problems.
+
+Since our model is strongly based on the models from mentioned papers \cite{mentzer_high_fidelity_2020,balle_variational_2018,agustsson_generative_2019}, we in depth describe the model in our Methodology chapter.
+
+\chapter{Methodology}
+\label{chapter:methodology}
+
+In our work we compared several approaches to compress images. At first we tried to use a graph as a representation of an image. This approach is quite intuitive, since graph has a certain information about image structure. However, after series of experiments, we figure out that graph cannot represent image identity precisely. And most importantly, current state of the art methods are not capable of producing a good image from a scene graph, since scene graph to image architectures use scene graph to scene layout to image architecture, which makes scene graph a redundant information and only makes reconstructed images worse. We also found out that layout to image algorithms such as \cite{Zhao_Meng_Yin_Sigal_2019} use LSTM \cite{lstm} network architecture to fuse layout objects into singe representation, but LSTM is not designed to capture spatial relations and fuse objects into single one, since layout objects are unordered. In future this task can be potentially solved by using permutation invariant fusion module.
+
+We need to solve several major problems in this work. The first one is reconstruction quality. To achieve a better performance we plan to use an enhancement network on top of the baseline model. The second is the size of the model. To reduce a size of the model we plan to reduce the number of layers in the generator of compression model.
+
+\begin{figure}[!ht]
+    \label{general-enhancement}
+    \includegraphics[width=\textwidth]{figure/general-enhance.png}
+    \caption{The proposed model with all modules included.}
+\end{figure}
+
+Our entire compression framework is based on HiFiC \cite{mentzer_high_fidelity_2020}: we use the same structure of encoder and discriminator and similar decoder modules. Image can be represented using a convolutional features and we can train two neural networks to extract features from given image and reconstruct initial image from these features back. Such a network should have an encoder and a decoder. Encoder is trained to extract meaningful information form given image, which we call feature map or latents; Decoder is trained to reconstruct initial image given latents. We can train such system simply by penalizing $L1$ or $L2$ distance between given image and its reconstruction.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{tabular}{cc}
+        \includegraphics[width=.45\textwidth]{figure/kodim15_HiFiC_Lo.png} & \includegraphics[width=.45\textwidth]{figure/kodim15_jpg_1x_0.166.jpg} \\
+        a) Baseline model                                                  & b) JPEG
+    \end{tabular}
+    \caption{Neural image compression (HiFiC) comparison with JPEG (figure adapted from HiFiC results \cite{mentzer_high_fidelity_2020}).}
+    \label{jpeg-hific-comparision}
+\end{figure}
+
+These intermediate convolutional features already take less disk space than raw initial image. However, we can compress these features using lossless coding algorithm. We are using arithmetic coding because of its huge capacity to compress sequences of numerical values.
+
+It is not difficult to train an autoencoder to compress some information and decompress it back. So, we are using the same design as \cite{balle_variational_2018} to compress hidden features and obtain hyperlatents. Then they can be encoded by lossless compression algorithm.
+
+After compressing image we need to be able to decompress these hyperlatent features back. Say we used lossless coding algorithm to decode hyperlatents, passed them to Hyperprior decoder and get latents. Then we feed these latents to fully convolutional decoder and apply deconvolution operation several times together with upscaling layers to make resulting image bigger. Finally we pass it through several super resolution layers to obtain an image with reduced blur artifacts, more sharp structure and, if needed, higher spacial resolution.
+
+Such a system is complicated and since we need to train it efficiently, we consider using generative adversarial training pipeline to fit the model to data. Discriminator will be trained to till real and generated images apart, which will stabilize training same as in HiFiC \cite{mentzer_high_fidelity_2020}.
+
 \section{Generative adversarial network}
 
 Generative modeling involves the approximation of non-computable a posteriori distributions. Because of this, most effective methods developed for training discriminative models do not work with generative models. The methods existing in the past to solve this problem are computationally difficult and are mainly based on the use of the Markov Chain Monte Carlo, which is poorly scalable. Therefore, to train generative models, a method based on scalable techniques such as Stochastic Gradient Descent (SGD) and backpropagation was needed. One of these methods is Generative Adversarial Networks (GAN). GANs were first proposed in 2014. At a high level, this model can be described as two submodels that compete with each other, and one of these models (the generator) is trying to learn to deceive the second one (the discriminator) in some sense. To do this, the generator generates random objects, and the discriminator tries to distinguish these generated objects from real objects from the training sample. During the learning process, the generator generates objects that are more and more similar to the sample, and it becomes increasingly difficult for the discriminator to distinguish them from the real ones. Thus, the generator turns into a generative model that generates objects from a certain complex distribution, for example, from the distribution of photographs of human faces.
@@ -806,7 +806,7 @@ GAN objective is formulated in \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Far
 
 \begin{equation}
     \label{eq:gan-loss}
-    min_G max_D V(D, G) = E_{x~p_{data}(x)} [log D(x)] + E_{z~p_z(z)} [log(1 - D(G(z)))]
+    min_G max_D V(D, G) = E_{x\sim p_{data}(x)} [log D(x)] + E_{z\sim p_z(z)} [log(1 - D(G(z)))]
 \end{equation}
 
 During training GAN learns a generator distribution $p_g$ over data $x$, $p_z(z)$ is a prior on input noise variables. $G(z, \Theta_g)$ is a mapping to data space, where $G$ is a differentiable function (neural network with parameters $\Theta_g$). There also is a second network $D(x, \Theta_d)$ that outputs a single scalar. $D(x)$ represents the probability that input $x$ came from the data rather than $p_g$. $D$ is trained to maximize the probability of assigning the correct label to both training examples and samples from $G$. $G$ simultaneously trained to minimize $log(1 − D(G(z)))$. The objective is to maximize discriminator loss and minimize generator loss.
@@ -819,19 +819,19 @@ Suppose we already have an ideal discriminator $D$. For any $x$ sample, it outpu
 
 \begin{equation}
     \label{eq:gan-00}
-    G^* = argmax_G E_{z~q(x)}D_k(G(z))
+    G^* = argmax_G E_{z\sim q(x)}D_k(G(z))
 \end{equation}
 
 Since $log(x)$ is a monotonically increasing function and does not change the position of the extremums of the argument, this formula can be rewritten in the form of equation \ref{eq:gan-0}.
 
 \begin{equation}
     \label{eq:gan-0}
-    G^* = argmax_G E_{z~q(x)} log D_k(G(z))
+    G^* = argmax_G E_{z\sim q(x)} log D_k(G(z))
 \end{equation}
 
 In reality, there is usually no ideal discriminator and it must be found. Since the task of the discriminator is to provide a signal for training the generator, instead of an ideal discriminator, it is enough to take a discriminator that ideally separates the real examples from those generated by the current generator, i.e. ideal only on a subset of $X$ from which the examples are generated by the current generator. This task can be reformulated as a search for such a function $D$ that maximizes the probability of correctly classifying examples as real or generated. This is called a binary classification problem, and in this case we have an infinite training sample: a finite number of real examples and a potentially infinite number of generated examples. Each example has a label: it is real or generated. The first article described the solution of the classification problem using the maximum likelihood method.
 
-So, our set $S=\{(x, 1), x~p(x)\} \cup \{G(z), 0\, z \sim q(z)\}$. Let's determine the density of distribution $f(\xi|\nu=1) = D(\xi), f(\xi|\nu=0)=1-D(\xi)$, then $f(\xi|\nu)$ is a reformulation of $D$, which gives out the probability of the class $1$ (this example) in the form of a distribution on the classes $\{0, 1\}$. Since $D(\xi) \in (0, 1)$, this definition sets the correct probability density. Then the optimal discriminator can be found as:
+So, our set $S=\{(x, 1), x\sim p(x)\} \cup \{G(z), 0\, z \sim q(z)\}$. Let's determine the density of distribution $f(\xi|\nu=1) = D(\xi), f(\xi|\nu=0)=1-D(\xi)$, then $f(\xi|\nu)$ is a reformulation of $D$, which gives out the probability of the class $1$ (this example) in the form of a distribution on the classes $\{0, 1\}$. Since $D(\xi) \in (0, 1)$, this definition sets the correct probability density. Then the optimal discriminator can be found as:
 
 \begin{equation}
     \label{eq:gan-1}
@@ -844,8 +844,8 @@ Group the multipliers for $\nu_i=0$ and $\nu_i=1$:
     \label{eq:gan-2}
     \begin{split}
         D^* = argmax_f \prod_{i, \nu=1} f(\xi_i|\nu_i=1) \prod_{i, \nu=0} f(\xi_i|\nu_i=0) = \\
-        = argmax_D \prod_{x_i~p(x)} D(x_i) \prod_{z_i~q(z)} (1 - D(G(z_i))) = \\
-        = argmax_D \sum_{x_i~p(x)} log D(x_i) + \sum_{z_i~q(z)} log (1 - D(G(z_i)))
+        = argmax_D \prod_{x_i\sim p(x)} D(x_i) \prod_{z_i\sim q(z)} (1 - D(G(z_i))) = \\
+        = argmax_D \sum_{x_i\sim p(x)} log D(x_i) + \sum_{z_i\sim q(z)} log (1 - D(G(z_i)))
     \end{split}
 \end{equation}
 
@@ -853,7 +853,7 @@ And when the sample number tends to infinity, we get:
 
 \begin{equation}
     \label{eq:gan-3}
-    D^* = argmax_D E_{x_i~p(x)} log D(x_i) + E_{z_i~q(z)} log (q - D(G(z_i)))
+    D^* = argmax_D E_{x_i\sim p(x)} log D(x_i) + E_{z_i\sim q(z)} log (q - D(G(z_i)))
 \end{equation}
 
 In total, we get the following iterative process:
@@ -862,10 +862,10 @@ In total, we get the following iterative process:
     \item Setting an arbitrary initial $G_0(z)$.
     \item The $k$ iteration begins, $k=1 \dots K$.
     \item We are looking for an optimal discriminator for the current generator: \\
-          $D_k = argmax_D E_{x_i~p(x)} log D(x_i) + E_{z_i~q(z)} log(1 - D(G_{k-1}(z_i)))$
+          $D_k = argmax_D E_{x_i\sim p(x)} log D(x_i) + E_{z_i\sim q(z)} log(1 - D(G_{k-1}(z_i)))$
     \item Improving the generator using the optimal discriminator:
 
-    \item $G_k = argmax_G E_{z~q(x)} log(D_k(G(z)))$. It is important to be in the vicinity of the current generator. If we move away from the current generator, the discriminator will cease to be optimal and the algorithm will cease to be correct.
+    \item $G_k = argmax_G E_{z\sim q(x)} log(D_k(G(z)))$. It is important to be in the vicinity of the current generator. If we move away from the current generator, the discriminator will cease to be optimal and the algorithm will cease to be correct.
     \item The task of training the generator is considered solved when $D_k(x) = 1/2$ for any $x$. If the process does not converge, then go to the next iteration in the (2).
 \end{enumerate}
 
@@ -873,7 +873,7 @@ In the original article, this algorithm is summarized into a single formula that
 
 \begin{equation}
     \label{eq:gan-4}
-    \min_{G}\max_{D} L(D, G) = E_{x~p(x)} log D(x) + E_{z~q(z)} log(1-D(G(z)))
+    \min_{G}\max_{D} L(D, G) = E_{x\sim p(x)} log D(x) + E_{z\sim q(z)} log(1-D(G(z)))
 \end{equation}
 
 Both $D, G$ functions can be represented as neural networks: $D(x) = D(x, \Phi_1), G(z) = G(z, \Phi_2)$, after which the task of finding optimal functions is reduced to the task of optimization by parameters and it can be solved using traditional methods: backpropagation and SGD or more advanced like Adam or RMSProp. Additionally, since the neural network is a universal function approximation, $G(z, \Phi_2)$ can approximate an arbitrary probability distribution, which removes the question of choosing $q(z)$ distribution. This can be any continuous distribution within some reasonable limits. For example, $U(-1, 1)$ or $N(0, 1)$. The correctness of this algorithm and the convergence of $G(z)$ to $p(x)$ under fairly general assumptions is proved in the original article \cite{Goodfellow_Pouget-Abadie_Mirza_Xu_Warde-Farley_Ozair_Courville_Bengio_2014}.
@@ -1133,21 +1133,23 @@ For super resolution we use a common architecture, which has been used in \cite{
 
 Having convolutional features propagated through the network body we apply two simple upsampling layers, that use a non-learnable interpolation operation and convolution layer followed by ReLU activation function.
 
-We imply L1 loss \ref{eq:1}, L2 loss \ref{eq:2} and GAN losses from equations \ref{eq:loss-d} and \ref{eq:loss-g} to pretrain super resolution module. Afterwards we fine tune an entire framework. Using same loss functions mentioned above.
+We imply $L1$ loss \ref{eq:1}, $L2$ loss \ref{eq:2} and GAN losses from equations \ref{eq:loss-d} and \ref{eq:loss-g} to pretrain super resolution module. Afterwards we fine tune an entire framework. Using same loss functions mentioned above.
 
 The last part of the framework is artifacts removal network. This network is a small enhancer placed on top of the described framework to further improve the quality of compressed and decompressed images. We tested several popular models and collected data from them. We show that this step may increase the restored image quality. We place enhancer module on top of the network and fine tune the entire model on our dataset.
 
 For debluring and denoising we use a common architectures. We compare enhancement models \cite{zhang2017learning, zhang2020plug, jiang_towards_2021} in combination with our compression model to further improve image compression results.
 
-The first model \cite{zhang2017learning} proposes a denoiser model that is capable of removing a noise artifacts from images.
-
-The second model \cite{zhang2020plug} is an improved version of the first one, which is also denoiser.
-
-The third model \cite{jiang_towards_2021} is a general artifact removing model. It is especially useful since it can work in blind manner, which means that no prior knowledge such as quantization table is required to perform a reconstruction and artifact removal.
+The first model \cite{zhang2017learning} proposes a denoiser model that is capable of removing a noise artifacts from images. The second model \cite{zhang2020plug} is an improved version of the first one, which is also denoiser. The third model \cite{jiang_towards_2021} is a general artifact removing model. It is especially useful since it can work in blind manner, which means that no prior knowledge such as quantization table is required to perform a reconstruction and artifact removal.
 
 \subsection{Training implementation}
 
 To implement training pipeline we mentioned above, we use a famous PyTorch framework. Having our model we implement training of entire model using traditional GAN pipeline: we iterate over the data batches and each even batch we optimize a compression loss, each odd batch we optimize a GAN loss.
+
+\begin{figure}[!ht]
+    \label{general-training}
+    \includegraphics[width=0.9\textwidth]{figure/general-train.png}
+    \caption{Training pipeline. (a) - compression model training pipeline. This is how we train our autoencoder compression model; (b) GAN training pipeline. In this configuration the output of the compression module is the input to the discriminator; (c) enhancement fine tuning pipeline. In this configuration we also use output of the compression module in the input to the enhancer. }
+\end{figure}
 
 We use $3$ separate optimizers: one for Hyperprior probability model, another for compression model and the last one for GAN model. We use Adam optimizer as it is mentioned in the next section. First two optimizers are responsible for training the compression model. The last one is responsible for training the GAN model, which improves the performance of the reconstruction. And separately we also use the fourth optimizer to fine tune entire model with enhancement module. Enhancement modules are trained using their own pipelines and we do not describe it in this work.
 
@@ -1183,7 +1185,7 @@ It might be more adequate to split the Visual Genome dataset on the following ge
 
 The dataset itself is quite big (more then 30 Gb), so we implemented a data loader that can work with such amounts of data. There were some efforts \cite{yang_2018_graph} to build a framework capable of working with the Visual Genome dataset, however there are no any stable version to work with.
 
-Another dataset we use in this work is Open Images \cite{OpenImages2}. Open Images is a dataset of ~9M images annotated with image-level labels, object bounding boxes, object segmentation masks, visual relationships, and localized narratives:
+Another dataset we use in this work is Open Images \cite{OpenImages2}. Open Images is a dataset of ~ 9M images annotated with image-level labels, object bounding boxes, object segmentation masks, visual relationships, and localized narratives:
 
 \begin{enumerate}
     \item It contains a total of 16M bounding boxes for 600 object classes on 1.9M images, making it the largest existing dataset with object location annotations. The boxes have been largely manually drawn by professional annotators to ensure accuracy and consistency. The images are very diverse and often contain complex scenes with several objects (8.3 per image on average).
